@@ -7,6 +7,7 @@ namespace API.DataTypes
 {
     public class Receiver
     {
+        private int _Id;
         private string _Name;
         private string _Lastname;
         private string _Email;
@@ -20,10 +21,17 @@ namespace API.DataTypes
         public string Phone { get => _Phone; set => _Phone = value; }
         public string Passport { get => _Passport; set => _Passport = value; }
         public Address Address { get => _Address; set => _Address = value; }
+        public int Id { get => _Id; set => _Id = value; }
 
         public Receiver()
-        { 
-        
+        {
+            _Id = 0;
+            _Name = "";
+            _Lastname = "";
+            _Email = "";
+            _Phone = "";
+            _Passport = "";
+            _Address = new Address();
         }
     }
 }

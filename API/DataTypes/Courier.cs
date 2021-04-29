@@ -7,11 +7,13 @@ namespace API.DataTypes
 {
     public class Courier
     {
-        private string _Nombre;
-        private string _Cuntry;
+        private int _Id;
+        private string _Name;
+        private string _Country;
 
-        public string Nombre { get => _Nombre; set => _Nombre = value; }
-        public string Cuntry { get => _Cuntry; set => _Cuntry = value; }
+        public string Name { get => _Name; set => _Name = value; }
+        public string Country { get => _Country; set => _Country = value; }
+        public int Id { get => _Id; set => _Id = value; }
 
         public Courier()
         { 
