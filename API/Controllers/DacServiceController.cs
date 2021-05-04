@@ -186,7 +186,7 @@ namespace API.Controllers
 
                 foreach (Locality _Locality in _Localities)
                 {
-                    DataAccess.DataAccess.InsertLocality(_Locality);
+                    DataAccess.DAShipping.InsertLocality(_Locality);
                 }
 
                 _Retorno = "INSERCIÓN COMPLETA!!!";
@@ -223,7 +223,7 @@ namespace API.Controllers
                 foreach (PostOffice _PostOffice in _PostOffices)
                 {
                     _PostOffice.Courier = _Courier;
-                    DataAccess.DataAccess.InsertPostOffice(_PostOffice);
+                    DataAccess.DAShipping.InsertPostOffice(_PostOffice);
                 }
 
                 _Retorno = "INSERCIÓN COMPLETA!!!";
@@ -246,10 +246,10 @@ namespace API.Controllers
 
            try
             {
-                _Locality = DataAccess.DataAccess.GetLocalityByCourierNameCity(pName, pCity, pCourier);
+                _Locality = DataAccess.DAShipping.GetLocalityByCourierNameCity(pName, pCity, pCourier);
 
-                if(_Locality.Id==0)
-                    _Locality = DataAccess.DataAccess.GetLocalityByCourierNameState(pName, pCity, pCourier);
+                if(_Locality==null)
+                    _Locality = DataAccess.DAShipping.GetLocalityByCourierNameState(pName, pCity, pCourier);
 
 
             }

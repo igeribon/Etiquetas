@@ -15,12 +15,16 @@ namespace API.Controllers
         [HttpPost("shippings")]
         public Shipping CreateShipping(DTOShipping pShipping)
         {
-            Shipping _Shipping = new Shipping();
+            Shipping _Shipping = null;
 
 
             try
             {
+                string _OrderId = pShipping.name.Replace("#", "").Trim();
                 //DATOS SHIPPING
+
+                _Shipping = GetShippingByOrderId(_OrderId);
+
                 _Shipping.OrderId = pShipping.name.Replace("#", "").Trim();
 
                 _Shipping.FinancialStatus = pShipping.financial_status;
@@ -32,7 +36,7 @@ namespace API.Controllers
              
 
                 //DATOS RECEIVER
-                _Shipping.Receiver = new Receiver();
+                //_Shipping.Receiver = new Receiver();
                 _Shipping.Receiver.Name = pShipping.customer.first_name;
                 _Shipping.Receiver.Lastname = pShipping.customer.last_name;
                 _Shipping.Receiver.Email = Convert.ToString(pShipping.customer.email);
@@ -45,14 +49,14 @@ namespace API.Controllers
 
 
                 //DATOS RECEIVER ADDRESS
-                _Shipping.Receiver.Address = new Address();
+                //_Shipping.Receiver.Address = new Address();
                 _Shipping.Receiver.Address.Line1 = pShipping.shipping_address.address1;
 
 
 
                 //DATOS COURIER
 
-                _Shipping.Courier = new Courier();
+                //_Shipping.Courier = new Courier();
 
                 foreach (ShippingLine _ShippingLine in pShipping.shipping_lines)
                 {
@@ -87,7 +91,7 @@ namespace API.Controllers
 
 
                 //CREO PACKAGES
-                _Shipping.Packages = new List<Package>();
+                //_Shipping.Packages = new List<Package>();
 
                 foreach (LineItem _LineItem in pShipping.line_items)
                 {
@@ -104,8 +108,15 @@ namespace API.Controllers
                 }
 
 
-                DataAccess.DataAccess.InsertShipping(_Shipping);
+                if (_Shipping.Id == 0)
+                {
+                    DataAccess.DAShipping.InsertShipping(_Shipping);
+                }
 
+                else 
+                {
+                    DataAccess.DAShipping.UpdateShipping(_Shipping);
+                }
 
             }
 
@@ -128,7 +139,7 @@ namespace API.Controllers
 
             try
             {
-                _Shipping = DataAccess.DataAccess.GetShippingByOrderId(pId);
+                _Shipping = DataAccess.DAShipping.GetShippingByOrderId(pId);
             }
 
             catch (Exception ex)
@@ -138,6 +149,26 @@ namespace API.Controllers
 
             return _Shipping;
         }
+
+
+        [HttpGet("shippings/from={pFrom}&to={pTo}")]
+        public List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo)
+        {
+            List<Shipping> _Shippings = new List<Shipping>();
+
+            try
+            {
+                _Shippings = DataAccess.DAShipping.GetShippingsByCreatedAtFromTo(pFrom, pTo);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return _Shippings;
+        }
+
 
     }
 }
