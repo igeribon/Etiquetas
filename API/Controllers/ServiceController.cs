@@ -200,7 +200,7 @@ namespace API.Controllers
         }
 
 
-        [HttpGet("Login/Username={pUsername}&Password={pPassword}")]
+        [HttpGet("login/username={pUsername}&password={pPassword}")]
         public Account Login(string pUsername, string pPassword)
         {
             Account _Account = null;
