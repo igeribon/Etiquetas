@@ -516,7 +516,16 @@ namespace API.DataAccess
                     _Shipping.Labels = GetLabelsByShippingId(_Shipping.Id);
                     _Shipping.Packages = GetPackagesByShippingId(_Shipping.Id);
 
+                    if (_Dr["ShippingDeliveryTypeId"] != DBNull.Value)
+                    {
 
+                        _Shipping.DeliveryType = Controllers.DacServiceController.GetDeliveryTypes().Find(x => x.Id == Convert.ToInt32(_Dr["ShippingDeliveryTypeId"]));
+                    }
+
+                    if (_Dr["ShippingGuideTypeId"] != DBNull.Value)
+                    {
+                        _Shipping.GuideType = (GuideType)Controllers.DacServiceController.GetGuideTypes().Find(x => x.Id == Convert.ToInt32(_Dr["ShippingGuideTypeId"]));
+                    }
                 }
 
             }
@@ -614,6 +623,18 @@ namespace API.DataAccess
 
                     //_Shipping.Labels = GetLabelsByShippingId(_Shipping.Id);
                     //_Shipping.Packages = GetPackagesByShippingId(_Shipping.Id);
+
+                    if (_Dr["ShippingDeliveryTypeId"] != DBNull.Value)
+                    {
+
+                        _Shipping.DeliveryType = Controllers.DacServiceController.GetDeliveryTypes().Find(x => x.Id == Convert.ToInt32(_Dr["ShippingDeliveryTypeId"]));
+                    }
+
+                    if (_Dr["ShippingGuideTypeId"] != DBNull.Value)
+                    {
+                        _Shipping.GuideType = (GuideType)Controllers.DacServiceController.GetGuideTypes().Find(x => x.Id == Convert.ToInt32(_Dr["ShippingGuideTypeId"]));
+                    }
+
 
 
                     _Shippings.Add(_Shipping);
@@ -1002,6 +1023,18 @@ namespace API.DataAccess
 
 
                 _Cmd.Parameters.Add("@ShippingTotalLinesItemPrice", SqlDbType.Decimal).Value = pShipping.TotalLinesItemPrice;
+
+
+                if(pShipping.GuideType!=null)
+                    _Cmd.Parameters.Add("@ShippingGuideTypeId", SqlDbType.Int).Value = pShipping.GuideType.Id;
+                else
+                    _Cmd.Parameters.Add("@ShippingGuideTypeId", SqlDbType.Int).Value = DBNull.Value;
+
+
+                if (pShipping.DeliveryType != null)
+                    _Cmd.Parameters.Add("@ShippingDeliveryTypeId", SqlDbType.Int).Value = pShipping.DeliveryType.Id;
+                else
+                    _Cmd.Parameters.Add("@ShippingDeliveryTypeId", SqlDbType.Int).Value = DBNull.Value;
 
 
                 _Cnn.Open();

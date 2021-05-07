@@ -4,19 +4,23 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
     //[Route("api/[controller]")]
     [ApiController]
-    public class ServiceController : IServiceController
+    public class ServiceController : ControllerBase , IServiceController
     {
+
         [HttpPost("shippings")]
-        public Shipping CreateShipping(DTOShipping pShipping)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Shipping))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult CreateShipping(DTOShipping pShipping)
         {
             Shipping _Shipping = null;
-
+            
 
             try
             {
@@ -115,9 +119,35 @@ namespace API.Controllers
 
                 else 
                 {
+
                     DataAccess.DAShipping.UpdateShipping(_Shipping);
                 }
 
+            }
+
+            catch (Exception ex)
+            {
+
+                return StatusCode(500);
+            }
+
+
+
+
+
+            return Ok(_Shipping);
+        }
+
+
+        [HttpPut("shippings")]
+        public Shipping UpdateShippingBackOffice(Shipping pShipping)
+        {
+            Shipping _Shipping = pShipping;
+
+
+            try
+            {
+                DataAccess.DAShipping.UpdateShipping(_Shipping);
             }
 
             catch (Exception ex)
@@ -126,11 +156,11 @@ namespace API.Controllers
             }
 
 
-        
 
-
+          
             return _Shipping;
         }
+
 
         [HttpGet("shippings/{pId}")]
         public Shipping GetShippingByOrderId(string pId)
@@ -168,7 +198,6 @@ namespace API.Controllers
 
             return _Shippings;
         }
-
 
     }
 }

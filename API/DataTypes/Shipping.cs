@@ -22,7 +22,8 @@ namespace API.DataTypes
         private PostOffice _PostOffice;
         private List<Label> _Labels;
 
-
+        private GuideType _GuideType;
+        private DeliveryType _DeliveryType;
 
 
 
@@ -43,5 +44,7 @@ namespace API.DataTypes
         public Courier Courier { get => _Courier; set => _Courier = value; }
         public PostOffice PostOffice { get => _PostOffice; set => _PostOffice = value; }
         public List<Label> Labels { get => _Labels; set => _Labels = value; }
+        public GuideType GuideType { get => _GuideType; set => _GuideType = value; }
+        public DeliveryType DeliveryType { get => _DeliveryType; set => _DeliveryType = value; }
     }
 }

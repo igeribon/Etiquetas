@@ -263,5 +263,69 @@ namespace API.Controllers
             return _Locality;
         }
 
+
+  
+        public static List<DeliveryType> GetDeliveryTypes()
+        {
+            List<DeliveryType> _DeliveryTypes = new List<DeliveryType>();
+
+
+            DeliveryType _DeliveryType = new DeliveryType();
+            _DeliveryType.Id = 1;
+            _DeliveryType.Name = "AGENCIA";
+
+            _DeliveryTypes.Add(_DeliveryType);
+
+
+            _DeliveryType = new DeliveryType();
+            _DeliveryType.Id = 2;
+            _DeliveryType.Name = "SERVICIO A DOMICILIO";
+
+            _DeliveryTypes.Add(_DeliveryType);
+
+
+            return _DeliveryTypes;
+        }
+
+
+     
+        public static List<GuideType> GetGuideTypes()
+        {
+            List<GuideType> _TiposGuia = new List<GuideType>();
+
+
+            GuideType _GuideType = new GuideType();
+            _GuideType.Id = 1;
+            _GuideType.Name = "FLETE PAGADO";
+
+            _TiposGuia.Add(_GuideType);
+
+
+            _GuideType = new GuideType();
+            _GuideType.Id = 2;
+            _GuideType.Name = "CUENTA CORRIENTE";
+
+            _TiposGuia.Add(_GuideType);
+
+
+
+            _GuideType = new GuideType();
+            _GuideType.Id = 4;
+            _GuideType.Name = "FLETE DESTINO";
+
+            _TiposGuia.Add(_GuideType);
+
+
+
+            _GuideType = new GuideType();
+            _GuideType.Id = 6;
+            _GuideType.Name = "CONTRAREMBOLSO";
+
+            _TiposGuia.Add(_GuideType);
+
+
+            return _TiposGuia;
+
+        }
     }
 }
