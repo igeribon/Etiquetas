@@ -199,5 +199,25 @@ namespace API.Controllers
             return _Shippings;
         }
 
+
+        [HttpGet("Login/Username={pUsername}&Password={pPassword}")]
+        public Account Login(string pUsername, string pPassword)
+        {
+            Account _Account = null;
+
+            try
+            {
+                _Account = DataAccess.DAShipping.Login(pUsername,pPassword);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return _Account;
+        }
+
+
     }
 }
