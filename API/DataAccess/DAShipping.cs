@@ -828,8 +828,6 @@ namespace API.DataAccess
 
         #endregion
 
-
-
         //UPDATES
         #region UPDATES
         public static void UpdateAddress(Address pAddress)
@@ -1064,5 +1062,53 @@ namespace API.DataAccess
         }
 
         #endregion
+
+        //LOGIN
+        public static Account Login(string pUserName, string pPassword)
+        {
+            Account _Account = null;
+
+            SqlConnection _Cnn = new SqlConnection();
+
+            try
+            {
+
+                _Cnn = Connection.Instancia.SetConnection();
+                SqlDataReader _Dr = null;
+                SqlCommand _Cmd = new SqlCommand("spAccountLogin", _Cnn);
+                _Cmd.Parameters.Add("@AccountUsername", SqlDbType.VarChar).Value = pUserName;
+                _Cmd.Parameters.Add("@AccountPassword", SqlDbType.VarChar).Value = pPassword;
+
+
+                _Cmd.CommandType = CommandType.StoredProcedure;
+
+                _Cnn.Open();
+
+                _Dr = _Cmd.ExecuteReader();
+
+                while (_Dr.Read())
+                {
+                    _Account = new Account();
+                    _Account.Id = Convert.ToInt32(_Dr["AccountId"]);
+                    _Account.Name = Convert.ToString(_Dr["AccountName"]);
+                    _Account.Username = Convert.ToString(_Dr["AccountUsername"]);
+                    _Account.Password = Convert.ToString(_Dr["AccountPassword"]);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                _Cnn.Close();
+            }
+
+
+            return _Account;
+        }
     }
 }
