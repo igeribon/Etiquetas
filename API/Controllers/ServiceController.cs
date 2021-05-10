@@ -125,7 +125,7 @@ namespace API.Controllers
 
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 return StatusCode(500);
