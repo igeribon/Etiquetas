@@ -114,13 +114,13 @@ namespace API.Controllers
 
                 if (_Shipping.Id == 0)
                 {
-                    DataAccess.DAShipping.InsertShipping(_Shipping);
+                    ShippingController.InsertShipping(_Shipping);
                 }
 
                 else 
                 {
 
-                    DataAccess.DAShipping.UpdateShipping(_Shipping);
+                    ShippingController.UpdateShipping(_Shipping);
                 }
 
             }
@@ -147,7 +147,7 @@ namespace API.Controllers
 
             try
             {
-                DataAccess.DAShipping.UpdateShipping(_Shipping);
+                ShippingController.UpdateShipping(_Shipping);
             }
 
             catch (Exception ex)
@@ -169,7 +169,7 @@ namespace API.Controllers
 
             try
             {
-                _Shipping = DataAccess.DAShipping.GetShippingByOrderId(pId);
+                _Shipping = ShippingController.GetShippingByOrderId(pId);
             }
 
             catch (Exception ex)
@@ -188,7 +188,7 @@ namespace API.Controllers
 
             try
             {
-                _Shippings = DataAccess.DAShipping.GetShippingsByCreatedAtFromTo(pFrom, pTo);
+                _Shippings = ShippingController.GetShippingsByCreatedAtFromTo(pFrom, pTo);
             }
 
             catch (Exception ex)
@@ -208,7 +208,7 @@ namespace API.Controllers
 
             try
             {
-                _Account = DataAccess.DAShipping.Login(pUsername,pPassword);
+                _Account = ShippingController.Login(pUsername,pPassword);
             }
 
             catch (Exception ex)

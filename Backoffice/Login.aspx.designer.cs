@@ -11,7 +11,7 @@ namespace Backoffice
 {
 
 
-    public partial class Index
+    public partial class Login
     {
     }
 }
