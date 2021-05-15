@@ -39,12 +39,20 @@ namespace API.DataTypes
         public bool CashOnDelivery { get => _CashOnDelivery; set => _CashOnDelivery = value; }
         public string FinancialStatus { get => _FinancialStatus; set => _FinancialStatus = value; }
         public string ReferenceId { get => _ReferenceId; set => _ReferenceId = value; }
-        public List<Package> Packages { get => _Packages; set => _Packages = value; }
+     
         public Receiver Receiver { get => _Receiver; set => _Receiver = value; }
         public Courier Courier { get => _Courier; set => _Courier = value; }
+
+        public List<Package> Packages { get => _Packages; set => _Packages = value; }
         public PostOffice PostOffice { get => _PostOffice; set => _PostOffice = value; }
-        public List<Label> Labels { get => _Labels; set => _Labels = value; }
-        public GuideType GuideType { get => _GuideType; set => _GuideType = value; }
+
+
         public DeliveryType DeliveryType { get => _DeliveryType; set => _DeliveryType = value; }
+
+        public GuideType GuideType { get => _GuideType; set => _GuideType = value; }
+
+        public List<Label> Labels { get => _Labels; set => _Labels = value; }
+
+     
     }
 }

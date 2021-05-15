@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using API.DataTypes;
 using System.Data;
 
+
 namespace API.DataAccess
 {
     public class DAShipping
@@ -122,6 +123,7 @@ namespace API.DataAccess
                 _Cmd.Parameters.Add("@PostOfficeCourierId", SqlDbType.Int).Value = pPostOffice.Courier.Id;
                 _Cmd.Parameters.Add("@PostOfficeAddressId", SqlDbType.Int).Value = pPostOffice.Address.Id;
                 _Cmd.Parameters.Add("@PostOfficeName", SqlDbType.VarChar).Value = pPostOffice.Name;
+                _Cmd.Parameters.Add("@PostOfficeCode", SqlDbType.Int).Value = pPostOffice.Code;
 
                 _Cnn.Open();
                 _Cmd.ExecuteNonQuery();
@@ -318,6 +320,41 @@ namespace API.DataAccess
 
         }
 
+        public static void InsertLabel(Label pLabel, Shipping pShipping)
+        {
+            SqlConnection _Cnn = new SqlConnection();
+
+            try
+            {
+                _Cnn = Connection.Instancia.SetConnection();
+
+                SqlCommand _Cmd = new SqlCommand("spInsertLabel", _Cnn);
+                _Cmd.CommandType = CommandType.StoredProcedure;
+
+                _Cmd.Parameters.Add("@LabelShippingId", SqlDbType.Int).Value = pShipping.Id;
+                _Cmd.Parameters.Add("@LabelIdentifier", SqlDbType.VarChar).Value = pLabel.Identifier;
+                _Cmd.Parameters.Add("@LabelTrackingNumber", SqlDbType.VarChar).Value = pLabel.TrackingNumber;
+                _Cmd.Parameters.Add("@LabelData", SqlDbType.Binary).Value = pLabel.Data;
+                _Cmd.Parameters.Add("@LabelPostoFficeId", SqlDbType.Int).Value = pLabel.PostOffice.Id;
+
+                _Cnn.Open();
+                _Cmd.ExecuteNonQuery();
+
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                _Cnn.Close();
+            }
+
+        }
+ 
 
         #endregion
 
@@ -434,6 +471,61 @@ namespace API.DataAccess
             return _Locality;
         }
 
+        public static Locality GetLocalityByCourierNameZIP(string pName, string pZIP, Courier pCourier)
+        {
+            Locality _Locality = null;
+
+            SqlConnection _Cnn = new SqlConnection();
+
+            try
+            {
+
+
+                _Cnn = Connection.Instancia.SetConnection();
+                SqlDataReader _Dr = null;
+                SqlCommand _Cmd = new SqlCommand("spLocalityGetByCourierNameZIP", _Cnn);
+                _Cmd.Parameters.Add("@LocalityName", SqlDbType.VarChar).Value = pName;
+                _Cmd.Parameters.Add("@LocalityZIP", SqlDbType.VarChar).Value = pZIP;
+                _Cmd.Parameters.Add("@LocalityCourierId", SqlDbType.Int).Value = pCourier.Id;
+
+
+                _Cmd.CommandType = CommandType.StoredProcedure;
+
+                _Cnn.Open();
+
+                _Dr = _Cmd.ExecuteReader();
+
+                while (_Dr.Read())
+                {
+                    _Locality = new Locality();
+
+                    _Locality.Id = Convert.ToInt32(_Dr["LocalityId"]);
+                    _Locality.Name = Convert.ToString(_Dr["LocalityName"]);
+                    _Locality.City = Convert.ToString(_Dr["LocalityCity"]);
+                    _Locality.State = Convert.ToString(_Dr["LocalityState"]);
+                    _Locality.ZIP = Convert.ToString(_Dr["LocalityZIP"]);
+
+                    _Locality.Code = Convert.ToString(_Dr["LocalityCode"]);
+                    _Locality.CityCode = Convert.ToString(_Dr["LocalityCityCode"]);
+                    _Locality.StateCode = Convert.ToString(_Dr["LocalityStateCode"]);
+
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                _Cnn.Close();
+            }
+
+            return _Locality;
+        }
+
 
         public static Shipping GetShippingByOrderId(string pOrderId)
         {
@@ -505,6 +597,7 @@ namespace API.DataAccess
                         _Shipping.PostOffice.Name = Convert.ToString(_Dr["PostOfficeName"]);
                         _Shipping.PostOffice.Courier = _Shipping.Courier;
                         _Shipping.PostOffice.Address = GetAddressById(Convert.ToInt32(_Dr["ReceiverAddressId"]));
+                        _Shipping.PostOffice.Code = Convert.ToInt32(_Dr["PostOfficeCode"]);
                     }
 
                     else
@@ -803,8 +896,27 @@ namespace API.DataAccess
                     _Label.Id = Convert.ToInt32(_Dr["LabelId"]);
                     _Label.Identifier = Convert.ToString(_Dr["LabelIdentifier"]);
                     _Label.TrackingNumber = Convert.ToString(_Dr["LabelTrackingNumber"]);
+                    _Label.Data = (byte[])(_Dr["LabelData"]);
 
-                    //LEVANTAR DATA DE LABELS
+
+                    if (_Dr["PostOfficeId"] != DBNull.Value)
+                    {
+                        _Label.PostOffice = new PostOffice();
+                        _Label.PostOffice.Id = Convert.ToInt32(_Dr["PostOfficeId"]);
+                        _Label.PostOffice.Name = Convert.ToString(_Dr["PostOfficeName"]);
+                        _Label.PostOffice.Code = Convert.ToInt32(_Dr["PostOfficeCode"]);
+
+                        if (_Dr["CourierId"] != DBNull.Value)
+                        {
+                            _Label.PostOffice.Courier = new Courier();
+                            _Label.PostOffice.Courier.Id = Convert.ToInt32(_Dr["CourierId"]);
+                            _Label.PostOffice.Courier.Name = Convert.ToString(_Dr["CourierName"]);
+                            _Label.PostOffice.Courier.Country = Convert.ToString(_Dr["CourierCountry"]);
+                        }
+
+
+                        _Label.PostOffice.Address = GetAddressById(Convert.ToInt32(_Dr["PostOfficeAddressId"]));
+                    }
 
                     _Labels.Add(_Label);
                 }
@@ -824,6 +936,75 @@ namespace API.DataAccess
             return _Labels;
 
         }
+
+
+        public static PostOffice GetPostOfficeByCodeCourier(int pCode, Courier pCourier)
+        {
+            PostOffice _Office = null;
+
+            SqlConnection _Cnn = new SqlConnection();
+
+            try
+            {
+
+
+                _Cnn = Connection.Instancia.SetConnection();
+                SqlDataReader _Dr = null;
+                SqlCommand _Cmd = new SqlCommand("spPostOfficeGetByCodeCourierId", _Cnn);
+                _Cmd.Parameters.Add("@PostOfficeCode", SqlDbType.Int).Value = pCode;
+                _Cmd.Parameters.Add("@CourierId", SqlDbType.Int).Value = pCourier.Id;
+
+
+                _Cmd.CommandType = CommandType.StoredProcedure;
+
+                _Cnn.Open();
+
+                _Dr = _Cmd.ExecuteReader();
+
+                while (_Dr.Read())
+                {
+                    _Office = new PostOffice();
+                    _Office.Id= Convert.ToInt32(_Dr["PostOfficeId"]);
+                    _Office.Name = Convert.ToString(_Dr["PostOfficeName"]);
+                    _Office.Code = Convert.ToInt32(_Dr["PostOfficeCode"]);
+                    _Office.Courier = pCourier;
+
+                    _Office.Address = new Address();
+                    _Office.Address.Id = Convert.ToInt32(_Dr["AddressId"]);
+                    _Office.Address.Line1 = Convert.ToString(_Dr["AddressLine1"]);
+                    _Office.Address.Line2 = Convert.ToString(_Dr["AddressLine2"]);
+                    _Office.Address.Phone = Convert.ToString(_Dr["AddressPhone"]);
+                    _Office.Address.Observation = Convert.ToString(_Dr["AddressObservation"]);
+
+                    _Office.Address.Locality = new Locality();
+                    _Office.Address.Locality.Id = Convert.ToInt32(_Dr["LocalityId"]);
+                    _Office.Address.Locality.Name = Convert.ToString(_Dr["LocalityName"]);
+                    _Office.Address.Locality.City = Convert.ToString(_Dr["LocalityCity"]);
+                    _Office.Address.Locality.State = Convert.ToString(_Dr["LocalityState"]);
+                    _Office.Address.Locality.ZIP = Convert.ToString(_Dr["LocalityZIP"]);
+                    _Office.Address.Locality.Code = Convert.ToString(_Dr["LocalityCode"]);
+                    _Office.Address.Locality.CityCode = Convert.ToString(_Dr["LocalityCityCode"]);
+                    _Office.Address.Locality.StateCode = Convert.ToString(_Dr["LocalityStateCode"]);
+
+
+
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                _Cnn.Close();
+            }
+
+            return _Office;
+        }
+
 
 
         #endregion

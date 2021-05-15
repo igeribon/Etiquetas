@@ -112,5 +112,54 @@ namespace API.Controllers
             return _Account;
 
         }
+
+
+        public static Locality GetLocalityByCourierNameCity(string pName, string pCity, Courier pCourier)
+        {
+            Locality _Locality = new Locality();
+
+            try
+            {
+                bool _IsZIP;
+
+                try
+                {
+                    Convert.ToInt64(pCity);
+                    _IsZIP = true;
+                }
+
+                catch
+                {
+                    _IsZIP = false;
+                }
+
+
+
+                if (_IsZIP)
+                {
+                    _Locality = DataAccess.DAShipping.GetLocalityByCourierNameZIP(pName, pCity, pCourier);
+                }
+
+                else
+                {
+                    _Locality = DataAccess.DAShipping.GetLocalityByCourierNameCity(pName, pCity, pCourier);
+
+                    if(_Locality==null)
+                        _Locality = DataAccess.DAShipping.GetLocalityByCourierNameState(pName, pCity, pCourier);
+                }
+
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+            return _Locality;
+        }
+
+
     }
 }

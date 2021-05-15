@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace API.Controllers
 {
@@ -88,7 +89,7 @@ namespace API.Controllers
 
 
                 //DATOS RECEIVER ADDRESS LOCALITY
-                _Shipping.Receiver.Address.Locality = DacServiceController.GetLocalityByCourierNameCity(pShipping.shipping_address.zip, pShipping.shipping_address.city, _Shipping.Courier);
+                _Shipping.Receiver.Address.Locality = ShippingController.GetLocalityByCourierNameCity(pShipping.shipping_address.zip, pShipping.shipping_address.city, _Shipping.Courier);
 
 
 
@@ -219,6 +220,26 @@ namespace API.Controllers
             return _Account;
         }
 
+        [HttpPost("shippings/{pId}/labels")]
+        public Shipping CreateLabel(string pId)
+        {
+            Shipping _Shipping = new Shipping();
+
+            try
+            {
+                _Shipping = ShippingController.GetShippingByOrderId(pId);
+
+
+                _Shipping = DacServiceController.CreateLabel(_Shipping);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return _Shipping;
+        }
 
     }
 }
