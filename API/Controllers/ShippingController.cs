@@ -68,7 +68,7 @@ namespace API.Controllers
         }
 
 
-        public static List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo)
+        public static List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo, int pHasLabel)
         {
             List<Shipping> _Shippings = new List<Shipping>();
 
@@ -77,7 +77,7 @@ namespace API.Controllers
             {
 
 
-                _Shippings = DataAccess.DAShipping.GetShippingsByCreatedAtFromTo(pFrom, pTo);
+                _Shippings = DataAccess.DAShipping.GetShippingsByCreatedAtFromTo(pFrom, pTo, pHasLabel);
 
             }
 

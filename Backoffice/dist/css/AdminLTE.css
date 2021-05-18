@@ -2748,7 +2748,7 @@ table.text-center th {
 }
 .login-page,
 .register-page {
-  background: #d2d6de;
+    background: #9F19EC;
 }
 .login-box,
 .register-box {
@@ -2764,16 +2764,16 @@ table.text-center th {
 }
 .login-box-body,
 .register-box-body {
-  background: #fff;
-  padding: 20px;
-  color: #444;
-  border-top: 0;
-  color: #666;
+    background: #9F19EC;
+    padding: 20px;
+    color: #444;
+    border-top: 0;
+    color: #666;
 }
-.login-box-body .form-control-feedback,
-.register-box-body .form-control-feedback {
-  color: #777;
-}
+    .login-box-body .form-control-feedback,
+    .register-box-body .form-control-feedback {
+        color: #DB8C1E;
+    }
 .login-box-msg,
 .register-box-msg {
   margin: 0;

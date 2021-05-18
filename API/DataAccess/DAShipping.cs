@@ -105,7 +105,7 @@ namespace API.DataAccess
         }
 
 
-
+        
         public static void InsertPostOffice(PostOffice pPostOffice)
         {
             SqlConnection _Cnn = new SqlConnection();
@@ -636,7 +636,7 @@ namespace API.DataAccess
             return _Shipping;
         }
 
-        public static List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo)
+        public static List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo, int pHasLabel)
         {
             List<Shipping> _Shippings = new List<Shipping>();
 
@@ -651,6 +651,7 @@ namespace API.DataAccess
                 SqlCommand _Cmd = new SqlCommand("spShippingGetByCreatedAtFromTo", _Cnn);
                 _Cmd.Parameters.Add("@From", SqlDbType.DateTime).Value = pFrom;
                 _Cmd.Parameters.Add("@To", SqlDbType.DateTime).Value = pTo;
+                _Cmd.Parameters.Add("@HasLabel", SqlDbType.Int).Value = pHasLabel;
 
 
                 _Cmd.CommandType = CommandType.StoredProcedure;

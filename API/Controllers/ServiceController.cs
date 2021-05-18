@@ -182,14 +182,14 @@ namespace API.Controllers
         }
 
 
-        [HttpGet("shippings/from={pFrom}&to={pTo}")]
-        public List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo)
+        [HttpGet("shippings/from={pFrom}&to={pTo}&hasLabel={pHasLabel}")]
+        public List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo, int pHasLabel)
         {
             List<Shipping> _Shippings = new List<Shipping>();
 
             try
             {
-                _Shippings = ShippingController.GetShippingsByCreatedAtFromTo(pFrom, pTo);
+                _Shippings = ShippingController.GetShippingsByCreatedAtFromTo(pFrom, pTo, pHasLabel);
             }
 
             catch (Exception ex)
