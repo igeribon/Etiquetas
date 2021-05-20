@@ -84,8 +84,8 @@
                 <i class="fa fa-files-o"></i> <span>Ordenes</span> <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href=""><i class="fa fa-circle-o"></i> Pendientes de impresión</a></li>
-                <li><a href=""><i class="fa fa-circle-o"></i> Etiquetas impresas</a></li>
+                <li><a href="../PendingOrders.aspx"><i class="fa fa-circle-o"></i> Pendientes de impresión</a></li>
+                <li><a href="../PrintedOrders.aspx"><i class="fa fa-circle-o"></i> Impresas</a></li>
                  <%-- <li><a href=""><i class="fa fa-circle-o"></i> Etiquetas canceladas</a></li>--%>
 
               </ul>

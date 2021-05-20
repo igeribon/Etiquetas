@@ -23,6 +23,17 @@ namespace API.DataTypes
         public Address Address { get => _Address; set => _Address = value; }
         public int Id { get => _Id; set => _Id = value; }
 
+        public string AddressLine1 { get => _Address.Line1; }
+
+        public string LocalityStateName { get => _Address.Locality.State; }
+
+        public string LocalityCityName { get => _Address.Locality.City; }
+        
+        public string LocalityName { get => _Address.Locality.Name; }
+
+
+
+
         public Receiver()
         {
             _Id = 0;

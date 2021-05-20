@@ -53,6 +53,37 @@ namespace API.DataTypes
 
         public List<Label> Labels { get => _Labels; set => _Labels = value; }
 
-     
+
+        public string PackageReference { get => _Packages[0].Reference; }
+
+        public string CourierName
+        {
+            get
+            {
+                if (_Courier != null)
+                { return _Courier.Name; }
+                else return "";
+            }
+        }
+
+        public string LabelTrackingNumber
+        {
+            get
+            {
+                if (_Labels != null)
+                {
+                    return _Labels[0].TrackingNumber;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+    
+    public string ReceiverPassport { get => _Receiver.Passport; }
+
+   
     }
 }

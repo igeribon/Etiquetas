@@ -28,8 +28,8 @@ namespace API.DataTypes
 
 
         public Shipping()
-        { 
-        
+        {
+
         }
 
         public int Id { get => _Id; set => _Id = value; }
@@ -39,7 +39,7 @@ namespace API.DataTypes
         public bool CashOnDelivery { get => _CashOnDelivery; set => _CashOnDelivery = value; }
         public string FinancialStatus { get => _FinancialStatus; set => _FinancialStatus = value; }
         public string ReferenceId { get => _ReferenceId; set => _ReferenceId = value; }
-     
+
         public Receiver Receiver { get => _Receiver; set => _Receiver = value; }
         public Courier Courier { get => _Courier; set => _Courier = value; }
 
@@ -53,6 +53,24 @@ namespace API.DataTypes
 
         public List<Label> Labels { get => _Labels; set => _Labels = value; }
 
-     
+        public string PackageReference { get => _Packages[0].Reference; }
+
+        public string CourierName { get {if (_Courier != null)
+                { return _Courier.Name; }
+                else return "";
+                    } }
+
+        public string LabelTrackingNumber { get {
+                if (_Labels != null&& _Labels.Count!=0)
+                {
+                    return _Labels[0].TrackingNumber;
+                }
+                else
+                {
+                    return "";
+                }
+            } }
+        public string ReceiverPassport { get => _Receiver.Passport; }
+
     }
 }
