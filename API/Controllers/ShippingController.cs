@@ -124,7 +124,7 @@ namespace API.Controllers
 
                 try
                 {
-                    Convert.ToInt64(pCity);
+                    Convert.ToInt64(pName);
                     _IsZIP = true;
                 }
 
@@ -137,7 +137,7 @@ namespace API.Controllers
 
                 if (_IsZIP)
                 {
-                    _Locality = DataAccess.DAShipping.GetLocalityByCourierNameZIP(pName, pCity, pCourier);
+                    _Locality = DataAccess.DAShipping.GetLocalityByCourierZIPState(pName, pCity, pCourier);
                 }
 
                 else

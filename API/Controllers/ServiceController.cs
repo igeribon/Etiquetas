@@ -61,12 +61,13 @@ namespace API.Controllers
 
                 //DATOS COURIER
 
-                //_Shipping.Courier = new Courier();
+               
 
                 foreach (ShippingLine _ShippingLine in pShipping.shipping_lines)
                 {
                     if (_ShippingLine.title.ToLower().Contains("dac"))
                     {
+                        _Shipping.Courier = new Courier();
                         _Shipping.Courier.Id = 1;
                         _Shipping.Courier.Name = "DAC";
                         _Shipping.Courier.Country = "URUGUAY";
@@ -87,20 +88,20 @@ namespace API.Controllers
                 }
 
 
+                if (_Shipping.Courier != null)
+                {
+                    //DATOS RECEIVER ADDRESS LOCALITY
+                    _Shipping.Receiver.Address.Locality = ShippingController.GetLocalityByCourierNameCity(pShipping.shipping_address.zip, pShipping.shipping_address.city, _Shipping.Courier);
+                }
 
-                //DATOS RECEIVER ADDRESS LOCALITY
-                _Shipping.Receiver.Address.Locality = ShippingController.GetLocalityByCourierNameCity(pShipping.shipping_address.zip, pShipping.shipping_address.city, _Shipping.Courier);
-
-
-
-
+                    
+                
 
                 //CREO PACKAGES
                 //_Shipping.Packages = new List<Package>();
 
                 foreach (LineItem _LineItem in pShipping.line_items)
                 {
-
                     Package _Package = new Package();
                     _Package.Depth = 15;
                     _Package.Height = 15;

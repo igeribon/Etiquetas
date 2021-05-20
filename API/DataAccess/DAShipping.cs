@@ -471,7 +471,7 @@ namespace API.DataAccess
             return _Locality;
         }
 
-        public static Locality GetLocalityByCourierNameZIP(string pName, string pZIP, Courier pCourier)
+        public static Locality GetLocalityByCourierZIPState(string pZIP, string pState, Courier pCourier)
         {
             Locality _Locality = null;
 
@@ -483,9 +483,9 @@ namespace API.DataAccess
 
                 _Cnn = Connection.Instancia.SetConnection();
                 SqlDataReader _Dr = null;
-                SqlCommand _Cmd = new SqlCommand("spLocalityGetByCourierNameZIP", _Cnn);
-                _Cmd.Parameters.Add("@LocalityName", SqlDbType.VarChar).Value = pName;
+                SqlCommand _Cmd = new SqlCommand("spLocalityGetByCourierZIPState", _Cnn);
                 _Cmd.Parameters.Add("@LocalityZIP", SqlDbType.VarChar).Value = pZIP;
+                _Cmd.Parameters.Add("@LocalityState", SqlDbType.VarChar).Value = pState;
                 _Cmd.Parameters.Add("@LocalityCourierId", SqlDbType.Int).Value = pCourier.Id;
 
 
@@ -552,7 +552,6 @@ namespace API.DataAccess
                 while (_Dr.Read())
                 {
        
-
                     //DATOS SHIPPING
                     _Shipping.Id = Convert.ToInt32(_Dr["ShippingId"]);
                     _Shipping.OrderId = Convert.ToString(_Dr["ShippingOrderId"]);
@@ -608,6 +607,8 @@ namespace API.DataAccess
 
                     _Shipping.Labels = GetLabelsByShippingId(_Shipping.Id);
                     _Shipping.Packages = GetPackagesByShippingId(_Shipping.Id);
+
+
 
                     if (_Dr["ShippingDeliveryTypeId"] != DBNull.Value)
                     {
@@ -718,6 +719,41 @@ namespace API.DataAccess
                     //_Shipping.Labels = GetLabelsByShippingId(_Shipping.Id);
                     //_Shipping.Packages = GetPackagesByShippingId(_Shipping.Id);
 
+
+                    if (_Dr["PackageId"] != DBNull.Value)
+                    {
+
+                        _Shipping.Packages = new List<Package>();
+
+                        Package _Package = new Package();
+
+                        _Package.Id = Convert.ToInt32(_Dr["PackageId"]);
+                        _Package.Weight = Convert.ToDouble(_Dr["PackageWeight"]);
+                        _Package.Height = Convert.ToDouble(_Dr["PackageHeight"]);
+                        _Package.Width = Convert.ToDouble(_Dr["PackageWidth"]);
+
+                        _Package.Depth = Convert.ToDouble(_Dr["PackageDepth"]);
+                        _Package.Reference = Convert.ToString(_Dr["PackageReference"]);
+
+                        _Shipping.Packages.Add(_Package);
+
+                    }
+
+                    if (_Dr["LabelId"] != DBNull.Value)
+                    {
+                        _Shipping.Labels = new List<Label>();
+
+                        Label _Label = new Label();
+
+                        _Label.Id = Convert.ToInt32(_Dr["LabelId"]);
+                        _Label.Identifier = Convert.ToString(_Dr["LabelIdentifier"]);
+                        _Label.TrackingNumber = Convert.ToString(_Dr["LabelTrackingNumber"]);
+
+                        _Label.Data = (byte[])(_Dr["LabelData"]);
+
+                        _Shipping.Labels.Add(_Label);
+                    }
+                    
                     if (_Dr["ShippingDeliveryTypeId"] != DBNull.Value)
                     {
 
@@ -1028,7 +1064,7 @@ namespace API.DataAccess
 
 
 
-                if(pAddress.Locality!=null)
+                if(pAddress.Locality!=null && pAddress.Locality.Id!=0)
                     _Cmd.Parameters.Add("@AddressLocalityId", SqlDbType.Int).Value = pAddress.Locality.Id;
                 else 
                     _Cmd.Parameters.Add("@AddressLocalityId", SqlDbType.Int).Value = DBNull.Value;
