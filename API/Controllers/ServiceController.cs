@@ -77,6 +77,7 @@ namespace API.Controllers
 
                     else if (_ShippingLine.title.ToLower().Contains("correo"))
                     {
+                        _Shipping.Courier = new Courier();
                         _Shipping.Courier.Id = 2;
                         _Shipping.Courier.Name = "CORREO";
                         _Shipping.Courier.Country = "URUGUAY";
@@ -85,7 +86,30 @@ namespace API.Controllers
                     }
 
 
+                    
                 }
+
+
+
+                foreach (ShippingLine _ShippingLine in pShipping.shipping_lines)
+                {
+                    if (_ShippingLine.title.ToLower().Contains("contra"))
+                    {
+                        _Shipping.CashOnDelivery = true;
+
+                        _Shipping.Info = _ShippingLine.title;
+
+                        break;
+                    }
+
+                    else
+                    {
+                        _Shipping.CashOnDelivery = false;
+                        _Shipping.Info = _ShippingLine.title;
+                        break;
+                    }
+                }
+
 
 
                 if (_Shipping.Courier != null)
@@ -149,6 +173,12 @@ namespace API.Controllers
 
             try
             {
+                if (_Shipping.Courier != null)
+                {
+                    //DATOS RECEIVER ADDRESS LOCALITY
+                    _Shipping.Receiver.Address.Locality = ShippingController.GetLocalityByCourierNameCity(pShipping.Receiver.Address.Locality.Name, pShipping.Receiver.Address.Locality.City, _Shipping.Courier);
+                }
+
                 ShippingController.UpdateShipping(_Shipping);
             }
 
@@ -183,14 +213,33 @@ namespace API.Controllers
         }
 
 
-        [HttpGet("shippings/from={pFrom}&to={pTo}&hasLabel={pHasLabel}")]
-        public List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo, int pHasLabel)
+        [HttpGet("shippings/ReceiverNameLastname={pNameLastname}")]
+        public List<Shipping> GetShippingsByCreatedAtFromTo(string pNameLastname)
         {
             List<Shipping> _Shippings = new List<Shipping>();
 
             try
             {
-                _Shippings = ShippingController.GetShippingsByCreatedAtFromTo(pFrom, pTo, pHasLabel);
+                _Shippings = ShippingController.GetShippingsByReceiverNameLastName(pNameLastname);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return _Shippings;
+        }
+
+
+        [HttpGet("shippings/from={pFrom}&to={pTo}&hasLabel={pHasLabel}&limit={pLimit}&order={pOrder}")]
+        public List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo, int pHasLabel, int pLimit, string pOrder)
+        {
+            List<Shipping> _Shippings = new List<Shipping>();
+
+            try
+            {
+                _Shippings = ShippingController.GetShippingsByCreatedAtFromTo(pFrom, pTo, pHasLabel, pLimit,pOrder);
             }
 
             catch (Exception ex)
@@ -230,8 +279,19 @@ namespace API.Controllers
             {
                 _Shipping = ShippingController.GetShippingByOrderId(pId);
 
+                if (_Shipping.Courier != null && _Shipping.Courier.Id != 0)
+                {
+                    if (_Shipping.Courier.Name == "DAC")
+                        _Shipping = DacServiceController.CreateLabel(_Shipping);
 
-                _Shipping = DacServiceController.CreateLabel(_Shipping);
+                    else if (_Shipping.Courier.Name == "CORREO")
+                        throw new Exception("Aun no contamos con integración para este courier.");
+                }
+
+                else
+                {
+                    throw new Exception("No se indicó courier.");
+                }
             }
 
             catch (Exception ex)
@@ -240,6 +300,68 @@ namespace API.Controllers
             }
 
             return _Shipping;
+        }
+
+
+        //GETS LOCALITIES
+
+        [HttpGet("statesByCourier/{pCourierId}")]
+        public List<string> GetStatesByCourier(int pCourierId)
+        {
+           List<string> _States;
+
+            try
+            {
+                _States = ShippingController.GetStatesByCourier(pCourierId);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return _States;
+        }
+
+
+
+
+        [HttpGet("citiesByCourierState/Courier={pCourierId}&State={pState}")]
+        public List<string> GetCitiesByCourierState(int pCourierId, string pState)
+        {
+            List<string> _Cities;
+
+            try
+            {
+                _Cities = ShippingController.GetCitiesByCourierState(pCourierId, pState);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return _Cities;
+        }
+
+
+
+        [HttpGet("localitiesByCourierStateCity/Courier={pCourierId}&State={pState}&City={pCity}")]
+        public List<string> GetLocalitiesByCourierStateCity(int pCourierId, string pState, string pCity)
+        {
+            List<string> _Localities;
+
+            try
+            {
+                _Localities = ShippingController.GetLocalitiesByCourierStateCity(pCourierId, pState, pCity);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return _Localities;
         }
 
     }

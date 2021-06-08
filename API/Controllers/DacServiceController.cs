@@ -303,6 +303,23 @@ namespace API.Controllers
                 string _IDSesionAux = Login("", "");
 
 
+
+                if (_Shipping.CashOnDelivery)
+                {
+                    _Shipping.GuideType = new GuideType();
+                    _Shipping.GuideType.Id = 6;
+                    _Shipping.GuideType.Name = "CONTRAREMBOLSO";
+                }
+
+                else
+                {
+                    _Shipping.GuideType = new GuideType();
+                    _Shipping.GuideType.Id = 2;
+                    _Shipping.GuideType.Name = "CUENTA CORRIENTE";
+
+                }
+                
+
                 JProperty _IDSesion = new JProperty("ID_Sesion", _IDSesionAux);
                 JProperty _K_Cliente_Remitente = new JProperty("K_Cliente_Remitente", 1);
                 JProperty _D_Cliente_Remitente = new JProperty("D_Cliente_Remitente", "Milgenial");

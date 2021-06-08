@@ -25,6 +25,7 @@ namespace API.DataTypes
         private GuideType _GuideType;
         private DeliveryType _DeliveryType;
 
+        private string _Info;
 
 
         public Shipping()
@@ -53,8 +54,7 @@ namespace API.DataTypes
 
         public List<Label> Labels { get => _Labels; set => _Labels = value; }
 
-        public string PackageReference { get => _Packages[0].Reference; }
-
+       
         public string CourierName { get {if (_Courier != null)
                 { return _Courier.Name; }
                 else return "";
@@ -71,6 +71,6 @@ namespace API.DataTypes
                 }
             } }
         public string ReceiverPassport { get => _Receiver.Passport; }
-
+        public string Info { get => _Info; set => _Info = value; }
     }
 }
