@@ -68,7 +68,32 @@ namespace API.Controllers
         }
 
 
-        public static List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo, int pHasLabel)
+
+        public static List<Shipping> GetShippingsByReceiverNameLastName(string pNameLastname)
+        {
+            List<Shipping> _Shippings = new List<Shipping>();
+
+
+            try
+            {
+
+
+                _Shippings = DataAccess.DAShipping.GetShippingsByReceiverNameLastname(pNameLastname);
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+            return _Shippings;
+        }
+
+
+        public static List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo, int pHasLabel, int pLimit, string pOrder)
         {
             List<Shipping> _Shippings = new List<Shipping>();
 
@@ -77,7 +102,7 @@ namespace API.Controllers
             {
 
 
-                _Shippings = DataAccess.DAShipping.GetShippingsByCreatedAtFromTo(pFrom, pTo, pHasLabel);
+                _Shippings = DataAccess.DAShipping.GetShippingsByCreatedAtFromTo(pFrom, pTo, pHasLabel, pLimit, pOrder);
 
             }
 
@@ -159,6 +184,82 @@ namespace API.Controllers
 
             return _Locality;
         }
+
+
+
+        public static List<string> GetStatesByCourier(int pCourierId)
+        {
+            List<string> _States;
+
+            try
+            {
+                _States = DataAccess.DAShipping.GetStatesByCourier(pCourierId);
+
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+            return _States;
+
+        }
+
+
+        public static List<string> GetCitiesByCourierState(int pCourierId, string pState)
+        {
+            List<string> _Cities;
+
+            try
+            {
+                _Cities = DataAccess.DAShipping.GetCitiesByCourierState(pCourierId, pState);
+
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+            return _Cities;
+
+
+        }
+
+
+
+        public static List<string> GetLocalitiesByCourierStateCity(int pCourierId, string pState, string pCity)
+        {
+            List<string> _Localities;
+
+            try
+            {
+                _Localities = DataAccess.DAShipping.GetLocalitiesByCourierStateCity(pCourierId, pState, pCity);
+
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+            return _Localities;
+
+
+        }
+
+
+
 
 
     }

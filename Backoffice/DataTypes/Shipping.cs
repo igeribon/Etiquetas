@@ -25,6 +25,7 @@ namespace API.DataTypes
         private GuideType _GuideType;
         private DeliveryType _DeliveryType;
 
+        private string _Info;
 
 
         public Shipping()
@@ -70,7 +71,7 @@ namespace API.DataTypes
         {
             get
             {
-                if (_Labels != null)
+                if (_Labels != null && _Labels.Count>0)
                 {
                     return _Labels[0].TrackingNumber;
                 }
@@ -81,9 +82,10 @@ namespace API.DataTypes
             }
         }
 
-    
-    public string ReceiverPassport { get => _Receiver.Passport; }
+        public string NameLastname { get => _Receiver.Name + " " + _Receiver.Lastname; }
 
-   
+
+        public string ReceiverPassport { get => _Receiver.Passport; }
+        public string Info { get => _Info; set => _Info = value; }
     }
 }

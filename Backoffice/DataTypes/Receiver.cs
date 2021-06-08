@@ -31,9 +31,7 @@ namespace API.DataTypes
         
         public string LocalityName { get => _Address.Locality.Name; }
 
-
-
-
+    
         public Receiver()
         {
             _Id = 0;

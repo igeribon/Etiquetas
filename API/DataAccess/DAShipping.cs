@@ -285,6 +285,8 @@ namespace API.DataAccess
 
                 _Cmd.Parameters.Add("@ShippingTotalLinesItemPrice", SqlDbType.Decimal).Value = pShipping.TotalLinesItemPrice;
 
+                _Cmd.Parameters.Add("@ShippingInfo", SqlDbType.VarChar).Value = pShipping.Info;
+
 
                 var _ReturnParameter = _Cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
                 _ReturnParameter.Direction = ParameterDirection.ReturnValue;
@@ -564,9 +566,13 @@ namespace API.DataAccess
 
                     _Shipping.CashOnDelivery = Convert.ToBoolean(_Dr["ShippingCashOnDelivery"]);
 
+                    if(_Dr["ShippingInfo"]!=DBNull.Value)
+                        _Shipping.Info = Convert.ToString(_Dr["ShippingInfo"]);
+
+
                     //DATOS COURIER
 
-                    
+
                     if (_Dr["CourierId"] != DBNull.Value)
                     {
                         _Shipping.Courier = new Courier();
@@ -637,7 +643,125 @@ namespace API.DataAccess
             return _Shipping;
         }
 
-        public static List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo, int pHasLabel)
+        public static List<Shipping> GetShippingsByReceiverNameLastname(string pNameLastname)
+        {
+            List<Shipping> _Shippings = new List<Shipping>();
+
+            SqlConnection _Cnn = new SqlConnection();
+
+            try
+            {
+
+
+                _Cnn = Connection.Instancia.SetConnection();
+                SqlDataReader _Dr = null;
+                SqlCommand _Cmd = new SqlCommand("spShippingGetByReceiverNameLastname", _Cnn);
+                _Cmd.Parameters.Add("@NameLastname", SqlDbType.VarChar).Value = pNameLastname;
+
+
+                _Cmd.CommandType = CommandType.StoredProcedure;
+
+                _Cnn.Open();
+
+                _Dr = _Cmd.ExecuteReader();
+
+                while (_Dr.Read())
+                {
+                    Shipping _Shipping = new Shipping();
+
+                    //DATOS SHIPPING
+                    _Shipping.Id = Convert.ToInt32(_Dr["ShippingId"]);
+                    _Shipping.OrderId = Convert.ToString(_Dr["ShippingOrderId"]);
+
+                    _Shipping.FinancialStatus = Convert.ToString(_Dr["ShippingFinancialStatus"]);
+
+                    _Shipping.CreatedAt = Convert.ToDateTime(_Dr["ShippingCreatedAt"]);
+
+                    _Shipping.TotalLinesItemPrice = Convert.ToDouble(_Dr["ShippingTotalLinesItemPrice"]);
+
+                    _Shipping.CashOnDelivery = Convert.ToBoolean(_Dr["ShippingCashOnDelivery"]);
+
+                    if (_Dr["ShippingInfo"] != DBNull.Value)
+                        _Shipping.Info = Convert.ToString(_Dr["ShippingInfo"]);
+
+
+                    //DATOS COURIER
+
+
+                    if (_Dr["CourierId"] != DBNull.Value)
+                    {
+                        _Shipping.Courier = new Courier();
+
+                        _Shipping.Courier.Id = Convert.ToInt32(_Dr["CourierId"]);
+                        _Shipping.Courier.Name = Convert.ToString(_Dr["CourierName"]);
+                        _Shipping.Courier.Country = Convert.ToString(_Dr["CourierCountry"]);
+                    }
+
+
+                    //DATOS RECEIVER
+                    _Shipping.Receiver = new Receiver();
+                    _Shipping.Receiver.Id = Convert.ToInt32(_Dr["ReceiverId"]);
+                    _Shipping.Receiver.Name = Convert.ToString(_Dr["ReceiverName"]);
+                    _Shipping.Receiver.Lastname = Convert.ToString(_Dr["ReceiverLastName"]);
+                    _Shipping.Receiver.Email = Convert.ToString(_Dr["ReceiverEmail"]);
+                    _Shipping.Receiver.Phone = Convert.ToString(_Dr["ReceiverPhone"]);
+
+                    _Shipping.Receiver.Address = GetAddressById(Convert.ToInt32(_Dr["ReceiverAddressId"]));
+
+
+                    //DATOS POST OFFICE
+
+                    if (_Dr["PostOfficeId"] != DBNull.Value)
+                    {
+                        _Shipping.PostOffice.Id = Convert.ToInt32(_Dr["PostOfficeId"]);
+                        _Shipping.PostOffice.Name = Convert.ToString(_Dr["PostOfficeName"]);
+                        _Shipping.PostOffice.Courier = _Shipping.Courier;
+                        _Shipping.PostOffice.Address = GetAddressById(Convert.ToInt32(_Dr["ReceiverAddressId"]));
+                        _Shipping.PostOffice.Code = Convert.ToInt32(_Dr["PostOfficeCode"]);
+                    }
+
+                    else
+                    {
+                        _Shipping.PostOffice = new PostOffice();
+
+                    }
+
+                    //_Shipping.Labels = GetLabelsByShippingId(_Shipping.Id);
+                    //_Shipping.Packages = GetPackagesByShippingId(_Shipping.Id);
+
+
+
+                    if (_Dr["ShippingDeliveryTypeId"] != DBNull.Value)
+                    {
+
+                        _Shipping.DeliveryType = Controllers.DacServiceController.GetDeliveryTypes().Find(x => x.Id == Convert.ToInt32(_Dr["ShippingDeliveryTypeId"]));
+                    }
+
+                    if (_Dr["ShippingGuideTypeId"] != DBNull.Value)
+                    {
+                        _Shipping.GuideType = (GuideType)Controllers.DacServiceController.GetGuideTypes().Find(x => x.Id == Convert.ToInt32(_Dr["ShippingGuideTypeId"]));
+                    }
+
+                    _Shippings.Add(_Shipping);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                _Cnn.Close();
+            }
+
+            return _Shippings;
+        }
+
+
+        public static List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo, int pHasLabel, int pLimit, string pOrder)
         {
             List<Shipping> _Shippings = new List<Shipping>();
 
@@ -653,7 +777,8 @@ namespace API.DataAccess
                 _Cmd.Parameters.Add("@From", SqlDbType.DateTime).Value = pFrom;
                 _Cmd.Parameters.Add("@To", SqlDbType.DateTime).Value = pTo;
                 _Cmd.Parameters.Add("@HasLabel", SqlDbType.Int).Value = pHasLabel;
-
+                _Cmd.Parameters.Add("@Limit", SqlDbType.Int).Value = pLimit;
+                _Cmd.Parameters.Add("@Order", SqlDbType.VarChar).Value = pOrder;
 
                 _Cmd.CommandType = CommandType.StoredProcedure;
 
@@ -677,6 +802,9 @@ namespace API.DataAccess
                     _Shipping.TotalLinesItemPrice = Convert.ToDouble(_Dr["ShippingTotalLinesItemPrice"]);
 
                     _Shipping.CashOnDelivery = Convert.ToBoolean(_Dr["ShippingCashOnDelivery"]);
+
+                    if (_Dr["ShippingInfo"] != DBNull.Value)
+                        _Shipping.Info = Convert.ToString(_Dr["ShippingInfo"]);
 
                     //DATOS COURIER
 
@@ -1044,6 +1172,150 @@ namespace API.DataAccess
 
 
 
+
+        public static List<string> GetStatesByCourier(int  pCourierId)
+        {
+            List<string> _States=new List<string>();
+
+            SqlConnection _Cnn = new SqlConnection();
+
+            try
+            {
+
+
+                _Cnn = Connection.Instancia.SetConnection();
+                SqlDataReader _Dr = null;
+                SqlCommand _Cmd = new SqlCommand("spLocalityStatesGetByCourier", _Cnn);
+                _Cmd.Parameters.Add("@LocalityCourierId", SqlDbType.Int).Value = pCourierId;
+
+
+                _Cmd.CommandType = CommandType.StoredProcedure;
+
+                _Cnn.Open();
+
+                _Dr = _Cmd.ExecuteReader();
+
+                while (_Dr.Read())
+                {
+                    string _State = "";
+
+                    _State = Convert.ToString(_Dr["LocalityState"]);
+
+                    _States.Add(_State);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                _Cnn.Close();
+            }
+
+            return _States;
+        }
+
+
+        public static List<string> GetCitiesByCourierState(int pCourierId, string pState)
+        {
+            List<string> _Cities = new List<string>();
+
+            SqlConnection _Cnn = new SqlConnection();
+
+            try
+            {
+
+
+                _Cnn = Connection.Instancia.SetConnection();
+                SqlDataReader _Dr = null;
+                SqlCommand _Cmd = new SqlCommand("spLocalityCitiesGetByCourierState", _Cnn);
+                _Cmd.Parameters.Add("@LocalityCourierId", SqlDbType.Int).Value = pCourierId;
+                _Cmd.Parameters.Add("@LocalityState", SqlDbType.VarChar).Value = pState;
+
+                _Cmd.CommandType = CommandType.StoredProcedure;
+
+                _Cnn.Open();
+
+                _Dr = _Cmd.ExecuteReader();
+
+                while (_Dr.Read())
+                {
+                    string _State = "";
+
+                    _State = Convert.ToString(_Dr["LocalityCity"]);
+
+                    _Cities.Add(_State);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                _Cnn.Close();
+            }
+
+            return _Cities;
+        }
+
+
+
+        public static List<string> GetLocalitiesByCourierStateCity(int pCourierId, string pState, string pCity)
+        {
+            List<string> _Localities = new List<string>();
+
+            SqlConnection _Cnn = new SqlConnection();
+
+            try
+            {
+
+
+                _Cnn = Connection.Instancia.SetConnection();
+                SqlDataReader _Dr = null;
+                SqlCommand _Cmd = new SqlCommand("spLocalitiesGetByCourierStateCity", _Cnn);
+                _Cmd.Parameters.Add("@LocalityCourierId", SqlDbType.Int).Value = pCourierId;
+                _Cmd.Parameters.Add("@LocalityState", SqlDbType.VarChar).Value = pState;
+                _Cmd.Parameters.Add("@LocalityCity", SqlDbType.VarChar).Value = pCity;
+
+                _Cmd.CommandType = CommandType.StoredProcedure;
+
+                _Cnn.Open();
+
+                _Dr = _Cmd.ExecuteReader();
+
+                while (_Dr.Read())
+                {
+                    string _State = "";
+
+                    _State = Convert.ToString(_Dr["LocalityName"]);
+
+                    _Localities.Add(_State);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                _Cnn.Close();
+            }
+
+            return _Localities;
+        }
+
+
         #endregion
 
         //UPDATES
@@ -1224,8 +1496,17 @@ namespace API.DataAccess
                 else
                     _Cmd.Parameters.Add("@ShippingPostOfficeId", SqlDbType.Int).Value = DBNull.Value;
 
+                if (pShipping.CashOnDelivery)
+                {
 
-                _Cmd.Parameters.Add("@ShippingCashOnDelivery", SqlDbType.Bit).Value = pShipping.CashOnDelivery;
+                    _Cmd.Parameters.Add("@ShippingCashOnDelivery", SqlDbType.Bit).Value = 1;
+                }
+
+
+                else
+                {
+                    _Cmd.Parameters.Add("@ShippingCashOnDelivery", SqlDbType.Bit).Value = 0;
+                }
 
                 if (pShipping.ReferenceId != null)
                     _Cmd.Parameters.Add("@ShippingReferenceId", SqlDbType.VarChar).Value = pShipping.ReferenceId;
@@ -1251,6 +1532,9 @@ namespace API.DataAccess
                     _Cmd.Parameters.Add("@ShippingDeliveryTypeId", SqlDbType.Int).Value = pShipping.DeliveryType.Id;
                 else
                     _Cmd.Parameters.Add("@ShippingDeliveryTypeId", SqlDbType.Int).Value = DBNull.Value;
+
+                _Cmd.Parameters.Add("@ShippingInfo", SqlDbType.VarChar).Value = pShipping.Info;
+
 
 
                 _Cnn.Open();
