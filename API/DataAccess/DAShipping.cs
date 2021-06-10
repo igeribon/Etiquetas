@@ -66,7 +66,7 @@ namespace API.DataAccess
                 _Cmd.CommandType = CommandType.StoredProcedure;
 
 
-                if (pAddress.Locality != null)
+                if (pAddress.Locality != null && pAddress.Locality.Id!=0)
                     _Cmd.Parameters.Add("@AddressLocalityId", SqlDbType.Int).Value = pAddress.Locality.Id;
                 else
                     _Cmd.Parameters.Add("@AddressLocalityId", SqlDbType.Int).Value = DBNull.Value;
@@ -848,24 +848,24 @@ namespace API.DataAccess
                     //_Shipping.Packages = GetPackagesByShippingId(_Shipping.Id);
 
 
-                    if (_Dr["PackageId"] != DBNull.Value)
-                    {
+                    //if (_Dr["PackageId"] != DBNull.Value)
+                    //{
 
-                        _Shipping.Packages = new List<Package>();
+                    //    _Shipping.Packages = new List<Package>();
 
-                        Package _Package = new Package();
+                    //    Package _Package = new Package();
 
-                        _Package.Id = Convert.ToInt32(_Dr["PackageId"]);
-                        _Package.Weight = Convert.ToDouble(_Dr["PackageWeight"]);
-                        _Package.Height = Convert.ToDouble(_Dr["PackageHeight"]);
-                        _Package.Width = Convert.ToDouble(_Dr["PackageWidth"]);
+                    //    _Package.Id = Convert.ToInt32(_Dr["PackageId"]);
+                    //    _Package.Weight = Convert.ToDouble(_Dr["PackageWeight"]);
+                    //    _Package.Height = Convert.ToDouble(_Dr["PackageHeight"]);
+                    //    _Package.Width = Convert.ToDouble(_Dr["PackageWidth"]);
 
-                        _Package.Depth = Convert.ToDouble(_Dr["PackageDepth"]);
-                        _Package.Reference = Convert.ToString(_Dr["PackageReference"]);
+                    //    _Package.Depth = Convert.ToDouble(_Dr["PackageDepth"]);
+                    //    _Package.Reference = Convert.ToString(_Dr["PackageReference"]);
 
-                        _Shipping.Packages.Add(_Package);
+                    //    _Shipping.Packages.Add(_Package);
 
-                    }
+                    //}
 
                     if (_Dr["LabelId"] != DBNull.Value)
                     {

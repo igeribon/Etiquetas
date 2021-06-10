@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -138,6 +139,9 @@ namespace Backoffice
 
                     if (_Shipping.Labels.Count > 0)
                     {
+                        File.WriteAllBytes(Server.MapPath("~/Label/Label.pdf"), _Shipping.Labels[0].Data);
+
+
                         pdfiframe.Visible = true;
                         pdfiframe.Src = "../Label/Label.pdf";
                     }

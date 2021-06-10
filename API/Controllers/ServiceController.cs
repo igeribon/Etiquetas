@@ -41,7 +41,9 @@ namespace API.Controllers
              
 
                 //DATOS RECEIVER
-                //_Shipping.Receiver = new Receiver();
+                if(_Shipping.Receiver==null)
+                    _Shipping.Receiver = new Receiver();
+                
                 _Shipping.Receiver.Name = pShipping.customer.first_name;
                 _Shipping.Receiver.Lastname = pShipping.customer.last_name;
                 _Shipping.Receiver.Email = Convert.ToString(pShipping.customer.email);
@@ -122,7 +124,8 @@ namespace API.Controllers
                 
 
                 //CREO PACKAGES
-                //_Shipping.Packages = new List<Package>();
+                if(_Shipping.Packages==null)
+                    _Shipping.Packages = new List<Package>();
 
                 foreach (LineItem _LineItem in pShipping.line_items)
                 {

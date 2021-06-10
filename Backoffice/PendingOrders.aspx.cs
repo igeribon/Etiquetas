@@ -116,32 +116,43 @@ namespace Backoffice
 
                 Shipping _Shipping = _Shippings.Find(x => x.OrderId.Trim().Equals(_OrderId.Trim()));
 
-                if (_Shipping.Receiver.Address.Locality.Id != 0)
+                if (_Shipping.FinancialStatus.Trim() == "paid")
                 {
-                    var client = new RestClient("http://localhost:8080/shippings/" + _OrderId + "/labels");
-                    client.Timeout = -1;
-                    var request = new RestRequest(Method.POST);
-                    IRestResponse response = client.Execute(request);
+                    if (_Shipping.Receiver.Address.Locality.Id != 0)
+                    {
+                        var client = new RestClient("http://localhost:8080/shippings/" + _OrderId + "/labels");
+                        client.Timeout = -1;
+                        var request = new RestRequest(Method.POST);
+                        IRestResponse response = client.Execute(request);
 
 
 
 
-                    _Shipping = JsonConvert.DeserializeObject<Shipping>(response.Content);
+                        _Shipping = JsonConvert.DeserializeObject<Shipping>(response.Content);
 
-                    File.WriteAllBytes(Server.MapPath("~/Label/Label.pdf"), _Shipping.Labels[0].Data);
+                        File.WriteAllBytes(Server.MapPath("~/Label/Label.pdf"), _Shipping.Labels[0].Data);
 
-                    Response.Write("<script>");
-                    Response.Write("window.open('ShowPDF.aspx','_blank')");
+                        Response.Write("<script>");
+                        Response.Write("window.open('ShowPDF.aspx','_blank')");
 
-                    Response.Write("</script>");
+                        Response.Write("</script>");
+
+
+                        LoadShippings();
+                    }
+
+                    else
+                    {
+                        lblError.Text = "La órden no tiene una empresa y/o localidad asignada.";
+                    }
                 }
 
                 else
                 {
-                    lblError.Text = "La órden no tiene una empresa y/o localidad asignada.";
+                    lblError.Text = "La órden no está paga.";
                 }
 
-                LoadShippings();
+                
             }
 
             catch (Exception ex)

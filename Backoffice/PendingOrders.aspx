@@ -71,6 +71,7 @@
         <asp:BoundField ItemStyle-Width="300px" DataField="NameLastname" HeaderText="Receptor" >
 <ItemStyle Width="300px"></ItemStyle>
         </asp:BoundField>
+        <asp:BoundField DataField="FinancialStatus" HeaderText="Estado" />
         <asp:CheckBoxField DataField="CashOnDelivery" HeaderText="Contra Reembolso">
         <ItemStyle HorizontalAlign="Center" />
         </asp:CheckBoxField>
