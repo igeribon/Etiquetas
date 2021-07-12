@@ -1,0 +1,416 @@
+{
+  "id": 4074551935135,
+  "email": "gentilerepresentaciones@yahoo.com.ar",
+  "closed_at": "2021-06-29T16:07:10-03:00",
+  "created_at": "2021-06-28T21:14:43-03:00",
+  "updated_at": "2021-07-06T15:32:49-03:00",
+  "number": 10875,
+  "note": "REALIZO RETIRO EN LA SUCURSAL// LEER CRONOLOGIA CUANDO VENGA A DEVOLVER EL PRODUCTO",
+  "token": "5f158463a5b74bc97d955474a32aee83",
+  "gateway": "Pos o Efectivo al retirarlo en Montevideo, Centro.",
+  "test": false,
+  "total_price": "1290.00",
+  "subtotal_price": "1290.00",
+  "total_weight": 0,
+  "total_tax": "232.62",
+  "taxes_included": true,
+  "currency": "UYU",
+  "financial_status": "paid",
+  "confirmed": true,
+  "total_discounts": "0.00",
+  "total_line_items_price": "1290.00",
+  "cart_token": "f76a1a5ce3d9c2fb66d853cf9a6236a4",
+  "buyer_accepts_marketing": true,
+  "name": "#11875",
+  "referring_site": "http://m.facebook.com",
+  "landing_site": "/products/posicionador?fbclid=IwAR2j-mjDuaiHGayr8f9E_5yZyEMo5fFMryWPDc1z-zp2yBYMmyD6dSS2DZU_aem_AZ9LpNNvHEhHRzELr82abS7Hx3geg-7Sq7w7YCd-PNrFGCI63Aizb9A5mrsyMsn1iq6pxl_7ojxRisq49nfQ01btvVu5T3Ev9zKj5O3dAIhiVmrtg-WSyMBBFa17U1YYMQI",
+  "cancelled_at": null,
+  "cancel_reason": null,
+  "total_price_usd": "29.69",
+  "checkout_token": "ae0c30bcc9444ce32129eb1df8b99e6a",
+  "reference": null,
+  "user_id": null,
+  "location_id": null,
+  "source_identifier": null,
+  "source_url": null,
+  "processed_at": "2021-06-28T21:14:41-03:00",
+  "device_id": null,
+  "phone": null,
+  "customer_locale": "es",
+  "app_id": 580111,
+  "browser_ip": "186.54.211.192",
+  "client_details": {
+    "accept_language": "es-es",
+    "browser_height": 608,
+    "browser_ip": "186.54.211.192",
+    "browser_width": 414,
+    "session_hash": null,
+    "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) WebKit/8611 (KHTML, like Gecko) Mobile/18F72 [FBAN/FBIOS;FBDV/iPhone10,2;FBMD/iPhone;FBSN/iOS;FBSV/14.6;FBSS/3;FBID/phone;FBLC/es_LA;FBOP/5]"
+  },
+  "landing_site_ref": null,
+  "order_number": 11875,
+  "discount_applications": [],
+  "discount_codes": [],
+  "note_attributes": [],
+  "payment_gateway_names": [
+    "Pos o Efectivo al retirarlo en Montevideo, Centro."
+  ],
+  "processing_method": "manual",
+  "checkout_id": 20822141829279,
+  "source_name": "web",
+  "fulfillment_status": "fulfilled",
+  "tax_lines": [
+    {
+      "price": "232.62",
+      "rate": 0.22,
+      "title": "VAT",
+      "price_set": {
+        "shop_money": {
+          "amount": "232.62",
+          "currency_code": "UYU"
+        },
+        "presentment_money": {
+          "amount": "232.62",
+          "currency_code": "UYU"
+        }
+      }
+    }
+  ],
+  "tags": "CONFIRMADO, mensaje enviado, PICKUP, SEPARADO",
+  "contact_email": "gentilerepresentaciones@yahoo.com.ar",
+  "order_status_url": "https://www.milgenialuy.com/42511728799/orders/5f158463a5b74bc97d955474a32aee83/authenticate?key=5973fa2e150bb27661937339423770ed",
+  "presentment_currency": "UYU",
+  "total_line_items_price_set": {
+    "shop_money": {
+      "amount": "1290.00",
+      "currency_code": "UYU"
+    },
+    "presentment_money": {
+      "amount": "1290.00",
+      "currency_code": "UYU"
+    }
+  },
+  "total_discounts_set": {
+    "shop_money": {
+      "amount": "0.00",
+      "currency_code": "UYU"
+    },
+    "presentment_money": {
+      "amount": "0.00",
+      "currency_code": "UYU"
+    }
+  },
+  "total_shipping_price_set": {
+    "shop_money": {
+      "amount": "0.00",
+      "currency_code": "UYU"
+    },
+    "presentment_money": {
+      "amount": "0.00",
+      "currency_code": "UYU"
+    }
+  },
+  "subtotal_price_set": {
+    "shop_money": {
+      "amount": "1290.00",
+      "currency_code": "UYU"
+    },
+    "presentment_money": {
+      "amount": "1290.00",
+      "currency_code": "UYU"
+    }
+  },
+  "total_price_set": {
+    "shop_money": {
+      "amount": "1290.00",
+      "currency_code": "UYU"
+    },
+    "presentment_money": {
+      "amount": "1290.00",
+      "currency_code": "UYU"
+    }
+  },
+  "total_tax_set": {
+    "shop_money": {
+      "amount": "232.62",
+      "currency_code": "UYU"
+    },
+    "presentment_money": {
+      "amount": "232.62",
+      "currency_code": "UYU"
+    }
+  },
+  "line_items": [
+    {
+      "id": 10452817739935,
+      "variant_id": 40321142227103,
+      "title": "POSICIONADOR PUNZÓN DE CARPINTERÍA CON ACCESORIOS",
+      "quantity": 1,
+      "sku": "506-0",
+      "variant_title": "",
+      "vendor": "Mil Genial Uruguay",
+      "fulfillment_service": "manual",
+      "product_id": 6871433937055,
+      "requires_shipping": true,
+      "taxable": true,
+      "gift_card": false,
+      "name": "POSICIONADOR PUNZÓN DE CARPINTERÍA CON ACCESORIOS",
+      "variant_inventory_management": "shopify",
+      "properties": [],
+      "product_exists": true,
+      "fulfillable_quantity": 0,
+      "grams": 0,
+      "price": "1290.00",
+      "total_discount": "0.00",
+      "fulfillment_status": "fulfilled",
+      "price_set": {
+        "shop_money": {
+          "amount": "1290.00",
+          "currency_code": "UYU"
+        },
+        "presentment_money": {
+          "amount": "1290.00",
+          "currency_code": "UYU"
+        }
+      },
+      "total_discount_set": {
+        "shop_money": {
+          "amount": "0.00",
+          "currency_code": "UYU"
+        },
+        "presentment_money": {
+          "amount": "0.00",
+          "currency_code": "UYU"
+        }
+      },
+      "discount_allocations": [],
+      "duties": [],
+      "admin_graphql_api_id": "gid://shopify/LineItem/10452817739935",
+      "tax_lines": [
+        {
+          "price": "232.62",
+          "rate": 0.22,
+          "title": "VAT",
+          "price_set": {
+            "shop_money": {
+              "amount": "232.62",
+              "currency_code": "UYU"
+            },
+            "presentment_money": {
+              "amount": "232.62",
+              "currency_code": "UYU"
+            }
+          }
+        }
+      ],
+      "origin_location": {
+        "id": 2821303140511,
+        "country_code": "UY",
+        "province_code": "",
+        "name": "Mil Genial Uruguay",
+        "address1": "1595 Calle Minas",
+        "address2": "Centro",
+        "city": "Montevideo",
+        "zip": "11200"
+      }
+    }
+  ],
+  "fulfillments": [
+    {
+      "id": 3636285997215,
+      "order_id": 4074551935135,
+      "status": "success",
+      "created_at": "2021-06-29T16:07:09-03:00",
+      "service": "manual",
+      "updated_at": "2021-06-29T16:07:09-03:00",
+      "tracking_company": null,
+      "shipment_status": null,
+      "location_id": 49644961951,
+      "line_items": [
+        {
+          "id": 10452817739935,
+          "variant_id": 40321142227103,
+          "title": "POSICIONADOR PUNZÓN DE CARPINTERÍA CON ACCESORIOS",
+          "quantity": 1,
+          "sku": "506-0",
+          "variant_title": "",
+          "vendor": "Mil Genial Uruguay",
+          "fulfillment_service": "manual",
+          "product_id": 6871433937055,
+          "requires_shipping": true,
+          "taxable": true,
+          "gift_card": false,
+          "name": "POSICIONADOR PUNZÓN DE CARPINTERÍA CON ACCESORIOS",
+          "variant_inventory_management": "shopify",
+          "properties": [],
+          "product_exists": true,
+          "fulfillable_quantity": 0,
+          "grams": 0,
+          "price": "1290.00",
+          "total_discount": "0.00",
+          "fulfillment_status": "fulfilled",
+          "price_set": {
+            "shop_money": {
+              "amount": "1290.00",
+              "currency_code": "UYU"
+            },
+            "presentment_money": {
+              "amount": "1290.00",
+              "currency_code": "UYU"
+            }
+          },
+          "total_discount_set": {
+            "shop_money": {
+              "amount": "0.00",
+              "currency_code": "UYU"
+            },
+            "presentment_money": {
+              "amount": "0.00",
+              "currency_code": "UYU"
+            }
+          },
+          "discount_allocations": [],
+          "duties": [],
+          "admin_graphql_api_id": "gid://shopify/LineItem/10452817739935",
+          "tax_lines": [
+            {
+              "price": "232.62",
+              "rate": 0.22,
+              "title": "VAT",
+              "price_set": {
+                "shop_money": {
+                  "amount": "232.62",
+                  "currency_code": "UYU"
+                },
+                "presentment_money": {
+                  "amount": "232.62",
+                  "currency_code": "UYU"
+                }
+              }
+            }
+          ],
+          "origin_location": {
+            "id": 2821303140511,
+            "country_code": "UY",
+            "province_code": "",
+            "name": "Mil Genial Uruguay",
+            "address1": "1595 Calle Minas",
+            "address2": "Centro",
+            "city": "Montevideo",
+            "zip": "11200"
+          }
+        }
+      ],
+      "tracking_number": null,
+      "tracking_numbers": [],
+      "tracking_url": null,
+      "tracking_urls": [],
+      "receipt": {},
+      "name": "#11875.1",
+      "admin_graphql_api_id": "gid://shopify/Fulfillment/3636285997215"
+    }
+  ],
+  "refunds": [],
+  "total_tip_received": "0.00",
+  "original_total_duties_set": null,
+  "current_total_duties_set": null,
+  "admin_graphql_api_id": "gid://shopify/Order/4074551935135",
+  "shipping_lines": [
+    {
+      "id": 3384281006239,
+      "title": "Pickup Minas 1595",
+      "price": "0.00",
+      "code": "Pickup Minas 1595",
+      "source": "shopify",
+      "phone": null,
+      "requested_fulfillment_service_id": null,
+      "delivery_category": null,
+      "carrier_identifier": "650f1a14fa979ec5c74d063e968411d4",
+      "discounted_price": "0.00",
+      "price_set": {
+        "shop_money": {
+          "amount": "0.00",
+          "currency_code": "UYU"
+        },
+        "presentment_money": {
+          "amount": "0.00",
+          "currency_code": "UYU"
+        }
+      },
+      "discounted_price_set": {
+        "shop_money": {
+          "amount": "0.00",
+          "currency_code": "UYU"
+        },
+        "presentment_money": {
+          "amount": "0.00",
+          "currency_code": "UYU"
+        }
+      },
+      "discount_allocations": [],
+      "tax_lines": []
+    }
+  ],
+  "billing_address": {
+    "first_name": "Giuseppe",
+    "address1": "Manuel pagola 3290/402",
+    "phone": "099 771 587",
+    "city": "Montevideo ",
+    "zip": "",
+    "province": null,
+    "country": "Uruguay",
+    "last_name": "Gentile ",
+    "address2": null,
+    "company": null,
+    "latitude": -34.909245299999988,
+    "longitude": -56.145415,
+    "name": "Giuseppe Gentile ",
+    "country_code": "UY",
+    "province_code": null
+  },
+  "shipping_address": null,
+  "customer": {
+    "id": 4323122184351,
+    "email": "gentilerepresentaciones@yahoo.com.ar",
+    "accepts_marketing": true,
+    "created_at": "2020-12-17T20:42:36-03:00",
+    "updated_at": "2021-06-28T21:14:43-03:00",
+    "first_name": "Giuseppe",
+    "last_name": "Gentile",
+    "orders_count": 2,
+    "state": "disabled",
+    "total_spent": "2680.00",
+    "last_order_id": 4074551935135,
+    "note": null,
+    "verified_email": true,
+    "multipass_identifier": null,
+    "tax_exempt": false,
+    "phone": null,
+    "tags": "",
+    "last_order_name": "#11875",
+    "currency": "UYU",
+    "accepts_marketing_updated_at": "2020-12-17T20:42:36-03:00",
+    "marketing_opt_in_level": "single_opt_in",
+    "admin_graphql_api_id": "gid://shopify/Customer/4323122184351",
+    "default_address": {
+      "id": 6656088866975,
+      "customer_id": 4323122184351,
+      "first_name": "Giuseppe",
+      "last_name": "Gentile ",
+      "company": null,
+      "address1": "Manuel pagola 3290/402",
+      "address2": null,
+      "city": "Montevideo",
+      "province": null,
+      "country": "Uruguay",
+      "zip": "",
+      "phone": "099 771 587",
+      "name": "Giuseppe Gentile ",
+      "province_code": null,
+      "country_code": "UY",
+      "country_name": "Uruguay",
+      "default": true
+    }
+  },
+  "APIResponse": "200"
+}

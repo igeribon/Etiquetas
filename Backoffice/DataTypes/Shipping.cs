@@ -26,7 +26,7 @@ namespace API.DataTypes
         private DeliveryType _DeliveryType;
 
         private string _Info;
-
+        private string _Note;
 
         public Shipping()
         { 
@@ -87,5 +87,6 @@ namespace API.DataTypes
 
         public string ReceiverPassport { get => _Receiver.Passport; }
         public string Info { get => _Info; set => _Info = value; }
+        public string Note { get => _Note; set => _Note = value; }
     }
 }

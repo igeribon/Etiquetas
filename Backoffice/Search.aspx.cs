@@ -47,7 +47,7 @@ namespace Backoffice
                 //    string _OrderId = grdShippings.DataKeys[e.Row.RowIndex].Value.ToString();
                 //    GridView grdDetail = e.Row.FindControl("grdDetail") as GridView;
 
-                //    var client = new RestClient("http://localhost:8080/shippings/" + _OrderId);
+                //    var client = new RestClient("http://api.enviosmilgenial.com/shippings/" + _OrderId);
                 //    client.Timeout = -1;
                 //    var request = new RestRequest(Method.GET);
                 //    IRestResponse response = client.Execute(request);
@@ -80,7 +80,7 @@ namespace Backoffice
                 string _OrderId = Convert.ToString(grdShippings.DataKeys[row.RowIndex].Value);
 
 
-                var client = new RestClient("http://localhost:8080/shippings/" + _OrderId);
+                var client = new RestClient("http://api.enviosmilgenial.com/shippings/" + _OrderId);
                 client.Timeout = -1;
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);
@@ -119,7 +119,7 @@ namespace Backoffice
                         string _OrderId = txtSearch.Text.Trim();
 
 
-                        var client = new RestClient("http://localhost:8080/shippings/" + _OrderId);
+                        var client = new RestClient("http://api.enviosmilgenial.com/shippings/" + _OrderId);
                         client.Timeout = -1;
                         var request = new RestRequest(Method.GET);
                         IRestResponse response = client.Execute(request);
@@ -140,7 +140,7 @@ namespace Backoffice
                         string _Name = txtSearch.Text.Trim();
 
 
-                        var client = new RestClient("http://localhost:8080/shippings/ReceiverNameLastname=" + _Name);
+                        var client = new RestClient("http://api.enviosmilgenial.com/shippings/ReceiverNameLastname=" + _Name);
                         client.Timeout = -1;
                         var request = new RestRequest(Method.GET);
                         IRestResponse response = client.Execute(request);

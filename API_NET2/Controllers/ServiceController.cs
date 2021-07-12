@@ -1,12 +1,14 @@
 ﻿using API.DataTypes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+
 
 namespace API.Controllers
 {
@@ -14,18 +16,29 @@ namespace API.Controllers
     [ApiController]
     public class ServiceController : ControllerBase , IServiceController
     {
+        
 
         [HttpPost("shippings")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Shipping))]
+        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Shipping))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult CreateShipping(DTOShipping pShipping)
         {
             Shipping _Shipping = null;
-            
 
             try
             {
-                string _OrderId = pShipping.name.Replace("#", "").Trim();
+
+                //JObject _Log = Newtonsoft.Json.Linq.JObject.FromObject(pShipping);
+
+                //string _LogMessage = "";
+
+
+                //SE CAMBIO pShipping.Name por pShipping.ordcer_number
+
+                //string _OrderId = pShipping.name.Replace("#", "").Trim();
+
+                string _OrderId = pShipping.order_number.ToString();
+
                 //DATOS SHIPPING
 
                 _Shipping = GetShippingByOrderId(_OrderId);
@@ -36,16 +49,19 @@ namespace API.Controllers
 
                 _Shipping.CreatedAt = pShipping.created_at;
 
-                _Shipping.TotalLinesItemPrice = Convert.ToDouble(pShipping.total_line_items_price.Replace(".", ","));
 
+                //SE QUITO EL REEMPLAZO DE PUNTOS POR COMAS EN TotalLinesItemPrice POR LA CONFIGURACION DE IDIOMA DEL SERVIDOR
+                //_Shipping.TotalLinesItemPrice = Convert.ToDouble(pShipping.total_line_items_price.Replace(".", ","));
 
-                _Shipping.Note = Convert.ToString(pShipping.note);                
-                
+                _Shipping.TotalLinesItemPrice = Convert.ToDouble(pShipping.total_line_items_price);
+
+                _Shipping.Note = Convert.ToString(pShipping.note);
+
 
                 //DATOS RECEIVER
-                if(_Shipping.Receiver==null)
+                if (_Shipping.Receiver == null)
                     _Shipping.Receiver = new Receiver();
-                
+
                 _Shipping.Receiver.Name = pShipping.customer.first_name;
                 _Shipping.Receiver.Lastname = pShipping.customer.last_name;
                 _Shipping.Receiver.Email = Convert.ToString(pShipping.customer.email);
@@ -59,13 +75,15 @@ namespace API.Controllers
 
                 //DATOS RECEIVER ADDRESS
                 //_Shipping.Receiver.Address = new Address();
+
+                if(pShipping.shipping_address!=null)
                 _Shipping.Receiver.Address.Line1 = pShipping.shipping_address.address1;
 
 
 
                 //DATOS COURIER
 
-               
+
 
                 foreach (ShippingLine _ShippingLine in pShipping.shipping_lines)
                 {
@@ -90,7 +108,7 @@ namespace API.Controllers
                     }
 
 
-                    
+
                 }
 
 
@@ -122,11 +140,11 @@ namespace API.Controllers
                     _Shipping.Receiver.Address.Locality = ShippingController.GetLocalityByCourierNameCity(pShipping.shipping_address.zip, pShipping.shipping_address.city, _Shipping.Courier);
                 }
 
-                    
-                
+
+
 
                 //CREO PACKAGES
-                if(_Shipping.Packages==null)
+                if (_Shipping.Packages == null)
                     _Shipping.Packages = new List<Package>();
 
                 foreach (LineItem _LineItem in pShipping.line_items)
@@ -148,25 +166,30 @@ namespace API.Controllers
                     ShippingController.InsertShipping(_Shipping);
                 }
 
-                else 
+                else
                 {
 
                     ShippingController.UpdateShipping(_Shipping);
                 }
 
+                //_LogMessage ="200";
+
             }
 
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                //_LogMessage= "500"+" - "+ex.Message;
                 return StatusCode(500);
             }
 
+            //finally
+            //{
+            //    _Log.Add("APIResponse", _LogMessage);
+            //    ShippingController.SaveLog(_Log.ToString(), pShipping.name.Replace("#", "").Trim() + "_" + DateTime.Now.ToString() + ".json");
+            //}
 
 
-
-
-            return Ok(_Shipping);
+            return Accepted(_Shipping);
         }
 
 
@@ -368,6 +391,28 @@ namespace API.Controllers
 
             return _Localities;
         }
+
+
+        [HttpGet("test")]
+        public string GetTest()
+        {
+            string _test = "";
+            try
+            {
+                _test = ShippingController.Test();
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return _test;
+        }
+
+     
+
+
 
     }
 }

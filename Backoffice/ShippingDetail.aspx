@@ -78,11 +78,24 @@
         
         <td class="auto-style6">  
            
-            Info.</td>  
+            Info</td>  
 
             <td class="auto-style1" colspan="3">  
            
              <asp:TextBox ID="txtInfo" runat="server" Width="620px" TextMode="MultiLine" Rows="10" Height="53px" ></asp:TextBox>
+         </td>  
+
+    </tr>
+    <tr>
+        
+        
+        <td class="auto-style6">  
+           
+            Notas</td>  
+
+            <td class="auto-style1" colspan="3">  
+           
+             <asp:TextBox ID="txtNote" runat="server" Width="620px" TextMode="MultiLine" Rows="10" Height="53px" ></asp:TextBox>
          </td>  
 
     </tr>
@@ -207,7 +220,7 @@
       <tr>  
          <td class="auto-style6">  
      
-            <strong>  Items</strong></td>  
+             &nbsp;</td>  
          <td width="10%" class="auto-style1">  
           
              &nbsp;</td>  
@@ -223,13 +236,54 @@
 
 
  </table>  
-    <asp:GridView ID="grdPackages" runat="server" CssClass="table table-bordered table-hover" Width="323px">
+    <asp:GridView ID="grdPackages" runat="server" CssClass="table table-bordered table-hover" Width="811px">
+            <RowStyle CssClass="table-bordered" />
+        <HeaderStyle CssClass="table-bordered"/>
+
         <Columns>
-            <asp:BoundField DataField="Reference" HeaderText="Nombre" />
+            <asp:BoundField DataField="Reference" HeaderText="Item" />
         </Columns>
     </asp:GridView>
 
     <table border="0" class="auto-style7">  
+
+        <tr>  
+         <td class="auto-style6">  
+ 
+             &nbsp;</td>  
+         <td class="auto-style4">  
+
+             &nbsp;</td>  
+
+
+         <td class="auto-style8">  
+             
+             &nbsp;</td>  
+
+         <td width="10%" class="auto-style1">  
+             &nbsp;</td>  
+     </tr>  
+  
+
+        <tr>  
+         <td class="auto-style6">  
+ 
+             &nbsp;</td>  
+         <td class="auto-style4">  
+
+             &nbsp;</td>  
+
+
+         <td class="auto-style8">  
+             
+             &nbsp;</td>  
+
+         <td width="10%" class="auto-style1">  
+             <asp:Button ID="btnCancelar" cssclass="btn btn-warning btn-block btn-flat" runat="server" Text="Cancelar" OnClick="btnCancelar_OnClick"/>
+                 <asp:Button ID="btnGuardar" cssclass="btn btn-warning btn-block btn-flat" runat="server" Text="Guardar" OnClick="btnGuardar_OnClick"/>
+         </td>  
+     </tr>  
+  
 
         <tr>  
          <td class="auto-style6">  
@@ -245,9 +299,7 @@
          </td>  
 
          <td width="10%" class="auto-style1">  
-             <asp:Button ID="btnCancelar" cssclass="btn btn-warning btn-block btn-flat" runat="server" Text="Cancelar" OnClick="btnCancelar_OnClick"/>
-                 <asp:Button ID="btnGuardar" cssclass="btn btn-warning btn-block btn-flat" runat="server" Text="Guardar" OnClick="btnGuardar_OnClick"/>
-         </td>  
+             &nbsp;</td>  
      </tr>  
   
 

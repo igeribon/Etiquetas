@@ -107,7 +107,7 @@
 &nbsp;
 
 
-         <asp:Label ID="lblError" runat="server" ForeColor="Red"></asp:Label>
+         <asp:Label ID="lblError" runat="server" ForeColor="Red" Font-Bold="True"></asp:Label>
               
     
 </asp:Content>

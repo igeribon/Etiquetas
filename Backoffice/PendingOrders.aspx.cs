@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing.Printing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -48,7 +51,7 @@ namespace Backoffice
                 //    string _OrderId = grdShippings.DataKeys[e.Row.RowIndex].Value.ToString();
                 //    GridView grdDetail = e.Row.FindControl("grdDetail") as GridView;
 
-                //    var client = new RestClient("http://localhost:8080/shippings/" + _OrderId);
+                //    var client = new RestClient("http://api.enviosmilgenial.com/shippings/" + _OrderId);
                 //    client.Timeout = -1;
                 //    var request = new RestRequest(Method.GET);
                 //    IRestResponse response = client.Execute(request);
@@ -81,7 +84,7 @@ namespace Backoffice
                 string _OrderId= Convert.ToString(grdShippings.DataKeys[row.RowIndex].Value);
 
               
-                    var client = new RestClient("http://localhost:8080/shippings/" + _OrderId);
+                    var client = new RestClient("http://api.enviosmilgenial.com/shippings/" + _OrderId);
                     client.Timeout = -1;
                     var request = new RestRequest(Method.GET);
                     IRestResponse response = client.Execute(request);
@@ -93,7 +96,6 @@ namespace Backoffice
                     Session["Shipping"] = _Shipping;
 
                     Response.Redirect("ShippingDetail.aspx", false);
-            
 
             }
 
@@ -120,25 +122,49 @@ namespace Backoffice
                 {
                     if (_Shipping.Receiver.Address.Locality.Id != 0)
                     {
-                        var client = new RestClient("http://localhost:8080/shippings/" + _OrderId + "/labels");
+                        var client = new RestClient("http://api.enviosmilgenial.com/shippings/" + _OrderId + "/labels");
                         client.Timeout = -1;
                         var request = new RestRequest(Method.POST);
                         IRestResponse response = client.Execute(request);
 
 
+                        if (response.StatusCode != System.Net.HttpStatusCode.InternalServerError)
+                        {
+                            _Shipping = JsonConvert.DeserializeObject<Shipping>(response.Content);
+
+                            File.WriteAllBytes(Server.MapPath("~/Label/Label.pdf"), _Shipping.Labels[0].Data);
+
+                            Response.Write("<script>");
+                            Response.Write("window.open('ShowPDF.aspx','_blank')");
+
+                            Response.Write("</script>");
+
+                            //Process printjob = new Process();
+
+                            //printjob.StartInfo.FileName = Server.MapPath("~/Label/Label.pdf");//path of your file;
+
+                            //printjob.StartInfo.Verb = "Print";
+
+                            //printjob.StartInfo.CreateNoWindow = true;
+
+                            //printjob.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+
+                            //PrinterSettings setting = new PrinterSettings();
+
+                            //setting.DefaultPageSettings.Landscape = true;
+
+                            //printjob.Start();
 
 
-                        _Shipping = JsonConvert.DeserializeObject<Shipping>(response.Content);
+                            LoadShippings();
 
-                        File.WriteAllBytes(Server.MapPath("~/Label/Label.pdf"), _Shipping.Labels[0].Data);
+                            lblError.Text = "";
+                        }
 
-                        Response.Write("<script>");
-                        Response.Write("window.open('ShowPDF.aspx','_blank')");
-
-                        Response.Write("</script>");
-
-
-                        LoadShippings();
+                        else
+                        {
+                            lblError.Text = "Hubo un error al generar la etiqueta.";                        
+                        }
                     }
 
                     else
@@ -156,8 +182,8 @@ namespace Backoffice
             }
 
             catch (Exception ex)
-            { 
-            
+            {
+                lblError.Text = ex.Message;
             }
 
         }
@@ -170,14 +196,13 @@ namespace Backoffice
               
                 _Shippings = new List<Shipping>();
 
-
-                DateTime _From = Convert.ToDateTime(txtFrom.Text);
-                DateTime _To = Convert.ToDateTime(txtTo.Text);
+                DateTime _From = DateTime.ParseExact(txtFrom.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                DateTime _To = DateTime.ParseExact(txtTo.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
                 string _Order = "asc";
 
               
-                var client = new RestClient("http://localhost:8080/shippings/from=" + _From.ToString("yyyy-MM-dd") + "&to=" + _To.ToString("yyyy-MM-dd") + "&hasLabel=0" + "&limit=100" + "&order=" + _Order);
+                var client = new RestClient("http://api.enviosmilgenial.com/shippings/from=" + _From.ToString("yyyy-MM-dd") + "&to=" + _To.ToString("yyyy-MM-dd") + "&hasLabel=0" + "&limit=100" + "&order=" + _Order);
                 client.Timeout = -1;
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);
