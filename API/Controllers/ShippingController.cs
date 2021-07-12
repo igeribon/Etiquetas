@@ -1,62 +1,265 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.DataAccess;
 using API.DataTypes;
 
 namespace API.Controllers
 {
-    //[Route("api/[controller]")]
-    [ApiController]
-    public class ShippingController : ControllerBase
+    public class ShippingController 
     {
 
-        [HttpGet("shippings/{from}/{to}")]
-        public List<Shipping> Get(DateTime from, DateTime to)
+        public static void InsertShipping(Shipping pShipping)
         {
-            //Obtiene los shippings entre dos fechas para listarlos
+            try
+            {
+                DataAccess.DAShipping.InsertShipping(pShipping);
+            }
 
-            List<Shipping> _Shippings = new List<Shipping>();
-                return _Shippings;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+ 
+        }
+
+        public static void UpdateShipping(Shipping pShipping)
+        {
+
+            try
+            {
+
+                DataAccess.DAShipping.UpdateShipping(pShipping);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
         }
 
 
-        [HttpGet("shippings/{id}")]
-        public Shipping Get(int id)
+        public static Shipping GetShippingByOrderId(string pOrderId)
         {
-
-            //Obtiene la información de un shipping para su detalle
-
             Shipping _Shipping = new Shipping();
+
+          
+            try
+            {
+                _Shipping = DataAccess.DAShipping.GetShippingByOrderId(pOrderId);
+
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+     
 
             return _Shipping;
         }
 
 
-        [HttpPost("shippings")]
-        public bool Post(Shipping shipping)
+
+        public static List<Shipping> GetShippingsByReceiverNameLastName(string pNameLastname)
         {
-            //Genera/actualiza un registro en la tabla de shipping a partir de la información que nos llega 
-
-            bool _Commited = false;
+            List<Shipping> _Shippings = new List<Shipping>();
 
 
-            return _Commited;
+            try
+            {
+
+
+                _Shippings = DataAccess.DAShipping.GetShippingsByReceiverNameLastname(pNameLastname);
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+            return _Shippings;
+        }
+
+
+        public static List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo, int pHasLabel, int pLimit, string pOrder)
+        {
+            List<Shipping> _Shippings = new List<Shipping>();
+
+           
+            try
+            {
+
+
+                _Shippings = DataAccess.DAShipping.GetShippingsByCreatedAtFromTo(pFrom, pTo, pHasLabel, pLimit, pOrder);
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+ 
+
+            return _Shippings;
+        }
+
+
+        public static Account Login(string pUserName, string pPassword)
+        {
+            Account _Account = null;
+
+         
+            try
+            {
+                _Account = DataAccess.DAShipping.Login(pUserName, pPassword);
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+            return _Account;
 
         }
 
 
-        [HttpPost("shippings/{id}/labels")]
-        public Label Post(int id)
+        public static Locality GetLocalityByCourierNameCity(string pName, string pCity, Courier pCourier)
         {
-            //Genera una etiqueta para ese envío
+            Locality _Locality = new Locality();
+
+            try
+            {
+                bool _IsZIP;
+
+                try
+                {
+                    Convert.ToInt64(pName);
+                    _IsZIP = true;
+                }
+
+                catch
+                {
+                    _IsZIP = false;
+                }
 
 
-            Label _Label = new Label();
 
-            return _Label;
+                if (_IsZIP)
+                {
+                    _Locality = DataAccess.DAShipping.GetLocalityByCourierZIPState(pName, pCity, pCourier);
+                }
+
+                else
+                {
+                    _Locality = DataAccess.DAShipping.GetLocalityByCourierNameCity(pName, pCity, pCourier);
+
+                    if(_Locality==null)
+                        _Locality = DataAccess.DAShipping.GetLocalityByCourierNameState(pName, pCity, pCourier);
+                }
+
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+            return _Locality;
         }
+
+
+
+        public static List<string> GetStatesByCourier(int pCourierId)
+        {
+            List<string> _States;
+
+            try
+            {
+                _States = DataAccess.DAShipping.GetStatesByCourier(pCourierId);
+
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+            return _States;
+
+        }
+
+
+        public static List<string> GetCitiesByCourierState(int pCourierId, string pState)
+        {
+            List<string> _Cities;
+
+            try
+            {
+                _Cities = DataAccess.DAShipping.GetCitiesByCourierState(pCourierId, pState);
+
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+            return _Cities;
+
+
+        }
+
+
+
+        public static List<string> GetLocalitiesByCourierStateCity(int pCourierId, string pState, string pCity)
+        {
+            List<string> _Localities;
+
+            try
+            {
+                _Localities = DataAccess.DAShipping.GetLocalitiesByCourierStateCity(pCourierId, pState, pCity);
+
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+            return _Localities;
+
+
+        }
+
+
+
 
 
     }
