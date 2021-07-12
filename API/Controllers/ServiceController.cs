@@ -256,6 +256,25 @@ namespace API.Controllers
         }
 
 
+        [HttpGet("shippings/from={pFrom}&to={pTo}&hasLabel={pHasLabel}&limit={pLimit}&order={pOrder}")]
+        public List<Shipping> GetShippingsByCreatedAtFromTo(DateTime pFrom, DateTime pTo, int pHasLabel, int pLimit, string pOrder)
+        {
+            List<Shipping> _Shippings = new List<Shipping>();
+
+            try
+            {
+                _Shippings = ShippingController.GetShippingsByCreatedAtFromTo(pFrom, pTo, pHasLabel, pLimit,pOrder);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return _Shippings;
+        }
+
+
         [HttpGet("login/username={pUsername}&password={pPassword}")]
 
         public Account Login(string pUsername, string pPassword)

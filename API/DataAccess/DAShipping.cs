@@ -299,6 +299,7 @@ namespace API.DataAccess
                     _Cmd.Parameters.Add("@ShippingNote", SqlDbType.VarChar).Value = DBNull.Value;
 
 
+
                 var _ReturnParameter = _Cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
                 _ReturnParameter.Direction = ParameterDirection.ReturnValue;
 
@@ -1344,6 +1345,150 @@ namespace API.DataAccess
         }
 
 
+
+        public static List<string> GetStatesByCourier(int  pCourierId)
+        {
+            List<string> _States=new List<string>();
+
+            SqlConnection _Cnn = new SqlConnection();
+
+            try
+            {
+
+
+                _Cnn = Connection.Instancia.SetConnection();
+                SqlDataReader _Dr = null;
+                SqlCommand _Cmd = new SqlCommand("spLocalityStatesGetByCourier", _Cnn);
+                _Cmd.Parameters.Add("@LocalityCourierId", SqlDbType.Int).Value = pCourierId;
+
+
+                _Cmd.CommandType = CommandType.StoredProcedure;
+
+                _Cnn.Open();
+
+                _Dr = _Cmd.ExecuteReader();
+
+                while (_Dr.Read())
+                {
+                    string _State = "";
+
+                    _State = Convert.ToString(_Dr["LocalityState"]);
+
+                    _States.Add(_State);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                _Cnn.Close();
+            }
+
+            return _States;
+        }
+
+
+        public static List<string> GetCitiesByCourierState(int pCourierId, string pState)
+        {
+            List<string> _Cities = new List<string>();
+
+            SqlConnection _Cnn = new SqlConnection();
+
+            try
+            {
+
+
+                _Cnn = Connection.Instancia.SetConnection();
+                SqlDataReader _Dr = null;
+                SqlCommand _Cmd = new SqlCommand("spLocalityCitiesGetByCourierState", _Cnn);
+                _Cmd.Parameters.Add("@LocalityCourierId", SqlDbType.Int).Value = pCourierId;
+                _Cmd.Parameters.Add("@LocalityState", SqlDbType.VarChar).Value = pState;
+
+                _Cmd.CommandType = CommandType.StoredProcedure;
+
+                _Cnn.Open();
+
+                _Dr = _Cmd.ExecuteReader();
+
+                while (_Dr.Read())
+                {
+                    string _State = "";
+
+                    _State = Convert.ToString(_Dr["LocalityCity"]);
+
+                    _Cities.Add(_State);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                _Cnn.Close();
+            }
+
+            return _Cities;
+        }
+
+
+
+        public static List<string> GetLocalitiesByCourierStateCity(int pCourierId, string pState, string pCity)
+        {
+            List<string> _Localities = new List<string>();
+
+            SqlConnection _Cnn = new SqlConnection();
+
+            try
+            {
+
+
+                _Cnn = Connection.Instancia.SetConnection();
+                SqlDataReader _Dr = null;
+                SqlCommand _Cmd = new SqlCommand("spLocalitiesGetByCourierStateCity", _Cnn);
+                _Cmd.Parameters.Add("@LocalityCourierId", SqlDbType.Int).Value = pCourierId;
+                _Cmd.Parameters.Add("@LocalityState", SqlDbType.VarChar).Value = pState;
+                _Cmd.Parameters.Add("@LocalityCity", SqlDbType.VarChar).Value = pCity;
+
+                _Cmd.CommandType = CommandType.StoredProcedure;
+
+                _Cnn.Open();
+
+                _Dr = _Cmd.ExecuteReader();
+
+                while (_Dr.Read())
+                {
+                    string _State = "";
+
+                    _State = Convert.ToString(_Dr["LocalityName"]);
+
+                    _Localities.Add(_State);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                _Cnn.Close();
+            }
+
+            return _Localities;
+        }
+
+
         #endregion
 
         //UPDATES
@@ -1560,6 +1705,9 @@ namespace API.DataAccess
                     _Cmd.Parameters.Add("@ShippingDeliveryTypeId", SqlDbType.Int).Value = pShipping.DeliveryType.Id;
                 else
                     _Cmd.Parameters.Add("@ShippingDeliveryTypeId", SqlDbType.Int).Value = DBNull.Value;
+
+                _Cmd.Parameters.Add("@ShippingInfo", SqlDbType.VarChar).Value = pShipping.Info;
+
 
 
 

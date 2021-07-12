@@ -48,11 +48,10 @@ namespace Backoffice
             //        string _OrderId = grdShippings.DataKeys[e.Row.RowIndex].Value.ToString();
             //        GridView grdDetail = e.Row.FindControl("grdDetail") as GridView;
 
-            //        var client = new RestClient("http://api.enviosmilgenial.com/shippings/" + _OrderId);
-            //        client.Timeout = -1;
-            //        var request = new RestRequest(Method.GET);
-            //        IRestResponse response = client.Execute(request);
-
+                    List<Shipping> _Shippings = JsonConvert.DeserializeObject<List<Shipping>>(response.Content);
+                    grdShippings.DataSource = _Shippings;
+                    grdShippings.DataBind();
+                    
 
 
             //        Shipping _Shipping = JsonConvert.DeserializeObject<Shipping>(response.Content);
@@ -71,29 +70,6 @@ namespace Backoffice
             }
         }
 
-        protected void btnDetail_OnClick(object sender, ImageClickEventArgs e)
-        {
-            try
-            {
-                ImageButton lbtn = (ImageButton)sender;
-                GridViewRow row = (GridViewRow)lbtn.NamingContainer;
-
-                string _OrderId = Convert.ToString(grdShippings.DataKeys[row.RowIndex].Value);
-
-
-                var client = new RestClient("http://api.enviosmilgenial.com/shippings/" + _OrderId);
-                client.Timeout = -1;
-                var request = new RestRequest(Method.GET);
-                IRestResponse response = client.Execute(request);
-
-
-
-                Shipping _Shipping = JsonConvert.DeserializeObject<Shipping>(response.Content);
-
-                Session["Shipping"] = _Shipping;
-
-                Response.Redirect("ShippingDetail.aspx", false);
-
             }
 
             catch
@@ -107,17 +83,15 @@ namespace Backoffice
         {
             try
             {
-                _Shippings = new List<Shipping>();
+                if (e.Row.RowType == DataControlRowType.DataRow)
+                {
+                    string _OrderId = grdShippings.DataKeys[e.Row.RowIndex].Value.ToString();
+                    GridView grdDetail = e.Row.FindControl("grdDetail") as GridView;
 
-                DateTime _From = DateTime.ParseExact(txtFrom.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                DateTime _To = DateTime.ParseExact(txtTo.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-
-                string _Order = "asc";
-
-                var client = new RestClient("http://api.enviosmilgenial.com/shippings/from=" + _From.ToString("yyyy-MM-dd") + "&to=" + _To.ToString("yyyy-MM-dd") + "&hasLabel=1" + "&limit=100" + "&order=" + _Order);
-                client.Timeout = -1;
-                var request = new RestRequest(Method.GET);
-                IRestResponse response = client.Execute(request);
+                    var client = new RestClient("http://localhost:8080/shippings/" + _OrderId);
+                    client.Timeout = -1;
+                    var request = new RestRequest(Method.GET);
+                    IRestResponse response = client.Execute(request);
 
 
                 if (response.StatusCode.ToString() == "OK")
@@ -127,18 +101,13 @@ namespace Backoffice
                     grdShippings.DataSource = _Shippings;
                     grdShippings.DataBind();
 
-
-                }
-
-                else
+                if (response.StatusCode.ToString() == "OK")
                 {
-                    throw new Exception("");
-                }
 
-            }
+                    Shipping _Shipping = JsonConvert.DeserializeObject<Shipping>(response.Content);
 
-            catch (Exception ex)
-            {
+                    List<Receiver> _ReceiverAux = new List<Receiver>();
+                    _ReceiverAux.Add(_Shipping.Receiver);
 
             }
         }
