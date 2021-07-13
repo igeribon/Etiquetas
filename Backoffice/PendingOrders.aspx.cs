@@ -25,11 +25,11 @@ namespace Backoffice
                 
                 try
                 {
-                    DateTime _From = new DateTime(2021, 1, 1);
+                    DateTime _From = DateTime.Now;
                     DateTime _To = DateTime.Now;
 
-                    txtFrom.Text = _From.ToString("dd/MM/yyyy");
-                    txtTo.Text = _To.ToString("dd/MM/yyyy");
+                    txtFrom.Text = _From.ToString("yyyy-MM-dd");
+                    txtTo.Text = _To.ToString("yyyy-MM-dd");
 
 
                     LoadShippings();
@@ -110,7 +110,7 @@ namespace Backoffice
         {
             try
             {
-          
+   
                 Button lbtn = (Button)sender;
                 GridViewRow row = (GridViewRow)lbtn.NamingContainer;
 
@@ -130,6 +130,7 @@ namespace Backoffice
 
                         if (response.StatusCode != System.Net.HttpStatusCode.InternalServerError)
                         {
+                          
                             _Shipping = JsonConvert.DeserializeObject<Shipping>(response.Content);
 
                             File.WriteAllBytes(Server.MapPath("~/Label/Label.pdf"), _Shipping.Labels[0].Data);
@@ -163,19 +164,19 @@ namespace Backoffice
 
                         else
                         {
-                            lblError.Text = "Hubo un error al generar la etiqueta.";                        
+                            lblError.Text = "Error: Hubo un error al generar la etiqueta.";                        
                         }
                     }
 
                     else
                     {
-                        lblError.Text = "La órden no tiene una empresa y/o localidad asignada.";
+                        lblError.Text = "Error: La órden no tiene una empresa y/o localidad asignada.";
                     }
                 }
 
                 else
                 {
-                    lblError.Text = "La órden no está paga.";
+                    lblError.Text = "Error: La órden no está paga.";
                 }
 
                 
@@ -183,7 +184,7 @@ namespace Backoffice
 
             catch (Exception ex)
             {
-                lblError.Text = ex.Message;
+                lblError.Text = "Error: "+ex.Message;
             }
 
         }
@@ -193,11 +194,11 @@ namespace Backoffice
         {
             try
             {
-              
+                lblError.Text = "";
                 _Shippings = new List<Shipping>();
 
-                DateTime _From = DateTime.ParseExact(txtFrom.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                DateTime _To = DateTime.ParseExact(txtTo.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                DateTime _From = DateTime.ParseExact(txtFrom.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                DateTime _To = DateTime.ParseExact(txtTo.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1);
 
                 string _Order = "asc";
 

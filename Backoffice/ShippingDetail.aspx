@@ -18,18 +18,55 @@
     .auto-style7 {
         width: 84%;
     }
-    .auto-style8 {
-        height: 25px;
-        width: 12%;
-    }
-    </style>
+        </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
+      
+
+    <style type="text/css">
+.modal {
+  text-align: center;
+  padding: 0!important;
+}
+.modal:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -4px;
+}
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+        .auto-style1 {
+            margin-bottom: 0px;
+        }
+        .auto-style4 {
+            width: 96%;
+        }
+        .auto-style5 {
+            width: 50%;
+        }
+        .auto-style8 {
+            height: 25px;
+            margin-bottom: 0px;
+        }
+        .auto-style9 {
+            width: 5844px;
+        }
+        .auto-style11 {
+            width: 326px;
+        }
+        .auto-style12 {
+            width: 126px;
+        }
+        </style>
 
  
  <strong> <big>Detalles de órden</big> </strong>
-    <p></p>
     <p></p>
 <table border="0" width="80%">  
 
@@ -210,32 +247,7 @@
      </tr>  
 
 
-      <tr>  
-        <td class="auto-style6">  
-            
-             &nbsp;</tr>  
-         </td>  
-
-      
-      <tr>  
-         <td class="auto-style6">  
-     
-             &nbsp;</td>  
-         <td width="10%" class="auto-style1">  
-          
-             &nbsp;</td>  
-
-
-         <td class="auto-style6">  
-            
-         </td>  
-
-         <td width="10%" class="auto-style1">  
-             &nbsp;</td>  
-     </tr>  
-
-
- </table>  
+      </table>  
     <asp:GridView ID="grdPackages" runat="server" CssClass="table table-bordered table-hover" Width="811px">
             <RowStyle CssClass="table-bordered" />
         <HeaderStyle CssClass="table-bordered"/>
@@ -248,57 +260,36 @@
     <table border="0" class="auto-style7">  
 
         <tr>  
-         <td class="auto-style6">  
+         <td class="auto-style8"  style="text-align: right" colspan="4">  
  
-             &nbsp;</td>  
-         <td class="auto-style4">  
+  
+         <asp:Label ID="lblError" runat="server" ForeColor="Red" Font-Bold="True" Font-Size="Large"></asp:Label>
+              
 
-             &nbsp;</td>  
-
-
-         <td class="auto-style8">  
              
-             &nbsp;</td>  
 
-         <td width="10%" class="auto-style1">  
-             &nbsp;</td>  
+            </td>  
      </tr>  
   
 
         <tr>  
-         <td class="auto-style6">  
+         <td style="text-align: right" class="auto-style9">  
  
-             &nbsp;</td>  
-         <td class="auto-style4">  
-
-             &nbsp;</td>  
-
-
-         <td class="auto-style8">  
-             
-             &nbsp;</td>  
-
-         <td width="10%" class="auto-style1">  
-             <asp:Button ID="btnCancelar" cssclass="btn btn-warning btn-block btn-flat" runat="server" Text="Cancelar" OnClick="btnCancelar_OnClick"/>
+                 &nbsp;</td>  
+         <td style="text-align: right" class="auto-style11">  
+ 
                  <asp:Button ID="btnGuardar" cssclass="btn btn-warning btn-block btn-flat" runat="server" Text="Guardar" OnClick="btnGuardar_OnClick"/>
-         </td>  
-     </tr>  
-  
 
-        <tr>  
-         <td class="auto-style6">  
+             &nbsp;</td>  
+         <td style="text-align: right" class="auto-style12">  
  
-         </td>  
-         <td class="auto-style4">  
-
-         </td>  
-
-
-         <td class="auto-style8">  
+             <asp:Button ID="btnGenerarEtiqueta" cssclass="btn btn-warning btn-block btn-flat" runat="server" Text="Generar Etiqueta" OnClick="btnGenerarEtiqueta_OnClick" data-toggle="modal" data-target="#myModal" style="margin-left: 0px"/>
              
-         </td>  
-
-         <td width="10%" class="auto-style1">  
+             &nbsp;</td>  
+         <td style="text-align: right">  
+ 
+             <asp:Button ID="btnCancelar" cssclass="btn btn-warning btn-block btn-flat" runat="server" Text="Volver" OnClick="btnCancelar_OnClick"/>
+ 
              &nbsp;</td>  
      </tr>  
   
@@ -312,5 +303,29 @@
 
          </p>
        
+    
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <div id="myModal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    
+                    <h4 class="modal-title">
+                        Generando etiqueta</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Aguarde un momento</p>
+
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+
 
 </asp:Content>

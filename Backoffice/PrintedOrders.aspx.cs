@@ -22,11 +22,11 @@ namespace Backoffice
             {
                 try
                 {
-                    DateTime _From = new DateTime(2021, 1, 1);
+                    DateTime _From = DateTime.Now;
                     DateTime _To = DateTime.Now;
 
-                    txtFrom.Text = _From.ToString("dd/MM/yyyy");
-                    txtTo.Text = _To.ToString("dd/MM/yyyy");
+                    txtFrom.Text = _From.ToString("yyyy-MM-dd");
+                    txtTo.Text = _To.ToString("yyyy-MM-dd");
 
 
                     LoadShippings();
@@ -107,10 +107,11 @@ namespace Backoffice
         {
             try
             {
+                //lblError.Text = "";
                 _Shippings = new List<Shipping>();
 
-                DateTime _From = DateTime.ParseExact(txtFrom.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                DateTime _To = DateTime.ParseExact(txtTo.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                DateTime _From = DateTime.ParseExact(txtFrom.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                DateTime _To = DateTime.ParseExact(txtTo.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1);
 
                 string _Order = "asc";
 

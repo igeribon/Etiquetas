@@ -23,10 +23,10 @@
 
         <tr>  
          <td class="auto-style2">  
-                 Desde: <asp:TextBox ID="txtFrom" runat="server"></asp:TextBox> 
+                 Desde: <asp:TextBox ID="txtFrom" runat="server" textmode="Date"></asp:TextBox> 
          </td>  
          <td class="auto-style4">  
-             Hasta: <asp:TextBox ID="txtTo" runat="server"></asp:TextBox>
+             Hasta: <asp:TextBox ID="txtTo" runat="server" textmode="Date"></asp:TextBox>
          </td>  
 
 
@@ -94,7 +94,6 @@
        
 </asp:GridView>
 
-   
 &nbsp;
 
 

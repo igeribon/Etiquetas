@@ -42,15 +42,6 @@ namespace Backoffice
         protected global::System.Web.UI.WebControls.Button btnAplicar;
 
         /// <summary>
-        /// Control grdShippings.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView grdShippings;
-
-        /// <summary>
         /// Control lblError.
         /// </summary>
         /// <remarks>
@@ -58,5 +49,14 @@ namespace Backoffice
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblError;
+
+        /// <summary>
+        /// Control grdShippings.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grdShippings;
     }
 }
