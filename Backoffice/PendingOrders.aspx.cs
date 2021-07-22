@@ -202,8 +202,10 @@ namespace Backoffice
 
                 string _Order = "asc";
 
+                if (rbtDescendente.Checked)
+                    _Order = "desc";
               
-                var client = new RestClient("http://api.enviosmilgenial.com/shippings/from=" + _From.ToString("yyyy-MM-dd") + "&to=" + _To.ToString("yyyy-MM-dd") + "&hasLabel=0" + "&limit=100" + "&order=" + _Order);
+                var client = new RestClient("http://api.enviosmilgenial.com/shippings/from=" + _From.ToString("yyyy-MM-dd") + "&to=" + _To.ToString("yyyy-MM-dd") + "&hasLabel=0" + "&limit=300" + "&order=" + _Order);
                 client.Timeout = -1;
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);
@@ -248,7 +250,9 @@ namespace Backoffice
             }
         }
 
+        protected void rbtDescendente_CheckedChanged(object sender, EventArgs e)
+        {
 
-
+        }
     }
 }

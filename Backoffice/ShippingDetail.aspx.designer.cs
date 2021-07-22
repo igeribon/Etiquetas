@@ -42,13 +42,31 @@ namespace Backoffice
         protected global::System.Web.UI.WebControls.TextBox txtCreatedAt;
 
         /// <summary>
-        /// Control chkCashOnDelivery.
+        /// Control rbtCuentaCorriente.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkCashOnDelivery;
+        protected global::System.Web.UI.WebControls.RadioButton rbtCuentaCorriente;
+
+        /// <summary>
+        /// Control rbtContrarembolso.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbtContrarembolso;
+
+        /// <summary>
+        /// Control rbtFleteDestino.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbtFleteDestino;
 
         /// <summary>
         /// Control txtInfo.

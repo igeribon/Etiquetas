@@ -15,30 +15,79 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+
+      <style type="text/css">
+.modal {
+  text-align: center;
+  padding: 0!important;
+}
+.modal:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -4px;
+}
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+        .auto-style1 {
+            width: 15%;
+        }
+        .auto-style2 {
+            width: 15%;
+        }
+        .auto-style6 {
+            width: 92%;
+        }
+        .auto-style9 {
+            width: 15%;
+        }
+        .auto-style10 {
+            width: 23%;
+        }
+        .auto-style11 {
+            width: 40%;
+        }
+        .auto-style12 {
+            width: 28%;
+        }
+    </style>
+
+
     <strong> <big>Impresas</big> </strong>
     <p></p>
     <p>
 
-                <table border="0" width="60%">  
+        <table border="0" class="auto-style6">  
 
         <tr>  
-         <td class="auto-style2">  
+         <td class="auto-style12">  
                  Desde: <asp:TextBox ID="txtFrom" runat="server" textmode="Date"></asp:TextBox> 
          </td>  
-         <td class="auto-style4">  
+         <td class="auto-style11">  
              Hasta: <asp:TextBox ID="txtTo" runat="server" textmode="Date"></asp:TextBox>
          </td>  
 
 
-         <td class="auto-style3">  
-            <asp:Button ID="btnAplicar" cssclass="btn btn-warning btn-block btn-flat" runat="server" Text="Aplicar" OnClick="btnAplicar_OnClick" Width="73px"/>
+         <td class="auto-style9">  
+             <asp:RadioButton ID="rbtAscendente" runat="server" Checked="True" Text="Ascendente" GroupName="grpSortOrder"/>
+         </td>  
+
+
+         <td class="auto-style10">  
+             <asp:RadioButton ID="rbtDescendente" runat="server" Text="Descendente" GroupName="grpSortOrder" />
          </td>  
 
          <td width="10%" class="auto-style1">  
              
-         </td>  
+            <asp:Button ID="btnAplicar" cssclass="btn btn-warning btn-block btn-flat" runat="server" Text="Aplicar" OnClick="btnAplicar_OnClick" Width="73px"/>
+            </td>  
      </tr>  
             </table>
+        
         
   
     </p>

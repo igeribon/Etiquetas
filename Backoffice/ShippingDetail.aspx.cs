@@ -9,6 +9,7 @@ using API.DataTypes;
 using Newtonsoft.Json;
 using RestSharp;
 
+
 namespace Backoffice
 {
     public partial class ShippingDetail : System.Web.UI.Page
@@ -109,7 +110,26 @@ namespace Backoffice
 
                 txtLine1.Text = _Shipping.Receiver.AddressLine1;
 
-                chkCashOnDelivery.Checked = _Shipping.CashOnDelivery;
+                if (_Shipping.GuideType != null)
+                {
+                    if (_Shipping.GuideType.Id == 2)
+                    {
+                        rbtCuentaCorriente.Checked = true;
+                    }
+
+                    else if (_Shipping.GuideType.Id == 6)
+                    {
+                        rbtContrarembolso.Checked = true;
+                    }
+
+                    else if(_Shipping.GuideType.Id==4)
+                    {
+                        rbtFleteDestino.Checked = true;
+                    }
+
+                }
+
+                //chkCashOnDelivery.Checked = _Shipping.CashOnDelivery;
 
                 if (_Shipping.Receiver.Address.Locality != null && _Shipping.Receiver.Address.Locality.Id != 0)
                 {
@@ -157,7 +177,7 @@ namespace Backoffice
 
                 if (_Shipping.Labels.Count > 0)
                 {
-                    btnGenerarEtiqueta.Enabled = false;
+                    //btnGenerarEtiqueta.Enabled = false;
 
                     File.WriteAllBytes(Server.MapPath("~/Label/Label.pdf"), _Shipping.Labels[0].Data);
 
@@ -192,13 +212,44 @@ namespace Backoffice
                 _Shipping.Note = txtNote.Text;
 
                 _Shipping.Receiver.Address.Line1 = txtLine1.Text.Trim();
-                _Shipping.Receiver.Address.Locality.State = drpState.Text.Trim();
-                _Shipping.Receiver.Address.Locality.City = drpCity.Text.Trim();
-                _Shipping.Receiver.Address.Locality.Name = drpLocality.Text.Trim();
 
-                _Shipping.Courier = _Couriers[drpCourier.SelectedIndex - 1];
 
-                _Shipping.CashOnDelivery = chkCashOnDelivery.Checked;
+                if (_Shipping.Receiver.Address.Locality == null)
+                    _Shipping.Receiver.Address.Locality = new Locality();
+                
+
+                    _Shipping.Receiver.Address.Locality.State = drpState.Text.Trim();
+
+                    _Shipping.Receiver.Address.Locality.City = drpCity.Text.Trim();
+
+                    _Shipping.Receiver.Address.Locality.Name = drpLocality.Text.Trim();
+
+                    _Shipping.Courier = _Couriers[drpCourier.SelectedIndex - 1];
+                
+
+
+                _Shipping.GuideType = new GuideType();
+
+                if (rbtCuentaCorriente.Checked)
+                {
+                    _Shipping.GuideType.Id = 2;
+                    _Shipping.CashOnDelivery = false;
+                }
+
+                else if (rbtContrarembolso.Checked)
+                {
+                    _Shipping.GuideType.Id = 6;
+                    _Shipping.CashOnDelivery = true;
+                }
+
+                else if (rbtFleteDestino.Checked)
+                {
+                    _Shipping.CashOnDelivery = false;
+                    _Shipping.GuideType.Id=4;
+                }
+
+                
+                //_Shipping.CashOnDelivery = chkCashOnDelivery.Checked;
 
 
                 var client = new RestClient("http://api.enviosmilgenial.com/shippings");
@@ -368,21 +419,83 @@ namespace Backoffice
         {
             try
             {
+                try
+                {
+                    _Shipping.Receiver.Name = txtName.Text.Trim();
+                    _Shipping.Receiver.Lastname = txtLastName.Text.Trim();
+                    _Shipping.Receiver.Phone = txtPhone.Text.Trim();
+                    _Shipping.Receiver.Email = txtEmail.Text.Trim();
+                    _Shipping.Receiver.Passport = txtPassport.Text.Trim();
+                    _Shipping.Info = txtInfo.Text;
+                    _Shipping.Note = txtNote.Text;
+
+                    _Shipping.Receiver.Address.Line1 = txtLine1.Text.Trim();
+                    _Shipping.Receiver.Address.Locality.State = drpState.Text.Trim();
+                    _Shipping.Receiver.Address.Locality.City = drpCity.Text.Trim();
+                    _Shipping.Receiver.Address.Locality.Name = drpLocality.Text.Trim();
+
+                    _Shipping.Courier = _Couriers[drpCourier.SelectedIndex - 1];
+
+                    _Shipping.GuideType = new GuideType();
+
+                    if (rbtCuentaCorriente.Checked)
+                    {
+                        _Shipping.GuideType.Id = 2;
+                        _Shipping.CashOnDelivery = false;
+                    }
+
+                    else if (rbtContrarembolso.Checked)
+                    {
+                        _Shipping.GuideType.Id = 6;
+                        _Shipping.CashOnDelivery = true;
+                    }
+
+                    else if (rbtFleteDestino.Checked)
+                    {
+                        _Shipping.CashOnDelivery = false;
+                        _Shipping.GuideType.Id = 4;
+                    }
+
+                    var client = new RestClient("http://api.enviosmilgenial.com/shippings");
+                    client.Timeout = -1;
+                    var request = new RestRequest(Method.PUT);
+                    request.AddHeader("Content-Type", "application/json");
+
+
+                    var body = JsonConvert.SerializeObject(_Shipping);
+
+                    request.AddParameter("application/json", body, ParameterType.RequestBody);
+                    IRestResponse response = client.Execute(request);
+
+                    _Shipping = JsonConvert.DeserializeObject<Shipping>(response.Content); ;
+
+
+                }
+
+                catch
+                {
+                    throw new Exception("Hay un prublema con los datos del cliente.");
+                }
+
+                //_Shipping.CashOnDelivery = chkCashOnDelivery.Checked;
+
+
+
 
                 if (_Shipping.FinancialStatus.Trim() == "paid")
                 {
-                    if (_Shipping.Receiver.Address.Locality.Id != 0)
+                    if (_Shipping.Receiver.Address.Locality != null &&_Shipping.Receiver.Address.Locality.Id != 0)
                     {
-                        var client = new RestClient("http://api.enviosmilgenial.com/shippings/" + _Shipping.OrderId + "/labels");
-                        client.Timeout = -1;
-                        var request = new RestRequest(Method.POST);
-                        IRestResponse response = client.Execute(request);
+                        var clientLabel = new RestClient("http://api.enviosmilgenial.com/shippings/" + _Shipping.OrderId + "/labels");
+                        clientLabel.Timeout = -1;
+                        var requestLabel = new RestRequest(Method.POST);
+                        IRestResponse responseLabel = clientLabel.Execute(requestLabel);
 
 
-                        if (response.StatusCode != System.Net.HttpStatusCode.InternalServerError)
+                        if (responseLabel.StatusCode == System.Net.HttpStatusCode.OK)
                         {
 
-                            _Shipping = JsonConvert.DeserializeObject<Shipping>(response.Content);
+                            _Shipping = JsonConvert.DeserializeObject<Shipping>(responseLabel.Content);
 
                             File.WriteAllBytes(Server.MapPath("~/Label/Label.pdf"), _Shipping.Labels[0].Data);
 
@@ -414,7 +527,13 @@ namespace Backoffice
 
                         else
                         {
-                            lblError.Text = "Error: Hubo un error al generar la etiqueta.";
+
+                            Newtonsoft.Json.Linq.JObject _JsonResponse = Newtonsoft.Json.Linq.JObject.Parse(responseLabel.Content);
+
+                            string _Message = (string)_JsonResponse.SelectToken("data");
+
+
+                            lblError.Text = "Error: "+_Message;
                         }
                     }
 

@@ -309,20 +309,24 @@ namespace API.Controllers
                 string _IDSesionAux = Login("", "");
 
 
-
-                if (_Shipping.CashOnDelivery)
+                if (_Shipping.GuideType == null)
                 {
-                    _Shipping.GuideType = new GuideType();
-                    _Shipping.GuideType.Id = 6;
-                    _Shipping.GuideType.Name = "CONTRAREMBOLSO";
+                    if (_Shipping.CashOnDelivery)
+                    {
+                        _Shipping.GuideType = new GuideType();
+                        _Shipping.GuideType.Id = 6;
+                        _Shipping.GuideType.Name = "CONTRAREMBOLSO";
+                    }
+
+                    else
+                    {
+                        _Shipping.GuideType = new GuideType();
+                        _Shipping.GuideType.Id = 2;
+                        _Shipping.GuideType.Name = "CUENTA CORRIENTE";
+                    }
                 }
 
-                else
-                {
-                    _Shipping.GuideType = new GuideType();
-                    _Shipping.GuideType.Id = 2;
-                    _Shipping.GuideType.Name = "CUENTA CORRIENTE";
-                }
+
 
                 _Shipping.DeliveryType = new DeliveryType();
                 _Shipping.DeliveryType.Id = 2;
@@ -333,7 +337,7 @@ namespace API.Controllers
                 JProperty _K_Cliente_Remitente = new JProperty("K_Cliente_Remitente", 1);
                 JProperty _D_Cliente_Remitente = new JProperty("D_Cliente_Remitente", "Milgenial");
                 JProperty _K_Cliente_Destinatario = new JProperty("K_Cliente_Destinatario", 5);
-                JProperty _Cliente_Destinatario = new JProperty("Cliente_Destinatario", pShipping.Receiver.Name +" "+pShipping.Receiver.Lastname);
+                JProperty _Cliente_Destinatario = new JProperty("Cliente_Destinatario", pShipping.Receiver.Name + " " + pShipping.Receiver.Lastname);
                 JProperty _RUT = new JProperty("RUT", pShipping.Receiver.Passport);
 
                 JProperty _Direccion_Destinatario;
@@ -343,7 +347,7 @@ namespace API.Controllers
                 else
                     _Direccion_Destinatario = new JProperty("Direccion_Destinatario", pShipping.Receiver.Address.Line2);
 
-                JProperty _K_Barrio = new JProperty("K_Barrio", pShipping.Receiver.Address.Locality.Code.Trim()) ;
+                JProperty _K_Barrio = new JProperty("K_Barrio", pShipping.Receiver.Address.Locality.Code.Trim());
                 JProperty _K_Ciudad_Destinatario = new JProperty("K_Ciudad_Destinatario", pShipping.Receiver.Address.Locality.CityCode);
                 JProperty _K_Estado_Destinatario = new JProperty("K_Estado_Destinatario", pShipping.Receiver.Address.Locality.StateCode);
                 JProperty _K_Pais_Destinatario = new JProperty("K_Pais_Destinatario", 1);
@@ -359,7 +363,7 @@ namespace API.Controllers
                 JProperty _Cartas = new JProperty("Cartas", 0);
                 JProperty _Sobres = new JProperty("Sobres", 0);
                 JProperty _K_Articulo = new JProperty("K_Articulo", 0);
-                JProperty _Observaciones = new JProperty("Observaciones", "");
+                JProperty _Observaciones = new JProperty("Observaciones", "Nro. Orden: "+pShipping.OrderId);
                 JProperty _K_Tipo_Guia = new JProperty("K_Tipo_Guia", pShipping.GuideType.Id);
 
                 JProperty _CostoMercaderia;
@@ -371,7 +375,7 @@ namespace API.Controllers
 
 
                 JProperty _Referencia_Pago = new JProperty("Referencia_Pago", "contrareembolso");
-                JProperty _CodigoPedido = new JProperty("CodigoPedido", "Milgenial"+pShipping.OrderId);
+                JProperty _CodigoPedido = new JProperty("CodigoPedido", "Milgenial" + pShipping.OrderId);
                 JProperty _Serv_DDF = new JProperty("Serv_DDF", "");
 
                 JObject _JsonBody = new JObject(_IDSesion, _K_Cliente_Remitente, _D_Cliente_Remitente, _K_Cliente_Destinatario, _Cliente_Destinatario, _RUT, _Direccion_Destinatario, _K_Barrio, _K_Ciudad_Destinatario,
@@ -390,56 +394,66 @@ namespace API.Controllers
                 IRestResponse response = client.Execute(request);
 
 
-                if (response.StatusCode== System.Net.HttpStatusCode.InternalServerError)
+                if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                 {
-                    throw new Exception("Hubo un problema en la solicitud.");
+                    throw new Exception("Hubo un problema en el servicio de DAC.");
                 }
 
                 Newtonsoft.Json.Linq.JObject _JsonResponse = Newtonsoft.Json.Linq.JObject.Parse(response.Content);
 
 
                 string _K_Guia_Resp = (string)_JsonResponse["data"].SelectToken("K_Guia");
-                int _K_Oficina_Destino_Resp = (int)_JsonResponse["data"].SelectToken("K_Oficina_Destino"); 
-                string _Codigo_Rastreo_Resp = (string)_JsonResponse["data"].SelectToken("Codigo_Rastreo");
 
-
-                pShipping.PostOffice = DataAccess.DAShipping.GetPostOfficeByCodeCourier(_K_Oficina_Destino_Resp, pShipping.Courier);
-
-                Label _Label = new Label();
-                _Label.PostOffice = pShipping.PostOffice;
-                _Label.Identifier = _K_Guia_Resp;
-                _Label.TrackingNumber = _Codigo_Rastreo_Resp;
-
-                int _Index = _Label.Identifier.IndexOf("-");
-
-                int _K_Oficina_getPegote = Convert.ToInt32(_Label.Identifier.Substring(0, _Index));
-
-                string _K_Guia_getPegote = _Label.Identifier.Substring(_Index + 1, (_Label.Identifier.Length-1-_Index));
-
-
-
-                var clientPegote = new RestClient("http://altis-web.grupoagencia.com:8082/JAgencia.asmx/wsGetPegote?K_oficina="+_K_Oficina_getPegote+"&K_guia="+_K_Guia_getPegote+"&CodigoPedido=&ID_Sesion="+ _IDSesionAux);
-                clientPegote.Timeout = -1;
-                var requestPegote = new RestRequest(Method.GET);
-                IRestResponse responsePegote = clientPegote.Execute(requestPegote);
-
-                if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+                if (_K_Guia_Resp != null)
                 {
-                    throw new Exception("Hubo un problema en la solicitud.");
+                    int _K_Oficina_Destino_Resp = (int)_JsonResponse["data"].SelectToken("K_Oficina_Destino");
+                    string _Codigo_Rastreo_Resp = (string)_JsonResponse["data"].SelectToken("Codigo_Rastreo");
+
+
+                    pShipping.PostOffice = DataAccess.DAShipping.GetPostOfficeByCodeCourier(_K_Oficina_Destino_Resp, pShipping.Courier);
+
+                    Label _Label = new Label();
+                    _Label.PostOffice = pShipping.PostOffice;
+                    _Label.Identifier = _K_Guia_Resp;
+                    _Label.TrackingNumber = _Codigo_Rastreo_Resp;
+
+                    int _Index = _Label.Identifier.IndexOf("-");
+
+                    int _K_Oficina_getPegote = Convert.ToInt32(_Label.Identifier.Substring(0, _Index));
+
+                    string _K_Guia_getPegote = _Label.Identifier.Substring(_Index + 1, (_Label.Identifier.Length - 1 - _Index));
+
+
+
+                    var clientPegote = new RestClient("http://altis-web.grupoagencia.com:8082/JAgencia.asmx/wsGetPegote?K_oficina=" + _K_Oficina_getPegote + "&K_guia=" + _K_Guia_getPegote + "&CodigoPedido=&ID_Sesion=" + _IDSesionAux);
+                    clientPegote.Timeout = -1;
+                    var requestPegote = new RestRequest(Method.GET);
+                    IRestResponse responsePegote = clientPegote.Execute(requestPegote);
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+                    {
+                        throw new Exception("Hubo un problema en el servicio de DAC.");
+                    }
+
+
+                    _JsonResponse = Newtonsoft.Json.Linq.JObject.Parse(responsePegote.Content);
+
+                    string _PegoteAux = (string)_JsonResponse["data"].SelectToken("Pegote");
+
+                    _Label.Data = Convert.FromBase64String(_PegoteAux);
+
+                    DataAccess.DAShipping.InsertLabel(_Label, _Shipping);
+
+                    _Shipping.Labels = new List<Label>();
+                    _Shipping.Labels.Add(_Label);
                 }
 
+                else
+                {
+                    string _ErrorMessage = (string)_JsonResponse.SelectToken("data");
+                    throw new Exception(_ErrorMessage);
+                }
 
-                _JsonResponse = Newtonsoft.Json.Linq.JObject.Parse(responsePegote.Content);
-
-                string _PegoteAux = (string)_JsonResponse["data"].SelectToken("Pegote");
-
-                _Label.Data = Convert.FromBase64String(_PegoteAux);
-
-                DataAccess.DAShipping.InsertLabel(_Label, _Shipping);
-
-                _Shipping.Labels = new List<Label>();
-                _Shipping.Labels.Add(_Label);
-                
             }
 
             catch (Exception ex)

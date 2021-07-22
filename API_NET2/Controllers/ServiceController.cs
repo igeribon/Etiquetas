@@ -19,31 +19,33 @@ namespace API.Controllers
         
 
         [HttpPost("shippings")]
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Shipping))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Shipping))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult CreateShipping(DTOShipping pShipping)
         {
             Shipping _Shipping = null;
 
+            JObject _Log = Newtonsoft.Json.Linq.JObject.FromObject(pShipping);
+
+            string _LogMessage = "";
+
+
             try
             {
 
-                //JObject _Log = Newtonsoft.Json.Linq.JObject.FromObject(pShipping);
+               
 
-                //string _LogMessage = "";
+                ////SE CAMBIO pShipping.Name por pShipping.ordcer_number
 
+                string _OrderId = pShipping.name.Replace("#", "").Trim();
 
-                //SE CAMBIO pShipping.Name por pShipping.ordcer_number
-
-                //string _OrderId = pShipping.name.Replace("#", "").Trim();
-
-                string _OrderId = pShipping.order_number.ToString();
+                //string _OrderId = pShipping.order_number.ToString();
 
                 //DATOS SHIPPING
 
                 _Shipping = GetShippingByOrderId(_OrderId);
 
-                _Shipping.OrderId = pShipping.name.Replace("#", "").Trim();
+                _Shipping.OrderId = _OrderId.Replace("#", "").Trim();
 
                 _Shipping.FinancialStatus = pShipping.financial_status;
 
@@ -53,31 +55,52 @@ namespace API.Controllers
                 //SE QUITO EL REEMPLAZO DE PUNTOS POR COMAS EN TotalLinesItemPrice POR LA CONFIGURACION DE IDIOMA DEL SERVIDOR
                 //_Shipping.TotalLinesItemPrice = Convert.ToDouble(pShipping.total_line_items_price.Replace(".", ","));
 
-                _Shipping.TotalLinesItemPrice = Convert.ToDouble(pShipping.total_line_items_price);
+                try
+                {
+                    _Shipping.TotalLinesItemPrice = Convert.ToDouble(pShipping.total_line_items_price);
+                }
+
+                catch
+                { 
+                
+                }
 
                 _Shipping.Note = Convert.ToString(pShipping.note);
 
+                if (_Shipping.Note == null)
+                    _Shipping.Note = "";
 
                 //DATOS RECEIVER
                 if (_Shipping.Receiver == null)
                     _Shipping.Receiver = new Receiver();
 
-                _Shipping.Receiver.Name = pShipping.customer.first_name;
-                _Shipping.Receiver.Lastname = pShipping.customer.last_name;
-                _Shipping.Receiver.Email = Convert.ToString(pShipping.customer.email);
 
-                if (pShipping.customer.phone != "" && pShipping.customer.phone != null)
-                    _Shipping.Receiver.Phone = pShipping.customer.phone;
+                if (pShipping.customer != null)
+                {
+                    _Shipping.Receiver.Name = pShipping.customer.first_name;
+                    _Shipping.Receiver.Lastname = pShipping.customer.last_name;
+                    _Shipping.Receiver.Email = pShipping.customer.email;
 
-                else if (pShipping.customer.default_address.phone != "" && pShipping.customer.default_address.phone != null)
-                    _Shipping.Receiver.Phone = pShipping.customer.default_address.phone;
+                    if (_Shipping.Receiver.Email == null)
+                        _Shipping.Receiver.Email = "";
 
+
+                    if (pShipping.customer.phone != "" && pShipping.customer.phone != null)
+                        _Shipping.Receiver.Phone = pShipping.customer.phone.ToString();
+
+                    else if (pShipping.customer.default_address.phone != "" && pShipping.customer.default_address.phone != null)
+                        _Shipping.Receiver.Phone = pShipping.customer.default_address.phone;
+
+
+                    if (_Shipping.Receiver.Phone == null)
+                        _Shipping.Receiver.Phone = "";
+                }
 
                 //DATOS RECEIVER ADDRESS
                 //_Shipping.Receiver.Address = new Address();
 
                 if(pShipping.shipping_address!=null)
-                _Shipping.Receiver.Address.Line1 = pShipping.shipping_address.address1;
+                    _Shipping.Receiver.Address.Line1 = pShipping.shipping_address.address1;
 
 
 
@@ -119,7 +142,13 @@ namespace API.Controllers
                     {
                         _Shipping.CashOnDelivery = true;
 
+
                         _Shipping.Info = _ShippingLine.title;
+
+                        if (_Shipping.Info == null)
+                        {
+                            _Shipping.Info = "";
+                        }
 
                         break;
                     }
@@ -127,9 +156,33 @@ namespace API.Controllers
                     else
                     {
                         _Shipping.CashOnDelivery = false;
+
                         _Shipping.Info = _ShippingLine.title;
+
+                        if (_Shipping.Info == null)
+                        {
+                            _Shipping.Info = "";
+                        }
+
                         break;
                     }
+                }
+
+
+                _Shipping.GuideType = new GuideType();
+
+                if (_Shipping.CashOnDelivery)
+                {
+                    _Shipping.GuideType = new GuideType();
+                    _Shipping.GuideType.Id = 6;
+                    _Shipping.GuideType.Name = "CONTRAREMBOLSO";
+                }
+
+                else
+                {
+                    _Shipping.GuideType = new GuideType();
+                    _Shipping.GuideType.Id = 2;
+                    _Shipping.GuideType.Name = "CUENTA CORRIENTE";
                 }
 
 
@@ -137,7 +190,8 @@ namespace API.Controllers
                 if (_Shipping.Courier != null)
                 {
                     //DATOS RECEIVER ADDRESS LOCALITY
-                    _Shipping.Receiver.Address.Locality = ShippingController.GetLocalityByCourierNameCity(pShipping.shipping_address.zip, pShipping.shipping_address.city, _Shipping.Courier);
+                    if(pShipping.shipping_address!=null)
+                        _Shipping.Receiver.Address.Locality = ShippingController.GetLocalityByCourierNameCity(pShipping.shipping_address.zip, pShipping.shipping_address.city, _Shipping.Courier);
                 }
 
 
@@ -172,24 +226,28 @@ namespace API.Controllers
                     ShippingController.UpdateShipping(_Shipping);
                 }
 
-                //_LogMessage ="200";
+                _LogMessage = "200";
 
             }
 
             catch (Exception ex)
             {
-                //_LogMessage= "500"+" - "+ex.Message;
+                _LogMessage= "500"+" - "+ex.Message;
+                _Log.Add("APIResponse", _LogMessage);
+                ShippingController.SaveLog(_Log.ToString(), pShipping.name.Replace("#", "").Trim() + "_" + DateTime.Now.ToString() + ".json");
+
                 return StatusCode(500);
             }
 
-            //finally
-            //{
-            //    _Log.Add("APIResponse", _LogMessage);
-            //    ShippingController.SaveLog(_Log.ToString(), pShipping.name.Replace("#", "").Trim() + "_" + DateTime.Now.ToString() + ".json");
-            //}
+            finally
+            {
+               
+            }
 
 
-            return Accepted(_Shipping);
+            //SE CAMBIO PARA RETORNAR VACIO
+            //return Ok(_Shipping);
+            return Ok();
         }
 
 
@@ -299,7 +357,9 @@ namespace API.Controllers
         }
 
         [HttpPost("shippings/{pId}/labels")]
-        public Shipping CreateLabel(string pId)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Shipping))]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public IActionResult CreateLabel(string pId)
         {
             Shipping _Shipping = new Shipping();
 
@@ -324,10 +384,16 @@ namespace API.Controllers
 
             catch (Exception ex)
             {
-                throw ex;
+                JObject _Json = new JObject();
+                _Json.Add("data", ex.Message);
+
+
+                Response.ContentType = "application/json";
+
+                return Conflict(_Json);
             }
 
-            return _Shipping;
+            return Ok(_Shipping);
         }
 
 

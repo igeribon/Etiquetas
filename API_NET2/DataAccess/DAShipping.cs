@@ -164,6 +164,8 @@ namespace API.DataAccess
                 _Cmd.Parameters.Add("@ReceiverAddressId", SqlDbType.Int).Value = pReceiver.Address.Id;
                 _Cmd.Parameters.Add("@ReceiverName", SqlDbType.VarChar).Value = pReceiver.Name;
                 _Cmd.Parameters.Add("@ReceiverLastname", SqlDbType.VarChar).Value = pReceiver.Lastname;
+
+
                 _Cmd.Parameters.Add("@ReceiverEmail", SqlDbType.VarChar).Value = pReceiver.Email;
                 _Cmd.Parameters.Add("@ReceiverPhone", SqlDbType.VarChar).Value = pReceiver.Phone;
                 _Cmd.Parameters.Add("@ReceiverPassport", SqlDbType.VarChar).Value = pReceiver.Passport;
@@ -241,7 +243,7 @@ namespace API.DataAccess
 
             try
             {
-
+                 
                 pShipping.Receiver.Id = InsertReceiver(pShipping.Receiver);
 
 
@@ -297,6 +299,13 @@ namespace API.DataAccess
                     _Cmd.Parameters.Add("@ShippingNote", SqlDbType.VarChar).Value = pShipping.Note;
                 else
                     _Cmd.Parameters.Add("@ShippingNote", SqlDbType.VarChar).Value = DBNull.Value;
+
+
+                if (pShipping.GuideType != null)
+                    _Cmd.Parameters.Add("@ShippingGuideTypeId", SqlDbType.Int).Value = pShipping.GuideType.Id;
+                else
+                    _Cmd.Parameters.Add("@ShippingGuideTypeId", SqlDbType.Int).Value = DBNull.Value;
+
 
 
                 var _ReturnParameter = _Cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);

@@ -1,0 +1,29 @@
+{
+  "created_at": "2021-07-22T15:56:38-03:00",
+  "note": "Retira Jueves 22/07",
+  "financial_status": "pending",
+  "total_line_items_price": "990.00",
+  "name": "#13686",
+  "line_items": [
+    {
+      "name": "Afilador de cuchillo multiuso",
+      "grams": 0
+    }
+  ],
+  "shipping_lines": [
+    {
+      "title": "Pickup Minas 1595"
+    }
+  ],
+  "shipping_address": null,
+  "customer": {
+    "email": "robertodaniel18@gmail.com",
+    "first_name": "Roberto Daniel",
+    "last_name": "Umpierrez Rodriguez",
+    "phone": null,
+    "default_address": {
+      "phone": "095 355 641"
+    }
+  },
+  "APIResponse": "500 - Object reference not set to an instance of an object."
+}

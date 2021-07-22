@@ -16,7 +16,6 @@
     });
 </script>--%>
 
-
 <%--     <script type="text/javascript">
          function openModal() {
              $('#myModal').modal('show');
@@ -51,19 +50,25 @@
   vertical-align: middle;
 }
         .auto-style1 {
-            margin-bottom: 0px;
+            width: 15%;
         }
-        .auto-style2 {
-            width: 98%;
+        .auto-style6 {
+            width: 92%;
         }
-        .auto-style3 {
-            width: 97%;
+        .auto-style9 {
+            width: 15%;
         }
-        .auto-style4 {
-            width: 96%;
+        .auto-style10 {
+            width: 23%;
         }
-        .auto-style5 {
-            width: 50%;
+        .auto-style11 {
+            width: 40%;
+        }
+        .auto-style12 {
+            width: 28%;
+        }
+        .auto-style13 {
+            width: 90%;
         }
     </style>
 
@@ -72,29 +77,35 @@
 
 
     <p>
-        <table border="0" width="60%">  
+        <table border="0" class="auto-style6">  
 
         <tr>  
-         <td class="auto-style5">  
+         <td class="auto-style12">  
                  Desde: <asp:TextBox ID="txtFrom" runat="server" textmode="Date"></asp:TextBox> 
          </td>  
-         <td class="auto-style4">  
+         <td class="auto-style11">  
              Hasta: <asp:TextBox ID="txtTo" runat="server" textmode="Date"></asp:TextBox>
          </td>  
 
 
-         <td class="auto-style3">  
-            <asp:Button ID="btnAplicar" cssclass="btn btn-warning btn-block btn-flat" runat="server" Text="Aplicar" OnClick="btnAplicar_OnClick" Width="73px"/>
+         <td class="auto-style9">  
+             <asp:RadioButton ID="rbtAscendente" runat="server" Checked="True" Text="Ascendente" GroupName="grpSortOrder"/>
+         </td>  
+
+
+         <td class="auto-style10">  
+             <asp:RadioButton ID="rbtDescendente" runat="server" OnCheckedChanged="rbtDescendente_CheckedChanged" Text="Descendente" GroupName="grpSortOrder" />
          </td>  
 
          <td width="10%" class="auto-style1">  
              
-             &nbsp;</td>  
+            <asp:Button ID="btnAplicar" cssclass="btn btn-warning btn-block btn-flat" runat="server" Text="Aplicar" OnClick="btnAplicar_OnClick" Width="73px"/>
+            </td>  
      </tr>  
             </table>
         
   
-        <table border="0" class="auto-style2">  
+        <table border="0" class="auto-style13">  
 
         <tr>  
 
