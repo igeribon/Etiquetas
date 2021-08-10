@@ -11,7 +11,8 @@ namespace Backoffice
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            //pdfIframe.Attributes["src"] = "../Label/Label.pdf";
+            //pdfIframe.Attributes["onLoad"] = "PrintReport()";
         }
     }
 }

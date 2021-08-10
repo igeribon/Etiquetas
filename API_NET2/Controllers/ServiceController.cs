@@ -108,6 +108,26 @@ namespace API.Controllers
                         _Shipping.Receiver.Phone = "";
                 }
 
+                else
+                {
+                    if (pShipping.shipping_address != null)
+                    {
+                        _Shipping.Receiver.Name = pShipping.shipping_address.first_name;
+                        _Shipping.Receiver.Lastname = pShipping.shipping_address.last_name;
+                        //_Shipping.Receiver.Email = pShipping.shipping_address.email;
+
+                        if (_Shipping.Receiver.Email == null)
+                            _Shipping.Receiver.Email = "";
+
+
+                        if (pShipping.shipping_address.phone != "" && pShipping.shipping_address.phone != null)
+                            _Shipping.Receiver.Phone = pShipping.shipping_address.phone.ToString();
+
+                        if (_Shipping.Receiver.Phone == null)
+                            _Shipping.Receiver.Phone = "";
+                    }
+                }
+
                 //DATOS RECEIVER ADDRESS
                 //_Shipping.Receiver.Address = new Address();
 
