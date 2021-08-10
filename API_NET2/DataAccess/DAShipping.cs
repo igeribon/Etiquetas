@@ -617,8 +617,9 @@ namespace API.DataAccess
 
                     _Shipping.Receiver.Address = GetAddressById(Convert.ToInt32(_Dr["ReceiverAddressId"]));
 
-              
+
                     //DATOS POST OFFICE
+                    _Shipping.PostOffice = new PostOffice();
 
                     if (_Dr["PostOfficeId"] != DBNull.Value)
                     {
@@ -629,11 +630,7 @@ namespace API.DataAccess
                         _Shipping.PostOffice.Code = Convert.ToInt32(_Dr["PostOfficeCode"]);
                     }
 
-                    else
-                    {
-                        _Shipping.PostOffice = new PostOffice();
-
-                    }
+               
 
                     _Shipping.Labels = GetLabelsByShippingId(_Shipping.Id);
                     _Shipping.Packages = GetPackagesByShippingId(_Shipping.Id);
@@ -740,6 +737,7 @@ namespace API.DataAccess
 
 
                     //DATOS POST OFFICE
+                    _Shipping.PostOffice = new PostOffice();
 
                     if (_Dr["PostOfficeId"] != DBNull.Value)
                     {
@@ -750,12 +748,7 @@ namespace API.DataAccess
                         _Shipping.PostOffice.Code = Convert.ToInt32(_Dr["PostOfficeCode"]);
                     }
 
-                    else
-                    {
-                        _Shipping.PostOffice = new PostOffice();
-
-                    }
-
+          
                     //_Shipping.Labels = GetLabelsByShippingId(_Shipping.Id);
                     //_Shipping.Packages = GetPackagesByShippingId(_Shipping.Id);
 
@@ -867,6 +860,8 @@ namespace API.DataAccess
 
                     //DATOS POST OFFICE
 
+                    _Shipping.PostOffice = new PostOffice();
+
                     if (_Dr["PostOfficeId"] != DBNull.Value)
                     {
                         _Shipping.PostOffice.Id = Convert.ToInt32(_Dr["PostOfficeId"]);
@@ -875,11 +870,6 @@ namespace API.DataAccess
                         _Shipping.PostOffice.Address = GetAddressById(Convert.ToInt32(_Dr["ReceiverAddressId"]));
                     }
 
-                    else
-                    {
-                        _Shipping.PostOffice = new PostOffice();
-
-                    }
 
                     //_Shipping.Labels = GetLabelsByShippingId(_Shipping.Id);
                     //_Shipping.Packages = GetPackagesByShippingId(_Shipping.Id);

@@ -89,12 +89,12 @@
 
 
          <td class="auto-style9">  
-             <asp:RadioButton ID="rbtAscendente" runat="server" Checked="True" Text="Ascendente" GroupName="grpSortOrder"/>
+             <asp:RadioButton ID="rbtAscendente" runat="server" Text="Ascendente" GroupName="grpSortOrder"/>
          </td>  
 
 
          <td class="auto-style10">  
-             <asp:RadioButton ID="rbtDescendente" runat="server" OnCheckedChanged="rbtDescendente_CheckedChanged" Text="Descendente" GroupName="grpSortOrder" />
+             <asp:RadioButton ID="rbtDescendente" runat="server" OnCheckedChanged="rbtDescendente_CheckedChanged" Text="Descendente" GroupName="grpSortOrder" Checked="True" />
          </td>  
 
          <td width="10%" class="auto-style1">  

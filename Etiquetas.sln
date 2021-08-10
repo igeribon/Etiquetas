@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backoffice", "Backoffice\Backoffice.csproj", "{F108BDFA-399A-4DCB-8E77-FA232BDA6F74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API_NET2", "API_NET2\API_NET2.csproj", "{795370EA-29E9-4B71-BB2E-5C009CCAE071}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API_NET2", "API_NET2\API_NET2.csproj", "{795370EA-29E9-4B71-BB2E-5C009CCAE071}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

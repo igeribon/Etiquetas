@@ -25,7 +25,7 @@ namespace API.Controllers
         {
             Shipping _Shipping = null;
 
-            JObject _Log = Newtonsoft.Json.Linq.JObject.FromObject(pShipping);
+            JObject _Log = new JObject();
 
             string _LogMessage = "";
 
@@ -33,7 +33,7 @@ namespace API.Controllers
             try
             {
 
-               
+                _Log = Newtonsoft.Json.Linq.JObject.FromObject(pShipping);
 
                 ////SE CAMBIO pShipping.Name por pShipping.ordcer_number
 
@@ -49,7 +49,16 @@ namespace API.Controllers
 
                 _Shipping.FinancialStatus = pShipping.financial_status;
 
-                _Shipping.CreatedAt = pShipping.created_at;
+                try
+                {
+                    if (pShipping.created_at != null)
+                        _Shipping.CreatedAt = Convert.ToDateTime(pShipping.created_at);
+                }
+
+                catch
+                {
+
+                }
 
 
                 //SE QUITO EL REEMPLAZO DE PUNTOS POR COMAS EN TotalLinesItemPrice POR LA CONFIGURACION DE IDIOMA DEL SERVIDOR
@@ -57,18 +66,21 @@ namespace API.Controllers
 
                 try
                 {
+
                     _Shipping.TotalLinesItemPrice = Convert.ToDouble(pShipping.total_line_items_price);
                 }
 
                 catch
-                { 
-                
+                {
+
                 }
 
-                _Shipping.Note = Convert.ToString(pShipping.note);
+                if (pShipping.note != null)
+                    _Shipping.Note = Convert.ToString(pShipping.note);
 
-                if (_Shipping.Note == null)
+                else
                     _Shipping.Note = "";
+
 
                 //DATOS RECEIVER
                 if (_Shipping.Receiver == null)
@@ -99,75 +111,76 @@ namespace API.Controllers
                 //DATOS RECEIVER ADDRESS
                 //_Shipping.Receiver.Address = new Address();
 
-                if(pShipping.shipping_address!=null)
+                if (pShipping.shipping_address != null)
                     _Shipping.Receiver.Address.Line1 = pShipping.shipping_address.address1;
 
 
 
                 //DATOS COURIER
 
-
-
-                foreach (ShippingLine _ShippingLine in pShipping.shipping_lines)
+                if (pShipping.shipping_lines != null)
                 {
-                    if (_ShippingLine.title.ToLower().Contains("dac"))
+                    foreach (ShippingLine _ShippingLine in pShipping.shipping_lines)
                     {
-                        _Shipping.Courier = new Courier();
-                        _Shipping.Courier.Id = 1;
-                        _Shipping.Courier.Name = "DAC";
-                        _Shipping.Courier.Country = "URUGUAY";
-
-                        break;
-                    }
-
-                    else if (_ShippingLine.title.ToLower().Contains("correo"))
-                    {
-                        _Shipping.Courier = new Courier();
-                        _Shipping.Courier.Id = 2;
-                        _Shipping.Courier.Name = "CORREO";
-                        _Shipping.Courier.Country = "URUGUAY";
-
-                        break;
-                    }
-
-
-
-                }
-
-
-
-                foreach (ShippingLine _ShippingLine in pShipping.shipping_lines)
-                {
-                    if (_ShippingLine.title.ToLower().Contains("contra"))
-                    {
-                        _Shipping.CashOnDelivery = true;
-
-
-                        _Shipping.Info = _ShippingLine.title;
-
-                        if (_Shipping.Info == null)
+                        if (_ShippingLine.title.ToLower().Contains("dac"))
                         {
-                            _Shipping.Info = "";
+                            _Shipping.Courier = new Courier();
+                            _Shipping.Courier.Id = 1;
+                            _Shipping.Courier.Name = "DAC";
+                            _Shipping.Courier.Country = "URUGUAY";
+
+                            break;
                         }
 
-                        break;
-                    }
-
-                    else
-                    {
-                        _Shipping.CashOnDelivery = false;
-
-                        _Shipping.Info = _ShippingLine.title;
-
-                        if (_Shipping.Info == null)
+                        else if (_ShippingLine.title.ToLower().Contains("correo"))
                         {
-                            _Shipping.Info = "";
+                            _Shipping.Courier = new Courier();
+                            _Shipping.Courier.Id = 2;
+                            _Shipping.Courier.Name = "CORREO";
+                            _Shipping.Courier.Country = "URUGUAY";
+
+                            break;
                         }
 
-                        break;
-                    }
-                }
 
+
+                    }
+
+
+
+                    foreach (ShippingLine _ShippingLine in pShipping.shipping_lines)
+                    {
+                        if (_ShippingLine.title.ToLower().Contains("contra"))
+                        {
+                            _Shipping.CashOnDelivery = true;
+
+
+                            _Shipping.Info = _ShippingLine.title;
+
+                            if (_Shipping.Info == null)
+                            {
+                                _Shipping.Info = "";
+                            }
+
+                            break;
+                        }
+
+                        else
+                        {
+                            _Shipping.CashOnDelivery = false;
+
+                            _Shipping.Info = _ShippingLine.title;
+
+                            if (_Shipping.Info == null)
+                            {
+                                _Shipping.Info = "";
+                            }
+
+                            break;
+                        }
+                    }
+
+                }
 
                 _Shipping.GuideType = new GuideType();
 
@@ -190,7 +203,7 @@ namespace API.Controllers
                 if (_Shipping.Courier != null)
                 {
                     //DATOS RECEIVER ADDRESS LOCALITY
-                    if(pShipping.shipping_address!=null)
+                    if (pShipping.shipping_address != null)
                         _Shipping.Receiver.Address.Locality = ShippingController.GetLocalityByCourierNameCity(pShipping.shipping_address.zip, pShipping.shipping_address.city, _Shipping.Courier);
                 }
 
@@ -201,18 +214,37 @@ namespace API.Controllers
                 if (_Shipping.Packages == null)
                     _Shipping.Packages = new List<Package>();
 
-                foreach (LineItem _LineItem in pShipping.line_items)
+                if (pShipping.line_items != null)
                 {
-                    Package _Package = new Package();
-                    _Package.Depth = 15;
-                    _Package.Height = 15;
-                    _Package.Weight = _LineItem.grams;
-                    _Package.Width = 15;
-                    _Package.Reference = _LineItem.name;
+                    foreach (LineItem _LineItem in pShipping.line_items)
+                    {
+                        Package _Package = new Package();
+                        _Package.Depth = 15;
+                        _Package.Height = 15;
 
-                    _Shipping.Packages.Add(_Package);
+                        try
+                        {
+                            if (_LineItem.grams != null)
+                                _Package.Weight = Convert.ToDouble(_LineItem.grams);
+                        }
 
+                        catch
+                        {
+                            
+                        }
+
+                        _Package.Width = 15;
+
+                        if (_LineItem.name != null)
+                            _Package.Reference = _LineItem.name;
+                        else
+                            _Package.Reference = "";
+
+                        _Shipping.Packages.Add(_Package);
+
+                    }
                 }
+
 
 
                 if (_Shipping.Id == 0)

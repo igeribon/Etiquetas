@@ -110,7 +110,7 @@ namespace API.DataTypes
         //public List<object> properties { get; set; }
         //public bool product_exists { get; set; }
         //public int fulfillable_quantity { get; set; }
-        public int grams { get; set; }
+        public string grams { get; set; }
         //public string price { get; set; }
         //public string total_discount { get; set; }
         //public object fulfillment_status { get; set; }
@@ -238,7 +238,7 @@ namespace API.DataTypes
         //public long id { get; set; }
         //public string email { get; set; }
         //public object closed_at { get; set; }
-        public DateTime created_at { get; set; }
+        public string created_at { get; set; }
         //public DateTime updated_at { get; set; }
         //public int number { get; set; }
         public string note { get; set; }

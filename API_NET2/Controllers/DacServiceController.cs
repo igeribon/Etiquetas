@@ -363,7 +363,7 @@ namespace API.Controllers
                 JProperty _Cartas = new JProperty("Cartas", 0);
                 JProperty _Sobres = new JProperty("Sobres", 0);
                 JProperty _K_Articulo = new JProperty("K_Articulo", 0);
-                JProperty _Observaciones = new JProperty("Observaciones", "Nro. Orden: "+pShipping.OrderId);
+                JProperty _Observaciones = new JProperty("Observaciones", pShipping.OrderId.ToString());
                 JProperty _K_Tipo_Guia = new JProperty("K_Tipo_Guia", pShipping.GuideType.Id);
 
                 JProperty _CostoMercaderia;
