@@ -91,6 +91,27 @@ namespace API.DataTypes
     //    public AmountSet amount_set { get; set; }
     //}
 
+    public class Fulfillment
+    {
+        public string id { get; set; }
+        //public string admin_graphql_api_id { get; set; }
+        //public DateTime created_at { get; set; }
+        //public long location_id { get; set; }
+        //public string name { get; set; }
+        //public long order_id { get; set; }
+        //public Receipt receipt { get; set; }
+        //public string service { get; set; }
+        //public object shipment_status { get; set; }
+        //public string status { get; set; }
+        //public string tracking_company { get; set; }
+        //public string tracking_number { get; set; }
+        //public List<string> tracking_numbers { get; set; }
+        //public string tracking_url { get; set; }
+        //public List<string> tracking_urls { get; set; }
+        //public DateTime updated_at { get; set; }
+        //public List<LineItem> line_items { get; set; }
+    }
+
     public class LineItem
     {
         //public object id { get; set; }
@@ -284,7 +305,7 @@ namespace API.DataTypes
         //public string processing_method { get; set; }
         //public object checkout_id { get; set; }
         //public string source_name { get; set; }
-        //public string fulfillment_status { get; set; }
+        public string fulfillment_status { get; set; }
         //public List<object> tax_lines { get; set; }
         //public string tags { get; set; }
         //public string contact_email { get; set; }
@@ -297,7 +318,7 @@ namespace API.DataTypes
         //public TotalPriceSet total_price_set { get; set; }
         //public TotalTaxSet total_tax_set { get; set; }
         public List<LineItem> line_items { get; set; }
-        //public List<object> fulfillments { get; set; }
+        public List<Fulfillment> fulfillments { get; set; }
         //public List<object> refunds { get; set; }
         //public string total_tip_received { get; set; }
         //public object original_total_duties_set { get; set; }

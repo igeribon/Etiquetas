@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using API.DataAccess;
 using API.DataTypes;
 using System.IO;
+using RestSharp;
 
 namespace API.Controllers
 {
@@ -299,7 +300,49 @@ namespace API.Controllers
 
         }
 
-      
-  
+
+        public static void UpdateShopifyTrackingNumber(Shipping pShipping)
+        {
+
+            try
+            {
+                string _api_key = "5ea8bb70bcee71df2f60400f318fad22";
+                string _api_password = "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";
+                string _store_name = "testmilgenial";
+                string _api_version = "2021-07";
+
+
+                string _Url = "https://" + _api_key + ":" + _api_password + "@" + _store_name + ".myshopify.com/admin/api/" + _api_version + "/fulfillments/" + pShipping.FulfillmentId + "/update_tracking.json";
+
+                var client = new RestClient(_Url);
+                client.Timeout = -1;
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("Content-Type", "application/json");
+
+
+                var body = "{" +
+" \"fulfillment\": {" +
+"\"notify_customer\": true," +
+"\"tracking_info\": {" +
+                    "\"number\": \"" + pShipping.LabelTrackingNumber + "\"," +
+"\"url\": \"https://dac.com.uy\"," +
+"\"company\": \"DAC\"" +
+"}" +
+            "}" +
+        "}";
+
+                request.AddParameter("application/json", body, ParameterType.RequestBody);
+                IRestResponse response = client.Execute(request);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+        }
+
     }
 }

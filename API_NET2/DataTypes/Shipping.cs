@@ -27,6 +27,7 @@ namespace API.DataTypes
 
         private string _Info;
         private string _Note;
+        private string _FulfillmentId;
 
         public Shipping()
         {
@@ -73,5 +74,6 @@ namespace API.DataTypes
         public string ReceiverPassport { get => _Receiver.Passport; }
         public string Info { get => _Info; set => _Info = value; }
         public string Note { get => _Note; set => _Note = value; }
+        public string FulfillmentId { get => _FulfillmentId; set => _FulfillmentId = value; }
     }
 }

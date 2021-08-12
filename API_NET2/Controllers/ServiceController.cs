@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -265,6 +266,18 @@ namespace API.Controllers
                     }
                 }
 
+                if (pShipping.fulfillment_status != null)
+                {
+                    //if (pShipping.fulfillment_status == "fulfilled")
+                    //{ 
+
+                    if (pShipping.fulfillments.Count > 0)
+                    {
+                        _Shipping.FulfillmentId = pShipping.fulfillments[0].id.Trim();
+                    }
+
+                    //}
+                }
 
 
                 if (_Shipping.Id == 0)
@@ -413,6 +426,8 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult CreateLabel(string pId)
         {
+            bool _SendTrackingNumber = true;
+
             Shipping _Shipping = new Shipping();
 
             try
@@ -426,12 +441,23 @@ namespace API.Controllers
 
                     else if (_Shipping.Courier.Name == "CORREO")
                         throw new Exception("Aun no contamos con integración para este courier.");
+
+                    if (_SendTrackingNumber)
+                    {
+                        if (_Shipping.FulfillmentId != null && _Shipping.FulfillmentId != "")
+                        {
+                            ShippingController.UpdateShopifyTrackingNumber(_Shipping);
+                        }
+                    }
                 }
+
+          
 
                 else
                 {
                     throw new Exception("No se indicó courier.");
                 }
+
             }
 
             catch (Exception ex)

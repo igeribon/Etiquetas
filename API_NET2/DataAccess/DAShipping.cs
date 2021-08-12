@@ -307,6 +307,11 @@ namespace API.DataAccess
                     _Cmd.Parameters.Add("@ShippingGuideTypeId", SqlDbType.Int).Value = DBNull.Value;
 
 
+                if (pShipping.FulfillmentId != null)
+                    _Cmd.Parameters.Add("@ShippingFulfillmentId", SqlDbType.VarChar).Value = pShipping.FulfillmentId;
+                else
+                    _Cmd.Parameters.Add("@ShippingFulfillmentId", SqlDbType.VarChar).Value = DBNull.Value;
+
 
                 var _ReturnParameter = _Cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
                 _ReturnParameter.Direction = ParameterDirection.ReturnValue;
@@ -593,6 +598,10 @@ namespace API.DataAccess
                         _Shipping.Note = Convert.ToString(_Dr["ShippingNote"]);
 
 
+                    if (_Dr["ShippingFulfillmentId"] != DBNull.Value)
+                        _Shipping.FulfillmentId = Convert.ToString(_Dr["ShippingFulfillmentId"]);
+
+
 
                     //DATOS COURIER
 
@@ -708,6 +717,11 @@ namespace API.DataAccess
 
                     if (_Dr["ShippingNote"] != DBNull.Value)
                         _Shipping.Note = Convert.ToString(_Dr["ShippingNote"]);
+
+
+
+                    if (_Dr["ShippingFulfillmentId"] != DBNull.Value)
+                        _Shipping.FulfillmentId = Convert.ToString(_Dr["ShippingFulfillmentId"]);
 
 
 
@@ -833,6 +847,11 @@ namespace API.DataAccess
 
                     if (_Dr["ShippingNote"] != DBNull.Value)
                         _Shipping.Note = Convert.ToString(_Dr["ShippingNote"]);
+
+
+                    if (_Dr["ShippingFulfillmentId"] != DBNull.Value)
+                        _Shipping.FulfillmentId = Convert.ToString(_Dr["ShippingFulfillmentId"]);
+
 
 
 
@@ -1575,6 +1594,10 @@ namespace API.DataAccess
                     _Cmd.Parameters.Add("@ShippingNote", SqlDbType.VarChar).Value = DBNull.Value;
 
 
+                if (pShipping.FulfillmentId != null)
+                    _Cmd.Parameters.Add("@ShippingFulfillmentId", SqlDbType.VarChar).Value = pShipping.FulfillmentId;
+                else
+                    _Cmd.Parameters.Add("@ShippingFulfillmentId", SqlDbType.VarChar).Value = DBNull.Value;
 
 
                 _Cnn.Open();
