@@ -318,7 +318,7 @@ namespace API.Controllers
                 client.Timeout = -1;
                 var request = new RestRequest(Method.POST);
                 request.AddHeader("Content-Type", "application/json");
-
+                request.AddHeader("X-Shopify-Access-Token", _api_password);
 
                 var body = "{" +
 " \"fulfillment\": {" +
@@ -339,8 +339,6 @@ namespace API.Controllers
             {
                 throw ex;
             }
-
-
 
         }
 
