@@ -313,6 +313,10 @@ namespace API.DataAccess
                     _Cmd.Parameters.Add("@ShippingFulfillmentId", SqlDbType.VarChar).Value = DBNull.Value;
 
 
+                _Cmd.Parameters.Add("@ShippingShopifyId", SqlDbType.BigInt).Value = pShipping.ShopifyId;
+
+
+
                 var _ReturnParameter = _Cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
                 _ReturnParameter.Direction = ParameterDirection.ReturnValue;
 
@@ -656,6 +660,12 @@ namespace API.DataAccess
                     {
                         _Shipping.GuideType = (GuideType)Controllers.DacServiceController.GetGuideTypes().Find(x => x.Id == Convert.ToInt32(_Dr["ShippingGuideTypeId"]));
                     }
+
+
+                    if (_Dr["ShippingShopifyId"] != DBNull.Value)
+                        _Shipping.ShopifyId = Convert.ToInt64(_Dr["ShippingShopifyId"]);
+
+
                 }
 
             }
@@ -1598,6 +1608,8 @@ namespace API.DataAccess
                     _Cmd.Parameters.Add("@ShippingFulfillmentId", SqlDbType.VarChar).Value = pShipping.FulfillmentId;
                 else
                     _Cmd.Parameters.Add("@ShippingFulfillmentId", SqlDbType.VarChar).Value = DBNull.Value;
+
+                _Cmd.Parameters.Add("@ShippingShopifyId", SqlDbType.BigInt).Value = pShipping.ShopifyId;
 
 
 

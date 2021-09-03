@@ -24,10 +24,10 @@ namespace API.Controllers
 
             try
             {
-                pUsername = "99090";
-                pPassword = "99090";
+                pUsername = "416869";
+                pPassword = "3600";
 
-                var client = new RestClient("http://altis-web.grupoagencia.com:8082/JAgencia.asmx/wsLogin?Login=" + pUsername + "&Contrasenia=" + pPassword);
+                var client = new RestClient("http://altis-web.grupoagencia.com:8087/JAgencia.asmx/wsLogin?Login=" + pUsername + "&Contrasenia=" + pPassword);
                 client.Timeout = -1;
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);
@@ -73,7 +73,7 @@ namespace API.Controllers
 
 
 
-                var client = new RestClient("http://altis-web.grupoagencia.com:8082/JAgencia.asmx/wsBarrio?ID_Sesion=" + _IDSession + "&Barrrio=" + pLocalityName);
+                var client = new RestClient("http://altis-web.grupoagencia.com:8087/JAgencia.asmx/wsBarrio?ID_Sesion=" + _IDSession + "&Barrrio=" + pLocalityName);
                 client.Timeout = -1;
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);
@@ -124,7 +124,7 @@ namespace API.Controllers
                 string _IDSession = Login("", "");
 
 
-                var client = new RestClient("http://altis-web.grupoagencia.com:8082/JAgencia.asmx/wsOficina?ID_Sesion="+_IDSession+"&K_Oficina="+pId);
+                var client = new RestClient("http://altis-web.grupoagencia.com:8087/JAgencia.asmx/wsOficina?ID_Sesion="+_IDSession+"&K_Oficina="+pId);
                 client.Timeout = -1;
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);
@@ -166,7 +166,7 @@ namespace API.Controllers
 
 
 
-        //[HttpGet("localities/insert")]
+        [HttpGet("localities/insert")]
         public string InsertLocalities()
         {
             string _Retorno="";
@@ -195,7 +195,7 @@ namespace API.Controllers
             return _Retorno;
         }
 
-        //[HttpGet("offices/insert")]
+        [HttpGet("offices/insert")]
         public string InsertOffices()
         {
 
@@ -383,7 +383,7 @@ namespace API.Controllers
                     _Observaciones, _K_Tipo_Guia, _CostoMercaderia, _Referencia_Pago, _CodigoPedido, _Serv_DDF);
 
 
-                var client = new RestClient("http://altis-web.grupoagencia.com:8082/JAgencia.asmx/wsInGuia");
+                var client = new RestClient("http://altis-web.grupoagencia.com:8087/JAgencia.asmx/wsInGuia");
                 client.Timeout = -1;
                 var request = new RestRequest(Method.POST);
                 request.AddHeader("Content-Type", "application/json");
@@ -425,7 +425,7 @@ namespace API.Controllers
 
 
 
-                    var clientPegote = new RestClient("http://altis-web.grupoagencia.com:8082/JAgencia.asmx/wsGetPegote?K_oficina=" + _K_Oficina_getPegote + "&K_guia=" + _K_Guia_getPegote + "&CodigoPedido=&ID_Sesion=" + _IDSesionAux);
+                    var clientPegote = new RestClient("http://altis-web.grupoagencia.com:8087/JAgencia.asmx/wsGetPegote?K_oficina=" + _K_Oficina_getPegote + "&K_guia=" + _K_Guia_getPegote + "&CodigoPedido=&ID_Sesion=" + _IDSesionAux);
                     clientPegote.Timeout = -1;
                     var requestPegote = new RestRequest(Method.GET);
                     IRestResponse responsePegote = clientPegote.Execute(requestPegote);

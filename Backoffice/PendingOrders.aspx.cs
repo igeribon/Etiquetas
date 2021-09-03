@@ -118,7 +118,7 @@ namespace Backoffice
 
                 Shipping _Shipping = _Shippings.Find(x => x.OrderId.Trim().Equals(_OrderId.Trim()));
 
-                if (_Shipping.FinancialStatus.Trim() == "paid")
+                if (_Shipping.FinancialStatus.Trim() == "paid" || _Shipping.CashOnDelivery)
                 {
                     if (_Shipping.Receiver.Address.Locality.Id != 0)
                     {

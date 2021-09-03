@@ -29,6 +29,7 @@ namespace API.DataTypes
         private string _Note;
 
         private string _FulfillmentId;
+        private long _ShopifyId;
 
         public Shipping()
         { 
@@ -91,5 +92,6 @@ namespace API.DataTypes
         public string Info { get => _Info; set => _Info = value; }
         public string Note { get => _Note; set => _Note = value; }
         public string FulfillmentId { get => _FulfillmentId; set => _FulfillmentId = value; }
+        public long ShopifyId { get => _ShopifyId; set => _ShopifyId = value; }
     }
 }

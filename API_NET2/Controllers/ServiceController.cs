@@ -50,10 +50,12 @@ namespace API.Controllers
 
                 _Shipping.FinancialStatus = pShipping.financial_status;
 
+                _Shipping.ShopifyId = pShipping.id;
+
                 try
                 {
                     if (pShipping.created_at != null)
-                        _Shipping.CreatedAt = Convert.ToDateTime(pShipping.created_at);
+                        _Shipping.CreatedAt = Convert.ToDateTime(pShipping.created_at).AddHours(4);
                 }
 
                 catch
@@ -446,7 +448,13 @@ namespace API.Controllers
                     {
                         if (_Shipping.FulfillmentId != null && _Shipping.FulfillmentId != "")
                         {
-                            ShippingController.UpdateShopifyTrackingNumber(_Shipping);
+                            ShippingController.UpdateShopifyTrackingNumberWithFulfillment(_Shipping);
+                        }
+
+                        else
+                        {
+                            ShippingController.UpdateShopifyTrackingNumberWithoutFulfillment(_Shipping);
+                         
                         }
                     }
                 }

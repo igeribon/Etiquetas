@@ -301,14 +301,50 @@ namespace API.Controllers
         }
 
 
-        public static void UpdateShopifyTrackingNumber(Shipping pShipping)
+        public static void UpdateShopifyTrackingNumberWithoutFulfillment(Shipping pShipping)
         {
 
             try
             {
-                string _api_key = "5ea8bb70bcee71df2f60400f318fad22";
-                string _api_password = "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";
-                string _store_name = "testmilgenial";
+                string _api_key = "2a69d0274a99072efb7f9835117fb708";
+                string _api_password = "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";
+                string _store_name = "mil-genial-uruguay";
+                string _api_version = "2021-07";
+
+
+                string _Url = "https://" + _api_key + ":" + _api_password + "@" + _store_name + ".myshopify.com/admin/api/" + _api_version + "/orders/" + pShipping.ShopifyId + "/fulfillments.json";
+                //string _Url = "https://" + _api_key + ":" + _api_password + "@" + _store_name + ".myshopify.com/admin/api/" + _api_version + "/orders/3960236114098/fulfillments.json";
+
+                var client = new RestClient(_Url);
+                client.Timeout = -1;
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("Content-Type", "application/json");
+                request.AddHeader("X-Shopify-Access-Token", _api_password);
+
+                var body = "{\"fulfillment\": {\r\n    \"location_id\": 49644961951,\r\n    \"tracking_company\" : \"DAC\",\r\n    \"tracking_number\": \"" + pShipping.LabelTrackingNumber+ "\",\r\n    \"tracking_urls\": [\r\n      \"https://www.dac.com.uy/rastreo.php\"\r\n    ],\r\n    \"notify_customer\": true\r\n  }\r\n}";
+
+
+                request.AddParameter("application/json", body, ParameterType.RequestBody);
+                IRestResponse response = client.Execute(request);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+
+
+        public static void UpdateShopifyTrackingNumberWithFulfillment(Shipping pShipping)
+        {
+
+            try
+            {
+                string _api_key = "2a69d0274a99072efb7f9835117fb708";
+                string _api_password = "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";
+                string _store_name = "mil-genial-uruguay";
                 string _api_version = "2021-07";
 
 
@@ -325,7 +361,7 @@ namespace API.Controllers
 "\"notify_customer\": true," +
 "\"tracking_info\": {" +
                     "\"number\": \"" + pShipping.LabelTrackingNumber + "\"," +
-"\"url\": \"https://dac.com.uy\"," +
+"\"url\": \"https://www.dac.com.uy/rastreo.php\"," +
 "\"company\": \"DAC\"" +
 "}" +
             "}" +

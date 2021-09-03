@@ -256,7 +256,7 @@ namespace API.DataTypes
 
     public class DTOShipping
     {
-        //public long id { get; set; }
+        public long id { get; set; }
         //public string email { get; set; }
         //public object closed_at { get; set; }
         public string created_at { get; set; }

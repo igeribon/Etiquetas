@@ -482,7 +482,7 @@ namespace Backoffice
 
 
 
-                if (_Shipping.FinancialStatus.Trim() == "paid")
+                if (_Shipping.FinancialStatus.Trim() == "paid"||_Shipping.CashOnDelivery)
                 {
                     if (_Shipping.Receiver.Address.Locality != null &&_Shipping.Receiver.Address.Locality.Id != 0)
                     {
