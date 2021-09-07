@@ -558,6 +558,64 @@ namespace API.DataAccess
         }
 
 
+        //PARA PUT DESDE BACKOFFICE
+        public static Locality GetLocalityByCourierNameCityState(string pName, string pCity, string pState, Courier pCourier)
+        {
+            Locality _Locality = null;
+
+            SqlConnection _Cnn = new SqlConnection();
+
+            try
+            {
+
+
+                _Cnn = Connection.Instancia.SetConnection();
+                SqlDataReader _Dr = null;
+                SqlCommand _Cmd = new SqlCommand("spLocalityGetByCourierNameCityState", _Cnn);
+                _Cmd.Parameters.Add("@LocalityName", SqlDbType.VarChar).Value = pName;
+                _Cmd.Parameters.Add("@LocalityState", SqlDbType.VarChar).Value = pState;
+                _Cmd.Parameters.Add("@LocalityCity", SqlDbType.VarChar).Value = pCity;
+                _Cmd.Parameters.Add("@LocalityCourierId", SqlDbType.Int).Value = pCourier.Id;
+
+
+                _Cmd.CommandType = CommandType.StoredProcedure;
+
+                _Cnn.Open();
+
+                _Dr = _Cmd.ExecuteReader();
+
+                while (_Dr.Read())
+                {
+                    _Locality = new Locality();
+
+                    _Locality.Id = Convert.ToInt32(_Dr["LocalityId"]);
+                    _Locality.Name = Convert.ToString(_Dr["LocalityName"]);
+                    _Locality.City = Convert.ToString(_Dr["LocalityCity"]);
+                    _Locality.State = Convert.ToString(_Dr["LocalityState"]);
+                    _Locality.ZIP = Convert.ToString(_Dr["LocalityZIP"]);
+
+                    _Locality.Code = Convert.ToString(_Dr["LocalityCode"]);
+                    _Locality.CityCode = Convert.ToString(_Dr["LocalityCityCode"]);
+                    _Locality.StateCode = Convert.ToString(_Dr["LocalityStateCode"]);
+
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                _Cnn.Close();
+            }
+
+            return _Locality;
+        }
+
+
         public static Shipping GetShippingByOrderId(string pOrderId)
         {
             Shipping _Shipping = new Shipping();

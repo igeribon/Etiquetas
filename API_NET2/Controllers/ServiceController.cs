@@ -328,8 +328,14 @@ namespace API.Controllers
             {
                 if (_Shipping.Courier != null)
                 {
-                    //DATOS RECEIVER ADDRESS LOCALITY
-                    _Shipping.Receiver.Address.Locality = ShippingController.GetLocalityByCourierNameCity(pShipping.Receiver.Address.Locality.Name, pShipping.Receiver.Address.Locality.City, _Shipping.Courier);
+
+
+                    //_Shipping.Receiver.Address.Locality = ShippingController.GetLocalityByCourierNameCity(pShipping.Receiver.Address.Locality.Name, pShipping.Receiver.Address.Locality.City, _Shipping.Courier);
+                    //SE AGREGÓ CAMPO STATE A LA BUSQUEDA.
+
+                    _Shipping.Receiver.Address.Locality = ShippingController.GetLocalityByCourierNameCityState(pShipping.Receiver.Address.Locality.Name, pShipping.Receiver.Address.Locality.City,pShipping.Receiver.Address.Locality.State, _Shipping.Courier);
+
+
                 }
 
                 ShippingController.UpdateShipping(_Shipping);

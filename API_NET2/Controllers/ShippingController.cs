@@ -204,7 +204,31 @@ namespace API.Controllers
             return _Locality;
         }
 
+        //PARA PUT DESDE BACKOFFICE
+        public static Locality GetLocalityByCourierNameCityState(string pName, string pCity, string pState, Courier pCourier)
+        {
+            Locality _Locality = new Locality();
 
+            try
+            {
+             
+
+
+             
+                    _Locality = DataAccess.DAShipping.GetLocalityByCourierNameCityState(pName, pCity, pState, pCourier);
+                
+
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+            return _Locality;
+        }
 
         public static List<string> GetStatesByCourier(int pCourierId)
         {
