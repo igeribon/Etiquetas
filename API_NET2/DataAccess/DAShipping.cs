@@ -366,7 +366,17 @@ namespace API.DataAccess
                 _Cmd.Parameters.Add("@LabelIdentifier", SqlDbType.VarChar).Value = pLabel.Identifier;
                 _Cmd.Parameters.Add("@LabelTrackingNumber", SqlDbType.VarChar).Value = pLabel.TrackingNumber;
                 _Cmd.Parameters.Add("@LabelData", SqlDbType.Binary).Value = pLabel.Data;
-                _Cmd.Parameters.Add("@LabelPostoFficeId", SqlDbType.Int).Value = pLabel.PostOffice.Id;
+
+                //ESTE CHECKEO SE PUSO CUANDO HABIA PROBLEMA CON LAS ETIQUETAS DE ROCHA, NO HAY OFICINA APARENTEMENTE
+                if (pLabel.PostOffice != null)
+                {
+                    _Cmd.Parameters.Add("@LabelPostoFficeId", SqlDbType.Int).Value = pLabel.PostOffice.Id;
+                }
+
+                else
+                {
+                    _Cmd.Parameters.Add("@LabelPostoFficeId", SqlDbType.Int).Value = DBNull.Value;
+                }
 
                 _Cnn.Open();
                 _Cmd.ExecuteNonQuery();
