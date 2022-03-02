@@ -402,5 +402,36 @@ namespace API.Controllers
 
         }
 
+
+
+
+        //PARA PROBAR ENDPOINT
+
+        public static List<PostOffice> GetGetPostOfficeByStateCourier(string pState, Courier pCourier)
+        {
+            List<PostOffice> _Officess = new List<PostOffice>();
+
+
+            try
+            {
+
+
+                _Officess = DataAccess.DAShipping.GetPostOfficeByStateCourier(pState,pCourier);
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+            return _Officess;
+        }
+
+
+
+
     }
 }

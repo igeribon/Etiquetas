@@ -568,7 +568,29 @@ namespace API.Controllers
             return _test;
         }
 
-     
+
+        //PARA PROBAR ENDPOINT
+
+        [HttpGet("PostOffices/State={pState}&Courier={pCourierId}")]
+        public List<PostOffice> GetGetPostOfficeByStateCourier(string pState, int pCourierId)
+        {
+            List<PostOffice> _Offices = new List<PostOffice>();
+
+            Courier _Courier = new Courier();
+            _Courier.Id = pCourierId;
+
+            try
+            {
+                _Offices = ShippingController.GetGetPostOfficeByStateCourier(pState,_Courier);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return _Offices;
+        }
 
 
 

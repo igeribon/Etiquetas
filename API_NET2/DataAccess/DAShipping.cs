@@ -1259,11 +1259,11 @@ namespace API.DataAccess
                     _Office.Courier = pCourier;
 
                     _Office.Address = new Address();
-                    _Office.Address.Id = Convert.ToInt32(_Dr["AddressId"]);
-                    _Office.Address.Line1 = Convert.ToString(_Dr["AddressLine1"]);
-                    _Office.Address.Line2 = Convert.ToString(_Dr["AddressLine2"]);
-                    _Office.Address.Phone = Convert.ToString(_Dr["AddressPhone"]);
-                    _Office.Address.Observation = Convert.ToString(_Dr["AddressObservation"]);
+                    _Office.Address.Id = 0;
+                    _Office.Address.Line1 = Convert.ToString(_Dr["PostOfficeAddressLine1"]);
+                    //_Office.Address.Line2 = Convert.ToString(_Dr["AddressLine2"]);
+                    _Office.Address.Phone = Convert.ToString(_Dr["PostOfficePhone"]);
+                    //_Office.Address.Observation = Convert.ToString(_Dr["AddressObservation"]);
 
                     _Office.Address.Locality = new Locality();
                     _Office.Address.Locality.Id = Convert.ToInt32(_Dr["LocalityId"]);
@@ -1295,6 +1295,74 @@ namespace API.DataAccess
         }
 
 
+        public static List<PostOffice> GetPostOfficeByStateCourier(string pState, Courier pCourier)
+        {
+            List<PostOffice> _Offices = new List<PostOffice>();
+
+            SqlConnection _Cnn = new SqlConnection();
+
+            try
+            {
+
+
+                _Cnn = Connection.Instancia.SetConnection();
+                SqlDataReader _Dr = null;
+                SqlCommand _Cmd = new SqlCommand("spPostOfficeGetByStateCourierId", _Cnn);
+                _Cmd.Parameters.Add("@LocalityState", SqlDbType.VarChar).Value = pState;
+                _Cmd.Parameters.Add("@CourierId", SqlDbType.Int).Value = pCourier.Id;
+
+
+                _Cmd.CommandType = CommandType.StoredProcedure;
+
+                _Cnn.Open();
+
+                _Dr = _Cmd.ExecuteReader();
+
+                while (_Dr.Read())
+                {
+                    PostOffice _Office = new PostOffice();
+
+                    _Office = new PostOffice();
+                    _Office.Id = Convert.ToInt32(_Dr["PostOfficeId"]);
+                    _Office.Name = Convert.ToString(_Dr["PostOfficeName"]);
+                    _Office.Code = Convert.ToInt32(_Dr["PostOfficeCode"]);
+                    _Office.Courier = pCourier;
+
+                    _Office.Address = new Address();
+                    _Office.Address.Id = 0;
+                    _Office.Address.Line1 = Convert.ToString(_Dr["PostOfficeAddressLine1"]);
+                    //_Office.Address.Line2 = Convert.ToString(_Dr["AddressLine2"]);
+                    _Office.Address.Phone = Convert.ToString(_Dr["PostOfficePhone"]);
+                    //_Office.Address.Observation = Convert.ToString(_Dr["AddressObservation"]);
+
+                    _Office.Address.Locality = new Locality();
+                    _Office.Address.Locality.Id = Convert.ToInt32(_Dr["LocalityId"]);
+                    _Office.Address.Locality.Name = Convert.ToString(_Dr["LocalityName"]);
+                    _Office.Address.Locality.City = Convert.ToString(_Dr["LocalityCity"]);
+                    _Office.Address.Locality.State = Convert.ToString(_Dr["LocalityState"]);
+                    _Office.Address.Locality.ZIP = Convert.ToString(_Dr["LocalityZIP"]);
+                    _Office.Address.Locality.Code = Convert.ToString(_Dr["LocalityCode"]);
+                    _Office.Address.Locality.CityCode = Convert.ToString(_Dr["LocalityCityCode"]);
+                    _Office.Address.Locality.StateCode = Convert.ToString(_Dr["LocalityStateCode"]);
+
+
+                    _Offices.Add(_Office);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                _Cnn.Close();
+            }
+
+            return _Offices;
+        }
 
 
         public static List<string> GetStatesByCourier(int  pCourierId)
