@@ -625,6 +625,60 @@ namespace API.DataAccess
             return _Locality;
         }
 
+        public static Locality GetLocalityById(int pLocalityId)
+        {
+            Locality _Locality = null;
+
+            SqlConnection _Cnn = new SqlConnection();
+
+            try
+            {
+
+
+                _Cnn = Connection.Instancia.SetConnection();
+                SqlDataReader _Dr = null;
+                SqlCommand _Cmd = new SqlCommand("spLocalityGetById", _Cnn);
+                _Cmd.Parameters.Add("@LocalityId", SqlDbType.Int).Value = pLocalityId;
+
+
+
+                _Cmd.CommandType = CommandType.StoredProcedure;
+
+                _Cnn.Open();
+
+                _Dr = _Cmd.ExecuteReader();
+
+                while (_Dr.Read())
+                {
+                    _Locality = new Locality();
+
+                    _Locality.Id = Convert.ToInt32(_Dr["LocalityId"]);
+                    _Locality.Name = Convert.ToString(_Dr["LocalityName"]).Trim();
+                    _Locality.City = Convert.ToString(_Dr["LocalityCity"]).Trim();
+                    _Locality.State = Convert.ToString(_Dr["LocalityState"]).Trim();
+                    _Locality.ZIP = Convert.ToString(_Dr["LocalityZIP"]).Trim();
+
+                    _Locality.Code = Convert.ToString(_Dr["LocalityCode"]).Trim();
+                    _Locality.CityCode = Convert.ToString(_Dr["LocalityCityCode"]).Trim();
+                    _Locality.StateCode = Convert.ToString(_Dr["LocalityStateCode"]).Trim();
+
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                _Cnn.Close();
+            }
+
+            return _Locality;
+        }
+
 
         public static Shipping GetShippingByOrderId(string pOrderId)
         {
@@ -705,9 +759,18 @@ namespace API.DataAccess
                     if (_Dr["PostOfficeId"] != DBNull.Value)
                     {
                         _Shipping.PostOffice.Id = Convert.ToInt32(_Dr["PostOfficeId"]);
-                        _Shipping.PostOffice.Name = Convert.ToString(_Dr["PostOfficeName"]);
+                        _Shipping.PostOffice.Name = Convert.ToString(_Dr["PostOfficeName"]).Trim();
                         _Shipping.PostOffice.Courier = _Shipping.Courier;
-                        _Shipping.PostOffice.Address = GetAddressById(Convert.ToInt32(_Dr["ReceiverAddressId"]));
+
+                        //SE CAMBIO PARA DESACOPLAR DE TABLA ADDRESS LAS POST OFFICES, AHORA POSTOFFICE SE RELACIONA CON LOCALITY, DE TODAS FORMAS
+                        //CONSERVAMOS EL DISEÑO DE CLASES DONDE LA LOCALITY VA ADENTRO DE LA ADDRESS
+
+                        //_Shipping.PostOffice.Address = GetAddressById(Convert.ToInt32(_Dr["ReceiverAddressId"]));
+
+                        _Shipping.PostOffice.Address = new Address();
+                        _Shipping.PostOffice.Address.Locality = GetLocalityById(Convert.ToInt32(_Dr["PostOfficeLocalityId"]));
+
+
                         _Shipping.PostOffice.Code = Convert.ToInt32(_Dr["PostOfficeCode"]);
                     }
 

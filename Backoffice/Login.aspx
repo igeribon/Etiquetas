@@ -4,7 +4,7 @@
 
   <head>
     <meta charset="UTF-8">
-    <title>WILMA | Login</title>
+    <title>MILGENIAL | Login</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
     <link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" runat="server" />
@@ -28,7 +28,7 @@
   <body class="login-page" runat="server">
     <div class="login-box" runat="server">
       <div class="login-logo">
-       <b>WILMA</b>
+       <b>MILGENIAL</b>
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg"></p>

@@ -431,7 +431,27 @@ namespace API.Controllers
         }
 
 
+        public static PostOffice GetPostOfficeByCodeCourier(int pCode, Courier pCourier)
+        {
+            PostOffice _Office = null;
 
+
+            try
+            {
+
+                _Office = DataAccess.DAShipping.GetPostOfficeByCodeCourier( pCode, pCourier);
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+            return _Office;
+        }
 
     }
 }

@@ -162,17 +162,18 @@
              Nombre   
          </td>  
          <td class="auto-style15">  
-             <asp:TextBox ID="txtName" runat="server" Width="225px"></asp:TextBox>
+             <asp:TextBox ID="txtName" runat="server" Width="286px"></asp:TextBox>
          </td>  
 
 
          <td class="auto-style20" colspan="2">  
-             Dirección  
-         </td>  
+             Tipo Envío</td>  
 
 
          <td width="10%" class="auto-style1">  
-             <asp:TextBox ID="txtLine1" runat="server" Width="225px"></asp:TextBox>
+                <asp:RadioButton ID="rbtADomicilio" runat="server" Text="A Domicilio" GroupName="DeliveryType" AutoPostBack="True" OnCheckedChanged="rbtADomicilio_CheckedChanged" />
+          &nbsp;&nbsp;&nbsp;&nbsp;
+                <asp:RadioButton ID="rbtOficina" runat="server" Text="Oficina" GroupName="DeliveryType" AutoPostBack="True" OnCheckedChanged="rbtOficina_CheckedChanged" />
          </td>  
      </tr>  
    
@@ -181,12 +182,12 @@
          <td class="auto-style19">  
              Apellido</td>  
          <td class="auto-style15">  
-             <asp:TextBox ID="txtLastName" runat="server" Width="225px"></asp:TextBox>
+             <asp:TextBox ID="txtLastName" runat="server" Width="286px"></asp:TextBox>
          </td>  
 
 
          <td class="auto-style20" colspan="2">  
-             Departamento  
+             <asp:Label ID="lblDepartamento" runat="server" Text="Departamento"></asp:Label>
          </td>  
 
 
@@ -204,18 +205,18 @@
              Teléfono   
          </td>  
          <td class="auto-style15">  
-             <asp:TextBox ID="txtPhone" runat="server" Width="225px"></asp:TextBox>
+             <asp:TextBox ID="txtPhone" runat="server" Width="286px"></asp:TextBox>
          </td>  
 
 
          <td class="auto-style20" colspan="2">  
-             Ciudad  
+             <asp:Label ID="lblOficina" runat="server" Text="Oficina" Visible="False"></asp:Label>
          </td>  
 
 
          <td width="10%" class="auto-style1">  
              
-             <asp:DropDownList ID="drpCity" runat="server" Width="225px" AutoPostBack="True" OnSelectedIndexChanged="drpCity_SelectedIndexChanged">
+             <asp:DropDownList ID="drpPostOffices" runat="server" Height="22px" Width="225px" AutoPostBack="True" Visible="False">
              </asp:DropDownList>
              
          </td>  
@@ -229,18 +230,18 @@
              Email   
          </td>  
          <td class="auto-style15">  
-             <asp:TextBox ID="txtEmail" runat="server" Width="225px"></asp:TextBox>
+             <asp:TextBox ID="txtEmail" runat="server" Width="286px"></asp:TextBox>
          </td>  
 
 
          <td class="auto-style20" colspan="2">  
-             Localidad  
+             <asp:Label ID="lblCiudad" runat="server" Text="Ciudad"></asp:Label>
          </td>  
 
 
          <td width="10%" class="auto-style1">  
              
-             <asp:DropDownList ID="drpLocality" runat="server" Height="22px" Width="225px" AutoPostBack="True">
+             <asp:DropDownList ID="drpCity" runat="server" Width="225px" AutoPostBack="True" OnSelectedIndexChanged="drpCity_SelectedIndexChanged">
              </asp:DropDownList>
              
          </td>  
@@ -256,7 +257,38 @@
          </td>  
          <td class="auto-style15">  
         
-             <asp:TextBox ID="txtPassport" runat="server" Width="225px"></asp:TextBox>
+             <asp:TextBox ID="txtPassport" runat="server" Width="286px"></asp:TextBox>
+        
+         </td>  
+
+
+         <td class="auto-style20" colspan="2">  
+        
+             <asp:Label ID="lblLocalidad" runat="server" Text="Localidad"></asp:Label>
+          </td>  
+
+
+          <td class="auto-style13">  
+             
+             <asp:DropDownList ID="drpLocality" runat="server" Height="22px" Width="225px" AutoPostBack="True">
+             </asp:DropDownList>
+             
+          </td>
+
+
+     </tr>  
+
+
+        
+      <tr>  
+         <td class="auto-style19">  
+              
+             Dirección  
+                                
+         </td>  
+         <td class="auto-style15">  
+        
+             <asp:TextBox ID="txtLine1" runat="server" Width="286px"></asp:TextBox>
         
          </td>  
 
@@ -264,6 +296,9 @@
          <td class="auto-style20" colspan="2">  
         
              &nbsp;</td>  
+
+
+          <td>&nbsp;</td>
 
 
      </tr>  

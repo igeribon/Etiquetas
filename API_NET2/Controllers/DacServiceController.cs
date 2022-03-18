@@ -24,10 +24,15 @@ namespace API.Controllers
 
             try
             {
-                pUsername = "416869";
-                pPassword = "3600";
+                //USER DEV
+                pUsername = "99090";
+                pPassword = "99092";
 
-                var client = new RestClient("http://altis-web.grupoagencia.com:8087/JAgencia.asmx/wsLogin?Login=" + pUsername + "&Contrasenia=" + pPassword);
+                ////USER PRODUCCION
+                //pUsername = "416869";
+                //pPassword = "3600";
+
+                var client = new RestClient("http://altis-web.grupoagencia.com:8082/JAgencia.asmx/wsLogin?Login=" + pUsername + "&Contrasenia=" + pPassword);
                 client.Timeout = -1;
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);
@@ -73,7 +78,7 @@ namespace API.Controllers
 
 
 
-                var client = new RestClient("http://altis-web.grupoagencia.com:8087/JAgencia.asmx/wsBarrio?ID_Sesion=" + _IDSession + "&Barrrio=" + pLocalityName);
+                var client = new RestClient("http://altis-web.grupoagencia.com:8082/JAgencia.asmx/wsBarrio?ID_Sesion=" + _IDSession + "&Barrrio=" + pLocalityName);
                 client.Timeout = -1;
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);
@@ -124,7 +129,7 @@ namespace API.Controllers
                 string _IDSession = Login("", "");
 
 
-                var client = new RestClient("http://altis-web.grupoagencia.com:8087/JAgencia.asmx/wsOficina?ID_Sesion="+_IDSession+"&K_Oficina="+pId);
+                var client = new RestClient("http://altis-web.grupoagencia.com:8082/JAgencia.asmx/wsOficina?ID_Sesion="+_IDSession+"&K_Oficina="+pId);
                 client.Timeout = -1;
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);
@@ -327,10 +332,13 @@ namespace API.Controllers
                 }
 
 
+                //SE COMENTO PORQUE ANTES SOLO HACIAMOS ENVIOS A DOMICILIO, AHORA TAMIEN ENVIAMOS A OFICINAS
 
-                _Shipping.DeliveryType = new DeliveryType();
-                _Shipping.DeliveryType.Id = 2;
-                _Shipping.DeliveryType.Name = "SERVICIO A DOMICILIO";
+                //_Shipping.DeliveryType = new DeliveryType();
+                //_Shipping.DeliveryType.Id = 2;
+                //_Shipping.DeliveryType.Name = "SERVICIO A DOMICILIO";
+
+
 
 
                 JProperty _IDSesion = new JProperty("ID_Sesion", _IDSesionAux);
@@ -347,14 +355,37 @@ namespace API.Controllers
                 else
                     _Direccion_Destinatario = new JProperty("Direccion_Destinatario", pShipping.Receiver.Address.Line2);
 
-                JProperty _K_Barrio = new JProperty("K_Barrio", pShipping.Receiver.Address.Locality.Code.Trim());
-                JProperty _K_Ciudad_Destinatario = new JProperty("K_Ciudad_Destinatario", pShipping.Receiver.Address.Locality.CityCode);
-                JProperty _K_Estado_Destinatario = new JProperty("K_Estado_Destinatario", pShipping.Receiver.Address.Locality.StateCode);
+                JProperty _K_Barrio = new JProperty("K_Barrio", "");
+                JProperty _K_Ciudad_Destinatario = new JProperty("K_Ciudad_Destinatario", "");
+                JProperty _K_Estado_Destinatario = new JProperty("K_Estado_Destinatario", "");
+                JProperty _CP_Destinatario = new JProperty("CP_Destinatario", "");
+
+
                 JProperty _K_Pais_Destinatario = new JProperty("K_Pais_Destinatario", 1);
-                JProperty _CP_Destinatario = new JProperty("CP_Destinatario", pShipping.Receiver.Address.Locality.ZIP);
+                
                 JProperty _Telefono = new JProperty("Telefono", pShipping.Receiver.Phone);
-                JProperty _K_Oficina_Destino = new JProperty("K_Oficina_Destino", 0);
+
                 JProperty _Entrega = new JProperty("Entrega", pShipping.DeliveryType.Id);
+
+
+
+                //SE CAMBIO PARA HACER ENVIOS A OFICINA
+                JProperty _K_Oficina_Destino = new JProperty("K_Oficina_Destino", 0);
+
+                if (_Shipping.DeliveryType.Id == 1)
+                    _K_Oficina_Destino = new JProperty("K_Oficina_Destino", _Shipping.PostOffice.Code);
+
+                else
+                {
+                     _K_Barrio = new JProperty("K_Barrio", pShipping.Receiver.Address.Locality.Code.Trim());
+                     _K_Ciudad_Destinatario = new JProperty("K_Ciudad_Destinatario", pShipping.Receiver.Address.Locality.CityCode);
+                     _K_Estado_Destinatario = new JProperty("K_Estado_Destinatario", pShipping.Receiver.Address.Locality.StateCode);
+                     _CP_Destinatario = new JProperty("CP_Destinatario", pShipping.Receiver.Address.Locality.ZIP);
+
+                }
+
+
+
                 JProperty _Paquetes_Ampara = new JProperty("Paquetes_Ampara", 1);
                 JProperty _Chicos = new JProperty("Chicos", 1);
                 JProperty _Medianos = new JProperty("Medianos", 0);
@@ -383,7 +414,7 @@ namespace API.Controllers
                     _Observaciones, _K_Tipo_Guia, _CostoMercaderia, _Referencia_Pago, _CodigoPedido, _Serv_DDF);
 
 
-                var client = new RestClient("http://altis-web.grupoagencia.com:8087/JAgencia.asmx/wsInGuia");
+                var client = new RestClient("http://altis-web.grupoagencia.com:8082/JAgencia.asmx/wsInGuia");
                 client.Timeout = -1;
                 var request = new RestRequest(Method.POST);
                 request.AddHeader("Content-Type", "application/json");
@@ -425,7 +456,7 @@ namespace API.Controllers
 
 
 
-                    var clientPegote = new RestClient("http://altis-web.grupoagencia.com:8087/JAgencia.asmx/wsGetPegote?K_oficina=" + _K_Oficina_getPegote + "&K_guia=" + _K_Guia_getPegote + "&CodigoPedido=&ID_Sesion=" + _IDSesionAux);
+                    var clientPegote = new RestClient("http://altis-web.grupoagencia.com:8082/JAgencia.asmx/wsGetPegote?K_oficina=" + _K_Oficina_getPegote + "&K_guia=" + _K_Guia_getPegote + "&CodigoPedido=&ID_Sesion=" + _IDSesionAux);
                     clientPegote.Timeout = -1;
                     var requestPegote = new RestRequest(Method.GET);
                     IRestResponse responsePegote = clientPegote.Execute(requestPegote);

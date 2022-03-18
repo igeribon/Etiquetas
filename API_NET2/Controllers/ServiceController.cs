@@ -333,7 +333,9 @@ namespace API.Controllers
                     //_Shipping.Receiver.Address.Locality = ShippingController.GetLocalityByCourierNameCity(pShipping.Receiver.Address.Locality.Name, pShipping.Receiver.Address.Locality.City, _Shipping.Courier);
                     //SE AGREGÓ CAMPO STATE A LA BUSQUEDA.
 
-                    _Shipping.Receiver.Address.Locality = ShippingController.GetLocalityByCourierNameCityState(pShipping.Receiver.Address.Locality.Name, pShipping.Receiver.Address.Locality.City,pShipping.Receiver.Address.Locality.State, _Shipping.Courier);
+                    //SE AGREGO ESTE CONTROL PARA VER QUE LA LOCALITY NO SEA NULA PARA EL CASO DE ENVIO A OFICINA, REVISAR
+                    if((_Shipping.Receiver.Address.Locality.Name!=null && _Shipping.Receiver.Address.Locality.Name!=""))
+                     _Shipping.Receiver.Address.Locality = ShippingController.GetLocalityByCourierNameCityState(pShipping.Receiver.Address.Locality.Name, pShipping.Receiver.Address.Locality.City,pShipping.Receiver.Address.Locality.State, _Shipping.Courier);
 
 
                 }
@@ -434,7 +436,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult CreateLabel(string pId)
         {
-            bool _SendTrackingNumber = true;
+            bool _SendTrackingNumber = false;
 
             Shipping _Shipping = new Shipping();
 
@@ -592,7 +594,28 @@ namespace API.Controllers
             return _Offices;
         }
 
+        [HttpGet("getPostOfficeByCodeCourier/PostOfficeCode={pCode}&CourierId={pCourierId}")]
 
+        public PostOffice GetPostOfficeByCodeCourier(int pCode, int pCourierId)
+        {
+            PostOffice _PostOffice = null;
+
+            try
+            {
+                Courier _Courier = new Courier();
+
+                _Courier.Id = 1;
+
+                _PostOffice = ShippingController.GetPostOfficeByCodeCourier(pCode, _Courier);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return _PostOffice;
+        }
 
     }
 }

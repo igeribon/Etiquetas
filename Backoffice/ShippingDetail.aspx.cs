@@ -21,6 +21,8 @@ namespace Backoffice
         static List<string> _Cities;
         static List<string> _Localities;
 
+        static List<PostOffice> _Offices;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -44,6 +46,7 @@ namespace Backoffice
             }
         }
 
+    
 
         public void LoadDetail()
         {
@@ -76,7 +79,7 @@ namespace Backoffice
                 {
                     //CARGO COMBOS STATE Y CITY
 
-                    var clientState = new RestClient("http://api.enviosmilgenial.com/statesByCourier/" + _Shipping.Courier.Id);
+                    var clientState = new RestClient("http://localhost:8080/statesByCourier/" + _Shipping.Courier.Id);
                     clientState.Timeout = -1;
                     var requestState = new RestRequest(Method.GET);
                     IRestResponse responseState = clientState.Execute(requestState);
@@ -122,7 +125,7 @@ namespace Backoffice
                         rbtContrarembolso.Checked = true;
                     }
 
-                    else if(_Shipping.GuideType.Id==4)
+                    else if (_Shipping.GuideType.Id == 4)
                     {
                         rbtFleteDestino.Checked = true;
                     }
@@ -131,45 +134,101 @@ namespace Backoffice
 
                 //chkCashOnDelivery.Checked = _Shipping.CashOnDelivery;
 
-                if (_Shipping.Receiver.Address.Locality != null && _Shipping.Receiver.Address.Locality.Id != 0)
+                if (_Shipping.DeliveryType == null || _Shipping.DeliveryType.Id == 0 || _Shipping.DeliveryType.Id == 2)
                 {
-                    drpState.Text = _Shipping.Receiver.Address.Locality.State;
+                    //rbtADomicilio.Checked = true;
 
 
-                    var clientCity = new RestClient("http://api.enviosmilgenial.com/citiesByCourierState/Courier=" + _Shipping.Courier.Id + "&State=" + _Shipping.Receiver.Address.Locality.State);
-                    clientCity.Timeout = -1;
-                    var requestCity = new RestRequest(Method.GET);
-                    IRestResponse responseCity = clientCity.Execute(requestCity);
-
-                    _Cities = JsonConvert.DeserializeObject<List<string>>(responseCity.Content);
-
-                    drpCity.Items.Add("Seleccionar...");
-
-                    foreach (string _City in _Cities)
+                    if (_Shipping.Receiver.Address.Locality != null && _Shipping.Receiver.Address.Locality.Id != 0)
                     {
-                        drpCity.Items.Add(_City);
+                        drpState.Text = _Shipping.Receiver.Address.Locality.State;
+
+
+                        var clientCity = new RestClient("http://localhost:8080/citiesByCourierState/Courier=" + _Shipping.Courier.Id + "&State=" + _Shipping.Receiver.Address.Locality.State);
+                        clientCity.Timeout = -1;
+                        var requestCity = new RestRequest(Method.GET);
+                        IRestResponse responseCity = clientCity.Execute(requestCity);
+
+                        _Cities = JsonConvert.DeserializeObject<List<string>>(responseCity.Content);
+
+                        drpCity.Items.Add("Seleccionar...");
+
+                        foreach (string _City in _Cities)
+                        {
+                            drpCity.Items.Add(_City);
+                        }
+
+                        drpCity.Text = _Shipping.Receiver.Address.Locality.City;
+
+
+
+                        var clientLocality = new RestClient("http://localhost:8080/localitiesByCourierStateCity/Courier=" + _Shipping.Courier.Id + "&State=" + _Shipping.Receiver.Address.Locality.State + "&City=" + _Shipping.Receiver.Address.Locality.City);
+                        clientLocality.Timeout = -1;
+                        var requestLocality = new RestRequest(Method.GET);
+                        IRestResponse responseLocality = clientLocality.Execute(requestLocality);
+
+                        _Localities = JsonConvert.DeserializeObject<List<string>>(responseLocality.Content);
+
+                        drpLocality.Items.Add("Seleccionar...");
+
+                        foreach (string _Locality in _Localities)
+                        {
+                            drpLocality.Items.Add(_Locality);
+                        }
+
+                        drpLocality.Text = _Shipping.Receiver.Address.Locality.Name;
                     }
-
-                    drpCity.Text = _Shipping.Receiver.Address.Locality.City;
-
-
-
-                    var clientLocality = new RestClient("http://api.enviosmilgenial.com/localitiesByCourierStateCity/Courier=" + _Shipping.Courier.Id + "&State=" + _Shipping.Receiver.Address.Locality.State + "&City=" + _Shipping.Receiver.Address.Locality.City);
-                    clientLocality.Timeout = -1;
-                    var requestLocality = new RestRequest(Method.GET);
-                    IRestResponse responseLocality = clientLocality.Execute(requestLocality);
-
-                    _Localities = JsonConvert.DeserializeObject<List<string>>(responseLocality.Content);
-
-                    drpLocality.Items.Add("Seleccionar...");
-
-                    foreach (string _Locality in _Localities)
-                    {
-                        drpLocality.Items.Add(_Locality);
-                    }
-
-                    drpLocality.Text = _Shipping.Receiver.Address.Locality.Name;
                 }
+
+                else if (_Shipping.DeliveryType.Id == 1)
+               {
+                    //ACA VA EL CODIGO PARA MOSTRAR UN ENVIO A OFICINA
+
+                    //rbtOficina.Checked = true;
+                    //rbtOficina.AutoPostBack = true;
+
+                    string _State = "Seleccionar...";
+
+                    if (_Shipping.PostOffice != null && _Shipping.PostOffice.Id!=0)
+                    {
+                        _State = _Shipping.PostOffice.Address.Locality.State;
+                    }
+
+                    else if (_Shipping.Receiver.Address.Locality != null)
+                    {
+                        _State = _Shipping.Receiver.Address.Locality.State;
+                    }
+
+                    drpState.SelectedValue = _State;
+
+                    drpPostOffices.Items.Clear();
+
+                    _Courier = _Couriers.Find(x => x.Name.Trim().Equals(drpCourier.Text.Trim()));
+
+
+                    var clientOffices = new RestClient("http://localhost:8080/PostOffices/State=" + _State + "&Courier=" + _Courier.Id);
+                    clientOffices.Timeout = -1;
+                    var requestOffices = new RestRequest(Method.GET);
+                    IRestResponse responseOffices = clientOffices.Execute(requestOffices);
+
+                    _Offices = JsonConvert.DeserializeObject<List<PostOffice>>(responseOffices.Content);
+
+                    drpPostOffices.Items.Add("Seleccionar...");
+
+                    if (_Offices != null)
+                    {
+                        foreach (PostOffice _Office in _Offices)
+                        {
+                            drpPostOffices.Items.Add(_Office.Name);
+                        }
+                    }
+
+
+                    drpPostOffices.Text = _Shipping.PostOffice.Name;
+                }
+
+                
+
 
                 grdPackages.DataSource = _Shipping.Packages;
                 grdPackages.AutoGenerateColumns = false;
@@ -190,6 +249,35 @@ namespace Backoffice
                 {
 
                     pdfiframe.Visible = false;
+                }
+
+
+                //ESTE CODIGO SE PUSO PARA MOSTRAR COMBOS SEGUN EL DELIVERYTYPE
+                if (_Shipping.DeliveryType == null || _Shipping.DeliveryType.Id == 0 || _Shipping.DeliveryType.Id == 2)
+                {
+                    rbtADomicilio.Checked = true;
+
+
+                    lblOficina.Visible = false;
+                    drpPostOffices.Visible = false;
+
+                    lblCiudad.Visible = true;
+                    drpCity.Visible = true;
+                    lblLocalidad.Visible = true;
+                    drpLocality.Visible = true;
+                }
+
+                else if(_Shipping.DeliveryType.Id==1)
+                {
+                    rbtOficina.Checked = true;
+
+                    lblOficina.Visible = true;
+                    drpPostOffices.Visible = true;
+
+                    lblCiudad.Visible = false;
+                    drpCity.Visible = false;
+                    lblLocalidad.Visible = false;
+                    drpLocality.Visible = false;
                 }
             }
 
@@ -214,9 +302,16 @@ namespace Backoffice
                 _Shipping.Receiver.Address.Line1 = txtLine1.Text.Trim();
 
 
-                if (_Shipping.Receiver.Address.Locality == null)
-                    _Shipping.Receiver.Address.Locality = new Locality();
-                
+
+
+                _Shipping.DeliveryType = new DeliveryType();
+
+
+                if (rbtADomicilio.Checked)
+                {
+                    if (_Shipping.Receiver.Address.Locality == null)
+                        _Shipping.Receiver.Address.Locality = new Locality();
+
 
                     _Shipping.Receiver.Address.Locality.State = drpState.Text.Trim();
 
@@ -225,7 +320,37 @@ namespace Backoffice
                     _Shipping.Receiver.Address.Locality.Name = drpLocality.Text.Trim();
 
                     _Shipping.Courier = _Couriers[drpCourier.SelectedIndex - 1];
-                
+
+
+
+                    _Shipping.DeliveryType.Id = 2;
+                    _Shipping.DeliveryType.Name = "SERVICIO A DOMICILIO";
+
+
+                }
+
+                else if(rbtOficina.Checked)
+                {
+                    if (drpPostOffices.SelectedValue != "" && drpPostOffices.SelectedValue != "Seleccionar...")
+                    {
+                        _Shipping.PostOffice = _Offices.Where(x => x.Name.Equals(drpPostOffices.SelectedValue.Trim())).Single();
+                    }
+
+                    else
+                    {
+                        _Shipping.PostOffice = null;
+                    }
+
+                    _Shipping.DeliveryType.Id = 1;
+                    _Shipping.DeliveryType.Name = "AGENCIA";
+
+                }
+
+
+
+                //PARA CONTEMPLAR EL TIPO DE ENVIO DE LA MISMA FORMA QUE CON EL TIPO DE GUIA, ESTO VA A CAMBIAR CUANDO INTEGREMOS EL CORREO
+
+  
 
 
                 _Shipping.GuideType = new GuideType();
@@ -252,7 +377,7 @@ namespace Backoffice
                 //_Shipping.CashOnDelivery = chkCashOnDelivery.Checked;
 
 
-                var client = new RestClient("http://api.enviosmilgenial.com/shippings");
+                var client = new RestClient("http://localhost:8080/shippings");
                 client.Timeout = -1;
                 var request = new RestRequest(Method.PUT);
                 request.AddHeader("Content-Type", "application/json");
@@ -303,7 +428,7 @@ namespace Backoffice
                 {
                     Courier _Courier = _Couriers.Find(x => x.Name.Trim().Equals(drpCourier.Text.Trim()));
 
-                    var clientState = new RestClient("http://api.enviosmilgenial.com/statesByCourier/" + _Courier.Id);
+                    var clientState = new RestClient("http://localhost:8080/statesByCourier/" + _Courier.Id);
                     clientState.Timeout = -1;
                     var requestState = new RestRequest(Method.GET);
                     IRestResponse responseState = clientState.Execute(requestState);
@@ -346,29 +471,62 @@ namespace Backoffice
             {
                 if (drpState.Text != "Seleccionar...")
                 {
-                    drpCity.Items.Clear();
-
-                    Courier _Courier = _Couriers.Find(x => x.Name.Trim().Equals(drpCourier.Text.Trim()));
-
-                    string _State = drpState.Text.Trim();
-
-                    var clientCity = new RestClient("http://api.enviosmilgenial.com/citiesByCourierState/Courier=" + _Courier.Id + "&State=" + _State);
-                    clientCity.Timeout = -1;
-                    var requestCity = new RestRequest(Method.GET);
-                    IRestResponse responseCity = clientCity.Execute(requestCity);
-
-                    _Cities = JsonConvert.DeserializeObject<List<string>>(responseCity.Content);
-
-                    drpCity.Items.Add("Seleccionar...");
-
-                    foreach (string _City in _Cities)
+                    if (rbtADomicilio.Checked)
                     {
-                        drpCity.Items.Add(_City);
+                        drpCity.Items.Clear();
+
+                        Courier _Courier = _Couriers.Find(x => x.Name.Trim().Equals(drpCourier.Text.Trim()));
+
+                        string _State = drpState.Text.Trim();
+
+                        var clientCity = new RestClient("http://localhost:8080/citiesByCourierState/Courier=" + _Courier.Id + "&State=" + _State);
+                        clientCity.Timeout = -1;
+                        var requestCity = new RestRequest(Method.GET);
+                        IRestResponse responseCity = clientCity.Execute(requestCity);
+
+                        _Cities = JsonConvert.DeserializeObject<List<string>>(responseCity.Content);
+
+                        drpCity.Items.Add("Seleccionar...");
+
+                        foreach (string _City in _Cities)
+                        {
+                            drpCity.Items.Add(_City);
+                        }
+
+                        drpLocality.Items.Clear();
+                        drpLocality.Items.Add("Seleccionar...");
                     }
 
-                    drpLocality.Items.Clear();
-                    drpLocality.Items.Add("Seleccionar...");
+                    else if (rbtOficina.Checked)
+                    {
+                        //ACA VA EL CODIGO PARA BUSCAR LAS OFICINAS POR COURIER Y STATE
 
+                        string _State = drpState.Text.Trim();
+
+                        if (_State != "Seleccionar...")
+                        {
+                            drpPostOffices.Items.Clear();
+
+                            Courier _Courier = _Couriers.Find(x => x.Name.Trim().Equals(drpCourier.Text.Trim()));
+
+
+                            var clientOffices = new RestClient("http://localhost:8080/PostOffices/State=" + _State + "&Courier=" + _Courier.Id);
+                            clientOffices.Timeout = -1;
+                            var requestOffices = new RestRequest(Method.GET);
+                            IRestResponse responseOffices = clientOffices.Execute(requestOffices);
+
+                            _Offices = JsonConvert.DeserializeObject<List<PostOffice>>(responseOffices.Content);
+
+                            drpPostOffices.Items.Add("Seleccionar...");
+
+                            foreach (PostOffice _Office in _Offices)
+                            {
+                                drpPostOffices.Items.Add(_Office.Name);
+                            }
+
+                        }
+
+                    }
                 }
             }
 
@@ -393,7 +551,7 @@ namespace Backoffice
 
                     string _City = drpCity.Text.Trim();
 
-                    var clientLocality = new RestClient("http://api.enviosmilgenial.com/localitiesByCourierStateCity/Courier=" + _Courier.Id + "&State=" + _State + "&City=" + _City);
+                    var clientLocality = new RestClient("http://localhost:8080/localitiesByCourierStateCity/Courier=" + _Courier.Id + "&State=" + _State + "&City=" + _City);
                     clientLocality.Timeout = -1;
                     var requestLocality = new RestRequest(Method.GET);
                     IRestResponse responseLocality = clientLocality.Execute(requestLocality);
@@ -430,9 +588,40 @@ namespace Backoffice
                     _Shipping.Note = txtNote.Text;
 
                     _Shipping.Receiver.Address.Line1 = txtLine1.Text.Trim();
-                    _Shipping.Receiver.Address.Locality.State = drpState.Text.Trim();
-                    _Shipping.Receiver.Address.Locality.City = drpCity.Text.Trim();
-                    _Shipping.Receiver.Address.Locality.Name = drpLocality.Text.Trim();
+                    //_Shipping.Receiver.Address.Locality.State = drpState.Text.Trim();
+                    //_Shipping.Receiver.Address.Locality.City = drpCity.Text.Trim();
+                    //_Shipping.Receiver.Address.Locality.Name = drpLocality.Text.Trim();
+
+
+
+
+                    if (rbtADomicilio.Checked)
+                    {
+                        if (_Shipping.Receiver.Address.Locality == null)
+                            _Shipping.Receiver.Address.Locality = new Locality();
+
+
+                        _Shipping.Receiver.Address.Locality.State = drpState.Text.Trim();
+
+                        _Shipping.Receiver.Address.Locality.City = drpCity.Text.Trim();
+
+                        _Shipping.Receiver.Address.Locality.Name = drpLocality.Text.Trim();
+
+                        _Shipping.Courier = _Couriers[drpCourier.SelectedIndex - 1];
+                    }
+
+                    else if (rbtOficina.Checked)
+                    {
+                        if (drpPostOffices.SelectedValue != "" && drpPostOffices.SelectedValue != "Seleccionar...")
+                        {
+                            _Shipping.PostOffice = _Offices.Where(x => x.Name.Equals(drpPostOffices.SelectedValue.Trim())).Single();
+                        }
+                    }
+
+
+
+
+
 
                     _Shipping.Courier = _Couriers[drpCourier.SelectedIndex - 1];
 
@@ -456,7 +645,24 @@ namespace Backoffice
                         _Shipping.GuideType.Id = 4;
                     }
 
-                    var client = new RestClient("http://api.enviosmilgenial.com/shippings");
+                    //PARA CONTEMPLAR EL TIPO DE ENVIO DE LA MISMA FORMA QUE CON EL TIPO DE GUIA, ESTO VA A CAMBIAR CUANDO INTEGREMOS EL CORREO
+
+                    _Shipping.DeliveryType = new DeliveryType();
+
+                    if (rbtADomicilio.Checked)
+                    {
+                        _Shipping.DeliveryType.Id = 2;
+                        _Shipping.DeliveryType.Name = "SERVICIO A DOMICILIO";
+                    }
+
+                    else if(rbtOficina.Checked)
+                    {
+                        _Shipping.DeliveryType.Id = 1;
+                        _Shipping.DeliveryType.Name = "AGENCIA";
+                    }
+
+
+                    var client = new RestClient("http://localhost:8080/shippings");
                     client.Timeout = -1;
                     var request = new RestRequest(Method.PUT);
                     request.AddHeader("Content-Type", "application/json");
@@ -467,12 +673,15 @@ namespace Backoffice
                     request.AddParameter("application/json", body, ParameterType.RequestBody);
                     IRestResponse response = client.Execute(request);
 
-                    _Shipping = JsonConvert.DeserializeObject<Shipping>(response.Content); ;
+
+                    //OJO CON ESTE COMMENT, se comentó porque el endpoint esta dando internal server error, hay que revisar
+
+                    _Shipping = JsonConvert.DeserializeObject<Shipping>(response.Content); 
 
 
                 }
 
-                catch
+                catch(Exception ex)
                 {
                     throw new Exception("Hay un prublema con los datos del cliente.");
                 }
@@ -484,9 +693,9 @@ namespace Backoffice
 
                 if (_Shipping.FinancialStatus.Trim() == "paid"||_Shipping.CashOnDelivery)
                 {
-                    if (_Shipping.Receiver.Address.Locality != null &&_Shipping.Receiver.Address.Locality.Id != 0)
+                    if ((_Shipping.Receiver.Address.Locality != null &&_Shipping.Receiver.Address.Locality.Id != 0 ) || (_Shipping.PostOffice!=null && _Shipping.PostOffice.Id!=0))
                     {
-                        var clientLabel = new RestClient("http://api.enviosmilgenial.com/shippings/" + _Shipping.OrderId + "/labels");
+                        var clientLabel = new RestClient("http://localhost:8080/shippings/" + _Shipping.OrderId + "/labels");
                         clientLabel.Timeout = -1;
                         var requestLabel = new RestRequest(Method.POST);
                         IRestResponse responseLabel = clientLabel.Execute(requestLabel);
@@ -554,6 +763,109 @@ namespace Backoffice
             catch (Exception ex)
             {
                 lblError.Text = "Error: " + ex.Message;
+            }
+
+        }
+
+        protected void rbtOficina_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbtOficina.Checked)
+            {
+
+                string _State = drpState.Text.Trim();
+
+                if (_State != "Seleccionar...")
+                {
+                    drpPostOffices.Items.Clear();
+
+                    Courier _Courier = _Couriers.Find(x => x.Name.Trim().Equals(drpCourier.Text.Trim()));
+
+
+                    var clientOffices = new RestClient("http://localhost:8080/PostOffices/State=" + _State + "&Courier=" + _Courier.Id);
+                    clientOffices.Timeout = -1;
+                    var requestOffices = new RestRequest(Method.GET);
+                    IRestResponse responseOffices = clientOffices.Execute(requestOffices);
+
+                    _Offices = JsonConvert.DeserializeObject<List<PostOffice>>(responseOffices.Content);
+
+                    drpPostOffices.Items.Add("Seleccionar...");
+
+                    foreach (PostOffice _Office in _Offices)
+                    {
+                        drpPostOffices.Items.Add(_Office.Name);
+                    }
+
+                }
+
+                if (_Shipping.PostOffice != null && _Shipping.PostOffice.Id != 0 && _Shipping.PostOffice.Address.Locality.State.Trim() == _State.Trim())
+                    drpPostOffices.SelectedValue = _Shipping.PostOffice.Name;
+
+                lblOficina.Visible = true;
+                drpPostOffices.Visible = true;
+
+                lblCiudad.Visible = false;
+                drpCity.Visible = false;
+                lblLocalidad.Visible = false;
+                drpLocality.Visible = false;
+
+            }
+
+        }
+
+        protected void rbtADomicilio_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbtADomicilio.Checked)
+            {
+                if (_Shipping.Receiver.Address.Locality != null && _Shipping.Receiver.Address.Locality.Id != 0)
+                {
+                    drpCity.Items.Clear();
+                    drpLocality.Items.Clear();
+
+                    drpState.Text = _Shipping.Receiver.Address.Locality.State;
+
+
+                    var clientCity = new RestClient("http://localhost:8080/citiesByCourierState/Courier=" + _Shipping.Courier.Id + "&State=" + _Shipping.Receiver.Address.Locality.State);
+                    clientCity.Timeout = -1;
+                    var requestCity = new RestRequest(Method.GET);
+                    IRestResponse responseCity = clientCity.Execute(requestCity);
+
+                    _Cities = JsonConvert.DeserializeObject<List<string>>(responseCity.Content);
+
+                    drpCity.Items.Add("Seleccionar...");
+
+                    foreach (string _City in _Cities)
+                    {
+                        drpCity.Items.Add(_City);
+                    }
+
+                    drpCity.Text = _Shipping.Receiver.Address.Locality.City;
+
+
+
+                    var clientLocality = new RestClient("http://localhost:8080/localitiesByCourierStateCity/Courier=" + _Shipping.Courier.Id + "&State=" + _Shipping.Receiver.Address.Locality.State + "&City=" + _Shipping.Receiver.Address.Locality.City);
+                    clientLocality.Timeout = -1;
+                    var requestLocality = new RestRequest(Method.GET);
+                    IRestResponse responseLocality = clientLocality.Execute(requestLocality);
+
+                    _Localities = JsonConvert.DeserializeObject<List<string>>(responseLocality.Content);
+
+                    drpLocality.Items.Add("Seleccionar...");
+
+                    foreach (string _Locality in _Localities)
+                    {
+                        drpLocality.Items.Add(_Locality);
+                    }
+
+                    drpLocality.Text = _Shipping.Receiver.Address.Locality.Name;
+                }
+
+                lblOficina.Visible = false;
+                drpPostOffices.Visible = false;
+
+                lblCiudad.Visible = true;
+                drpCity.Visible = true;
+                lblLocalidad.Visible = true;
+                drpLocality.Visible = true;
             }
 
         }
