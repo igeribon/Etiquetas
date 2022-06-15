@@ -26,16 +26,22 @@ namespace API.DataAccess
                 SqlConnection _Cnn = new SqlConnection();
 
                 //LOCAL
-                string servidor = "localhost";
-                string database = "Shippings";
-                string user = "sa";
-                string clave = "root";
+                //string servidor = "localhost";
+                //string database = "Shippings";
+                //string user = "sa";
+                //string clave = "root";
 
                 //CLOUD
                 //string servidor = "A2NWPLSK14SQL-v03.shr.prod.iad2.secureserver.net";
                 //string database = "Shippings";
                 //string user = "milgenial";
                 //string clave = "m1L63nI4l!";
+
+                string servidor = "SQL8003.site4now.net";
+                string database = "db_a870f2_shippings";
+                string user = "db_a870f2_shippings_admin";
+                string clave = "m1L63nI4l!";
+
 
 
                 _Cnn.ConnectionString = "Data Source=" + servidor + "; Initial Catalog = " +

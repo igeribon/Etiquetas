@@ -51,7 +51,7 @@ namespace Backoffice
                 //    string _OrderId = grdShippings.DataKeys[e.Row.RowIndex].Value.ToString();
                 //    GridView grdDetail = e.Row.FindControl("grdDetail") as GridView;
 
-                //    var client = new RestClient("http://localhost:8080/shippings/" + _OrderId);
+                //    var client = new RestClient("https://api.enviosmilgenial.com/shippings/" + _OrderId);
                 //    client.Timeout = -1;
                 //    var request = new RestRequest(Method.GET);
                 //    IRestResponse response = client.Execute(request);
@@ -84,7 +84,7 @@ namespace Backoffice
                 string _OrderId= Convert.ToString(grdShippings.DataKeys[row.RowIndex].Value);
 
               
-                    var client = new RestClient("http://localhost:8080/shippings/" + _OrderId);
+                    var client = new RestClient("https://api.enviosmilgenial.com/shippings/" + _OrderId);
                     client.Timeout = -1;
                     var request = new RestRequest(Method.GET);
                     IRestResponse response = client.Execute(request);
@@ -122,7 +122,7 @@ namespace Backoffice
                 {
                     if (_Shipping.Receiver.Address.Locality.Id != 0)
                     {
-                        var client = new RestClient("http://localhost:8080/shippings/" + _OrderId + "/labels");
+                        var client = new RestClient("https://api.enviosmilgenial.com/shippings/" + _OrderId + "/labels");
                         client.Timeout = -1;
                         var request = new RestRequest(Method.POST);
                         IRestResponse response = client.Execute(request);
@@ -205,7 +205,7 @@ namespace Backoffice
                 if (rbtDescendente.Checked)
                     _Order = "desc";
               
-                var client = new RestClient("http://localhost:8080/shippings/from=" + _From.ToString("yyyy-MM-dd") + "&to=" + _To.ToString("yyyy-MM-dd") + "&hasLabel=0" + "&limit=300" + "&order=" + _Order);
+                var client = new RestClient("https://api.enviosmilgenial.com/shippings/from=" + _From.ToString("yyyy-MM-dd") + "&to=" + _To.ToString("yyyy-MM-dd") + "&hasLabel=0" + "&limit=300" + "&order=" + _Order);
                 client.Timeout = -1;
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);

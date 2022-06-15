@@ -330,10 +330,15 @@ namespace API.Controllers
 
             try
             {
-                string _api_key = "2a69d0274a99072efb7f9835117fb708";
-                string _api_password = "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";
+                //string _api_key = "2a69d0274a99072efb7f9835117fb708";
+                //string _api_password = "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";
+                //string _store_name = "mil-genial-uruguay";
+                //string _api_version = "2021-07";
+
+                string _api_key = "3a1f5f79b21146c9e5969382271d3ad6";
+                string _api_password = "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";
                 string _store_name = "mil-genial-uruguay";
-                string _api_version = "2021-07";
+                string _api_version = "2022-04";
 
 
                 string _Url = "https://" + _api_key + ":" + _api_password + "@" + _store_name + ".myshopify.com/admin/api/" + _api_version + "/orders/" + pShipping.ShopifyId + "/fulfillments.json";
@@ -366,10 +371,15 @@ namespace API.Controllers
 
             try
             {
-                string _api_key = "2a69d0274a99072efb7f9835117fb708";
-                string _api_password = "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";
+                //string _api_key = "2a69d0274a99072efb7f9835117fb708";
+                //string _api_password = "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";
+                //string _store_name = "mil-genial-uruguay";
+                //string _api_version = "2021-07";
+
+                string _api_key = "3a1f5f79b21146c9e5969382271d3ad6";
+                string _api_password = "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";
                 string _store_name = "mil-genial-uruguay";
-                string _api_version = "2021-07";
+                string _api_version = "2022-04";
 
 
                 string _Url = "https://" + _api_key + ":" + _api_password + "@" + _store_name + ".myshopify.com/admin/api/" + _api_version + "/fulfillments/" + pShipping.FulfillmentId + "/update_tracking.json";

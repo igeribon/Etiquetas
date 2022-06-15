@@ -79,7 +79,7 @@ namespace Backoffice
                 {
                     //CARGO COMBOS STATE Y CITY
 
-                    var clientState = new RestClient("http://localhost:8080/statesByCourier/" + _Shipping.Courier.Id);
+                    var clientState = new RestClient("https://api.enviosmilgenial.com/statesByCourier/" + _Shipping.Courier.Id);
                     clientState.Timeout = -1;
                     var requestState = new RestRequest(Method.GET);
                     IRestResponse responseState = clientState.Execute(requestState);
@@ -144,7 +144,7 @@ namespace Backoffice
                         drpState.Text = _Shipping.Receiver.Address.Locality.State;
 
 
-                        var clientCity = new RestClient("http://localhost:8080/citiesByCourierState/Courier=" + _Shipping.Courier.Id + "&State=" + _Shipping.Receiver.Address.Locality.State);
+                        var clientCity = new RestClient("https://api.enviosmilgenial.com/citiesByCourierState/Courier=" + _Shipping.Courier.Id + "&State=" + _Shipping.Receiver.Address.Locality.State);
                         clientCity.Timeout = -1;
                         var requestCity = new RestRequest(Method.GET);
                         IRestResponse responseCity = clientCity.Execute(requestCity);
@@ -162,7 +162,7 @@ namespace Backoffice
 
 
 
-                        var clientLocality = new RestClient("http://localhost:8080/localitiesByCourierStateCity/Courier=" + _Shipping.Courier.Id + "&State=" + _Shipping.Receiver.Address.Locality.State + "&City=" + _Shipping.Receiver.Address.Locality.City);
+                        var clientLocality = new RestClient("https://api.enviosmilgenial.com/localitiesByCourierStateCity/Courier=" + _Shipping.Courier.Id + "&State=" + _Shipping.Receiver.Address.Locality.State + "&City=" + _Shipping.Receiver.Address.Locality.City);
                         clientLocality.Timeout = -1;
                         var requestLocality = new RestRequest(Method.GET);
                         IRestResponse responseLocality = clientLocality.Execute(requestLocality);
@@ -206,7 +206,7 @@ namespace Backoffice
                     _Courier = _Couriers.Find(x => x.Name.Trim().Equals(drpCourier.Text.Trim()));
 
 
-                    var clientOffices = new RestClient("http://localhost:8080/PostOffices/State=" + _State + "&Courier=" + _Courier.Id);
+                    var clientOffices = new RestClient("https://api.enviosmilgenial.com/PostOffices/State=" + _State + "&Courier=" + _Courier.Id);
                     clientOffices.Timeout = -1;
                     var requestOffices = new RestRequest(Method.GET);
                     IRestResponse responseOffices = clientOffices.Execute(requestOffices);
@@ -242,7 +242,7 @@ namespace Backoffice
 
 
                     pdfiframe.Visible = true;
-                    pdfiframe.Src = "../Label/Label.pdf";
+                    //pdfiframe.Src = "../Label/Label.pdf";
                 }
 
                 else
@@ -377,7 +377,7 @@ namespace Backoffice
                 //_Shipping.CashOnDelivery = chkCashOnDelivery.Checked;
 
 
-                var client = new RestClient("http://localhost:8080/shippings");
+                var client = new RestClient("https://api.enviosmilgenial.com/shippings");
                 client.Timeout = -1;
                 var request = new RestRequest(Method.PUT);
                 request.AddHeader("Content-Type", "application/json");
@@ -428,7 +428,7 @@ namespace Backoffice
                 {
                     Courier _Courier = _Couriers.Find(x => x.Name.Trim().Equals(drpCourier.Text.Trim()));
 
-                    var clientState = new RestClient("http://localhost:8080/statesByCourier/" + _Courier.Id);
+                    var clientState = new RestClient("https://api.enviosmilgenial.com/statesByCourier/" + _Courier.Id);
                     clientState.Timeout = -1;
                     var requestState = new RestRequest(Method.GET);
                     IRestResponse responseState = clientState.Execute(requestState);
@@ -479,7 +479,7 @@ namespace Backoffice
 
                         string _State = drpState.Text.Trim();
 
-                        var clientCity = new RestClient("http://localhost:8080/citiesByCourierState/Courier=" + _Courier.Id + "&State=" + _State);
+                        var clientCity = new RestClient("https://api.enviosmilgenial.com/citiesByCourierState/Courier=" + _Courier.Id + "&State=" + _State);
                         clientCity.Timeout = -1;
                         var requestCity = new RestRequest(Method.GET);
                         IRestResponse responseCity = clientCity.Execute(requestCity);
@@ -510,7 +510,7 @@ namespace Backoffice
                             Courier _Courier = _Couriers.Find(x => x.Name.Trim().Equals(drpCourier.Text.Trim()));
 
 
-                            var clientOffices = new RestClient("http://localhost:8080/PostOffices/State=" + _State + "&Courier=" + _Courier.Id);
+                            var clientOffices = new RestClient("https://api.enviosmilgenial.com/PostOffices/State=" + _State + "&Courier=" + _Courier.Id);
                             clientOffices.Timeout = -1;
                             var requestOffices = new RestRequest(Method.GET);
                             IRestResponse responseOffices = clientOffices.Execute(requestOffices);
@@ -551,7 +551,7 @@ namespace Backoffice
 
                     string _City = drpCity.Text.Trim();
 
-                    var clientLocality = new RestClient("http://localhost:8080/localitiesByCourierStateCity/Courier=" + _Courier.Id + "&State=" + _State + "&City=" + _City);
+                    var clientLocality = new RestClient("https://api.enviosmilgenial.com/localitiesByCourierStateCity/Courier=" + _Courier.Id + "&State=" + _State + "&City=" + _City);
                     clientLocality.Timeout = -1;
                     var requestLocality = new RestRequest(Method.GET);
                     IRestResponse responseLocality = clientLocality.Execute(requestLocality);
@@ -662,7 +662,7 @@ namespace Backoffice
                     }
 
 
-                    var client = new RestClient("http://localhost:8080/shippings");
+                    var client = new RestClient("https://api.enviosmilgenial.com/shippings");
                     client.Timeout = -1;
                     var request = new RestRequest(Method.PUT);
                     request.AddHeader("Content-Type", "application/json");
@@ -695,7 +695,7 @@ namespace Backoffice
                 {
                     if ((_Shipping.Receiver.Address.Locality != null &&_Shipping.Receiver.Address.Locality.Id != 0 ) || (_Shipping.PostOffice!=null && _Shipping.PostOffice.Id!=0))
                     {
-                        var clientLabel = new RestClient("http://localhost:8080/shippings/" + _Shipping.OrderId + "/labels");
+                        var clientLabel = new RestClient("https://api.enviosmilgenial.com/shippings/" + _Shipping.OrderId + "/labels");
                         clientLabel.Timeout = -1;
                         var requestLabel = new RestRequest(Method.POST);
                         IRestResponse responseLabel = clientLabel.Execute(requestLabel);
@@ -708,10 +708,10 @@ namespace Backoffice
 
                             File.WriteAllBytes(Server.MapPath("~/Label/Label.pdf"), _Shipping.Labels[0].Data);
 
-                            Response.Write("<script>");
-                            Response.Write("window.open('ShowPDF.aspx','_blank')");
+                            //Response.Write("<script>");
+                            //Response.Write("window.open('ShowPDF.aspx','_blank')");
 
-                            Response.Write("</script>");
+                            //Response.Write("</script>");
 
                             //Process printjob = new Process();
 
@@ -781,7 +781,7 @@ namespace Backoffice
                     Courier _Courier = _Couriers.Find(x => x.Name.Trim().Equals(drpCourier.Text.Trim()));
 
 
-                    var clientOffices = new RestClient("http://localhost:8080/PostOffices/State=" + _State + "&Courier=" + _Courier.Id);
+                    var clientOffices = new RestClient("https://api.enviosmilgenial.com/PostOffices/State=" + _State + "&Courier=" + _Courier.Id);
                     clientOffices.Timeout = -1;
                     var requestOffices = new RestRequest(Method.GET);
                     IRestResponse responseOffices = clientOffices.Execute(requestOffices);
@@ -824,7 +824,7 @@ namespace Backoffice
                     drpState.Text = _Shipping.Receiver.Address.Locality.State;
 
 
-                    var clientCity = new RestClient("http://localhost:8080/citiesByCourierState/Courier=" + _Shipping.Courier.Id + "&State=" + _Shipping.Receiver.Address.Locality.State);
+                    var clientCity = new RestClient("https://api.enviosmilgenial.com/citiesByCourierState/Courier=" + _Shipping.Courier.Id + "&State=" + _Shipping.Receiver.Address.Locality.State);
                     clientCity.Timeout = -1;
                     var requestCity = new RestRequest(Method.GET);
                     IRestResponse responseCity = clientCity.Execute(requestCity);
@@ -842,7 +842,7 @@ namespace Backoffice
 
 
 
-                    var clientLocality = new RestClient("http://localhost:8080/localitiesByCourierStateCity/Courier=" + _Shipping.Courier.Id + "&State=" + _Shipping.Receiver.Address.Locality.State + "&City=" + _Shipping.Receiver.Address.Locality.City);
+                    var clientLocality = new RestClient("https://api.enviosmilgenial.com/localitiesByCourierStateCity/Courier=" + _Shipping.Courier.Id + "&State=" + _Shipping.Receiver.Address.Locality.State + "&City=" + _Shipping.Receiver.Address.Locality.City);
                     clientLocality.Timeout = -1;
                     var requestLocality = new RestRequest(Method.GET);
                     IRestResponse responseLocality = clientLocality.Execute(requestLocality);
